@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>峴港+會安 6日5夜旅遊攻略 | Da Nang Travel Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0077B6;
+            --secondary: #00B4D8;
+            --accent: #FF7043;
+            --success: #2ECC71;
+            --warning: #F39C12;
+            --bg-light: #F8FAFB;
+            --bg-white: #FFFFFF;
+            --text-dark: #2C3E50;
+            --text-muted: #7F8C8D;
+            --shadow: 0 4px 6px rgba(0,0,0,0.07);
+            --shadow-hover: 0 8px 25px rgba(0,0,0,0.1);
+            --radius: 12px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.7;
+        }
+        
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            padding: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 60px;
+        }
+        
+        .nav-logo {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(0,119,182,0.9) 0%, rgba(0,180,216,0.8) 100%),
+                        url('https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=1920&q=80') center/cover;
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .hero .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+        
+        .hero .dates {
+            background: rgba(255,255,255,0.2);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 1rem;
+        }
+        
+        .hero .budget {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Sections */
+        .section {
+            background: var(--bg-white);
+            border-radius: var(--radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .card {
+            background: var(--bg-light);
+            border-radius: var(--radius);
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .price-tag {
+            background: var(--accent);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+            border-bottom: 1px dashed #E0E0E0;
+        }
+        
+        .timeline-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--primary);
+        }
+        
+        .timeline-time {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        
+        .timeline-content {
+            margin-top: 8px;
+        }
+        
+        /* Day Header */
+        .day-header {
+            background: linear-gradient(135deg, var(--accent) 0%, #FF8A65 100%);
+            color: white;
+            padding: 20px;
+            border-radius: var(--radius);
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .day-header h2 {
+            font-size: 1.4rem;
+        }
+        
+        .day-header .date {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+        
+        /* Tables */
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #E0E0E0;
+        }
+        
+        th {
+            background: var(--bg-light);
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background: var(--bg-light);
+        }
+        
+        /* Lists */
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+        
+        /* Links */
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+            text-decoration: none;
+            color: white;
+        }
+        
+        /* Summary Box */
+        .summary-box {
+            background: linear-gradient(135deg, var(--success) 0%, #27AE60 100%);
+            color: white;
+            border-radius: var(--radius);
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .summary-box h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            opacity: 0.95;
+        }
+        
+        .summary-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .summary-breakdown {
+            background: rgba(255,255,255,0.15);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        /* Checklist */
+        .checklist {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: var(--bg-light);
+            border-radius: 8px;
+        }
+        
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+        
+        /* Alert Box */
+        .alert {
+            background: #FFF3E0;
+            border-left: 4px solid var(--warning);
+            padding: 15px 20px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+            margin: 20px 0;
+        }
+        
+        .alert-title {
+            color: var(--warning);
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        /* Image Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--radius);
+            transition: transform 0.3s;
+        }
+        
+        .gallery img:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        footer p {
+            opacity: 0.8;
+        }
+        
+        /* Mobile Menu */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .menu-toggle {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 1.4rem;
+            }
+            
+            .day-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="nav-logo">🇻🇳 峴港旅遊攻略</a>
+            <button class="menu-toggle">☰</button>
+            <ul class="nav-links">
+                <li><a href="#flights">航班</a></li>
+                <li><a href="#itinerary">行程</a></li>
+                <li><a href="#attractions">景點</a></li>
+                <li><a href="#food">美食</a></li>
+                <li><a href="#tips">攻略</a></li>
+                <li><a href="#checklist">清單</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <header class="hero">
+        <h1>🇻🇳 峴港 + 會安</h1>
+        <p class="subtitle">5位成人悠閒度假 · 6日5夜</p>
+        <span class="dates">📅 2026年8月11日 - 8月16日</span>
+        <p class="budget">💰 每人預算：HK$5,235</p>
+    </header>
+    
+    <main class="container">
+        <!-- Flight Info -->
+        <section id="flights" class="section">
+            <h2 class="section-title">✈️ 航班資訊</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=600&q=80" alt="Flight">
+                    <h3>🛫 去程航班</h3>
+                    <p><strong>UO552</strong> | HK Express</p>
+                    <p>📅 8月11日（二）08:25 → 09:20</p>
+                    <p>🛫 香港國際機場 → 峴港國際機場</p>
+                    <span class="price-tag">目標價: ~HK$2,000/人</span>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1569154941061-e231b4725ef1?w=600&q=80" alt="Airport">
+                    <h3>🛬 回程航班</h3>
+                    <p><strong>UO553</strong> | HK Express</p>
+                    <p>📅 8月16日（日）10:05 → 13:05</p>
+                    <p>🛬 峴港國際機場 → 香港國際機場</p>
+                    <span class="price-tag">預訂: HK Express官網</span>
+                </div>
+            </div>
+            <div class="alert" style="margin-top: 20px;">
+                <div class="alert-title">⚠️ 重要提醒</div>
+                <p>需要預訂3位乘客（你+太太+奶奶），需2件寄艙行李 + 1件手提行李</p>
+            </div>
+        </section>
+        
+        <!-- Accommodation -->
+        <section class="section">
+            <h2 class="section-title">🏨 住宿推薦</h2>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80" alt="Hotel" style="height: 250px;">
+                <h3>Altara Suites Da Nang</h3>
+                <p><strong>三臥室海景套房 (3-Bedroom Ocean Suite)</strong></p>
+                <ul class="feature-list" style="margin-top: 15px;">
+                    <li>超大客廳 + 全套廚房</li>
+                    <li>三間獨立睡房 + 洗手間</li>
+                    <li>適合家人聚餐聊天</li>
+                    <li>步行5分鐘到美溪沙灘</li>
+                    <li>5人分攤成本極低</li>
+                </ul>
+                <p style="margin-top: 15px;">
+                    <span class="price-tag">約 HK$2,000-2,500/晚</span>
+                    <a href="https://www.tripadvisor.com/Hotel_Review-g298085-d13846812-Reviews-Altara_Suites-Da_Nang.html" target="_blank" style="margin-left: 10px;">查看評價 →</a>
+                </p>
+            </div>
+        </section>
+        
+        <!-- Itinerary -->
+        <section id="itinerary" class="section">
+            <h2 class="section-title">📅 詳細行程安排</h2>
+            
+            <!-- Day 1 -->
+            <div class="day-header">
+                <div>
+                    <h2>Day 1</h2>
+                    <p>抵達日 · 美溪沙灘</p>
+                </div>
+                <span class="date">8月11日（二）</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">05:25</div>
+                    <div class="timeline-content">出發往香港機場（的士或機場快線 ~HK$150）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">08:25 - 09:20</div>
+                    <div class="timeline-content">✈️ 航班 UO552 | HKG → DAD</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">10:00 - 10:30</div>
+                    <div class="timeline-content">專車接送至酒店（包車 ~HK$200/車）</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">10:30 - 11:30</div>
+                    <div class="timeline-content">辦理入住 Altara Suites</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">12:30 - 14:00</div>
+                    <div class="timeline-content">🍜 午餐：<a href="https://www.tripadvisor.com/Restaurant_Review-g298085-d13935803-Reviews-Pho_29-Da_Nang.html" target="_blank">Pho 29</a> 地道牛肉河粉 (~HK$40)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">14:00 - 17:00</div>
+                    <div class="timeline-content">🏖️ 美溪沙灘 My Khe Beach - 世界六大最美海灘之一</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">18:00 - 20:00</div>
+                    <div class="timeline-content">🍤 晚餐：<a href="https://www.tripadvisor.com/Restaurant_Review-g298085-d7191889-Reviews-Be_Man_Seafood-Da_Nang.html" target="_blank">Be Man Seafood</a> 蒜蓉烤蠔、大頭蝦 (~HK$150)</div>
+                </div>
+            </div>
+            <p style="text-align: right; margin-top: 15px;"><strong>Day 1 小計：~HK$340/人</strong></p>
+            
+            <!-- Day 2 -->
+            <div class="day-header">
+                <div>
+                    <h2>Day 2</h2>
+                    <p>巴拿山全日遊</p>
+                </div>
+                <span class="date">8月12日（三）</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">07:00 - 08:30</div>
+                    <div class="timeline-content">早餐後包車出發往巴拿山</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">09:00 - 09:30</div>
+                    <div class="timeline-content">🚠 乘世界最長單纜吊車上山</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">09:30 - 11:00</div>
+                    <div class="timeline-content">🖐️ <strong>佛手金橋 Golden Bridge</strong> - 必打卡！早上人流較少</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">11:00 - 14:00</div>
+                    <div class="timeline-content">法國村莊探索 + 午餐自助餐</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">14:00 - 16:00</div>
+                    <div class="timeline-content">Fantasy Park 遊樂園</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">16:30 - 17:30</div>
+                    <div class="timeline-content">纜車下山，包車返回峴港</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">19:00 - 21:00</div>
+                    <div class="timeline-content">🍜 晚餐：<a href="https://www.tripadvisor.com/Restaurant_Review-g298085-d10007832-Reviews-Madam_Lan-Da_Nang.html" target="_blank">Madam Lan</a> 傳統越南菜 (~HK$120)</div>
+                </div>
+            </div>
+            <p style="text-align: right; margin-top: 15px;"><strong>Day 2 小計：~HK$680/人</strong></p>
+            <div class="alert">
+                <div class="alert-title">🎫 門票貼士</div>
+                <p>提前在 <a href="https://www.klook.com/activity/13283-ba-na-hills-ticket-da-nang/" target="_blank">Klook</a> 購買門票，包含纜車+午餐自助餐，約HK$400/人</p>
+            </div>
+            
+            <!-- Day 3 -->
+            <div class="day-header">
+                <div>
+                    <h2>Day 3</h2>
+                    <p>迦南島 + 會安古城</p>
+                </div>
+                <span class="date">8月13日（四）</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">08:00 - 09:30</div>
+                    <div class="timeline-content">睡到自然醒，早餐</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">10:30 - 12:00</div>
+                    <div class="timeline-content">🛶 <strong>迦南島竹籃船</strong> - 穿梭水椰林，船伕花式划船 (~HK$80)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">14:30 - 16:30</div>
+                    <div class="timeline-content">🏮 <strong>燈籠製作工作坊</strong> - 動手體驗，可帶走成品 (~HK$80)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">16:30 - 18:00</div>
+                    <div class="timeline-content">會安古城漫步 - 日本橋、黃牆老建築</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">18:00 - 20:30</div>
+                    <div class="timeline-content">日落河邊景色 + 晚餐：<a href="https://www.tripadvisor.com/Restaurant_Review-g298082-d816920-Reviews-Morning_Glory_Original-Hoi_An_Quang_Nam_Province.html" target="_blank">Morning Glory</a> (~HK$120)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">20:30 - 21:30</div>
+                    <div class="timeline-content">🏮 夜遊會安、放水燈 - 燈籠夜景絕美</div>
+                </div>
+            </div>
+            <p style="text-align: right; margin-top: 15px;"><strong>Day 3 小計：~HK$600/人</strong></p>
+            
+            <!-- Day 4 -->
+            <div class="day-header">
+                <div>
+                    <h2>Day 4</h2>
+                    <p>美山聖地 + 五行山</p>
+                </div>
+                <span class="date">8月14日（五）</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">08:00 - 09:30</div>
+                    <div class="timeline-content">包車出發往美山聖地</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">09:30 - 11:30</div>
+                    <div class="timeline-content">🏛️ <strong>美山聖地 My Son Sanctuary</strong> - 占婆古蹟，類似小吳哥窟 (門票 HK$47)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">14:00 - 17:00</div>
+                    <div class="timeline-content">⛰️ <strong>五行山 Marble Mountains</strong> - 洞穴、寺廟、全景視野 (門票+電梯 HK$62)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">19:00 - 21:00</div>
+                    <div class="timeline-content">🛍️ 漢市場購物 - 越南咖啡、腰果、果乾</div>
+                </div>
+            </div>
+            <p style="text-align: right; margin-top: 15px;"><strong>Day 4 小計：~HK$430/人</strong></p>
+            
+            <!-- Day 5 -->
+            <div class="day-header">
+                <div>
+                    <h2>Day 5</h2>
+                    <p>休閒日 + 龍橋噴火</p>
+                </div>
+                <span class="date">8月15日（六）</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">09:00 - 10:00</div>
+                    <div class="timeline-content">☕ 早餐：<a href="https://www.tripadvisor.com/Restaurant_Review-g298085-d10829742-Reviews-Cong_Caphe-Da_Nang.html" target="_blank">Cong Caphe</a> 椰子冰沙咖啡 (~HK$40)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">10:00 - 12:00</div>
+                    <div class="timeline-content">自由活動 - 游泳、休息</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">12:00 - 13:30</div>
+                    <div class="timeline-content">🍽️ 午餐：Bánh Xèo Bà Dưỡng 越南煎餅 (~HK$40)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">13:30 - 15:30</div>
+                    <div class="timeline-content">🚗 山茶半島海岸公路兜風 - 看野生獼猴</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">15:30 - 16:30</div>
+                    <div class="timeline-content">💆 <strong>Spa按摩</strong> - <a href="https://herbalspa.vn/en" target="_blank">Herbal Spa</a> 90分鐘 (~HK$155)</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">21:00 - 21:15</div>
+                    <div class="timeline-content">🔥 <strong>龍橋噴火秀</strong> - 週六限定！提早佔位</div>
+                </div>
+            </div>
+            <p style="text-align: right; margin-top: 15px;"><strong>Day 5 小計：~HK$435/人</strong></p>
+            <div class="alert" style="background: #E8F5E9; border-color: var(--success);">
+                <div class="alert-title" style="color: var(--success);">🔥 龍橋噴火秀時間</div>
+                <p>每週五、六、日 21:00，噴火約2分鐘。提前20分鐘到達佔位！</p>
+            </div>
+            
+            <!-- Day 6 -->
+            <div class="day-header">
+                <div>
+                    <h2>Day 6</h2>
+                    <p>返港日</p>
+                </div>
+                <span class="date">8月16日（日）</span>
+            </div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-time">06:00 - 07:00</div>
+                    <div class="timeline-content">起床、收拾行李、退房</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">07:30 - 08:00</div>
+                    <div class="timeline-content">包車前往機場</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">10:05</div>
+                    <div class="timeline-content">✈️ 航班 UO553 起飛返回香港</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-time">13:05</div>
+                    <div class="timeline-content">🛬 抵達香港國際機場</div>
+                </div>
+            </div>
+            <p style="text-align: right; margin-top: 15px;"><strong>Day 6 小計：~HK$180/人</strong></p>
+        </section>
+        
+        <!-- Attractions -->
+        <section id="attractions" class="section">
+            <h2 class="section-title">🎫 景點門票價格</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>景點</th>
+                            <th>官方價格</th>
+                            <th>Klook/線上</th>
+                            <th>連結</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>巴拿山 Ba Na Hills</td>
+                            <td>~HK$410</td>
+                            <td>~HK$375-405</td>
+                            <td><a href="https://www.klook.com/activity/13283-ba-na-hills-ticket-da-nang/" target="_blank">Klook</a></td>
+                        </tr>
+                        <tr>
+                            <td>美山聖地 My Son</td>
+                            <td>HK$47</td>
+                            <td>包在導覽團</td>
+                            <td><a href="https://www.klook.com/activity/6266-private-car-charter-da-nang/" target="_blank">包車</a></td>
+                        </tr>
+                        <tr>
+                            <td>五行山 Marble Mountains</td>
+                            <td>HK$47</td>
+                            <td>電梯另加 HK$15</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>會安古城</td>
+                            <td>免費</td>
+                            <td>古城區 HK$25</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>竹籃船體驗</td>
+                            <td>~HK$80</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>燈籠工作坊</td>
+                            <td>~HK$80</td>
+                            <td>-</td>
+                            <td><a href="https://hoianlanternmakingworkshop.com/" target="_blank">官網</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="gallery">
+                <img src="https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&q=80" alt="Ba Na Hills">
+                <img src="https://images.unsplash.com/photo-1528181304800-259b08848526?w=600&q=80" alt="Hoi An">
+                <img src="https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=600&q=80" alt="Beach">
+            </div>
+        </section>
+        
+        <!-- Food -->
+        <section id="food" class="section">
+            <h2 class="section-title">🍜 美食推薦</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80" alt="Vietnamese Food">
+                    <h3>Be Man Seafood</h3>
+                    <p>海鮮大排檔，必食蒜蓉烤蠔、大頭蝦</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">價格: ~HK$150/人</p>
+                    <a href="https://www.tripadvisor.com/Restaurant_Review-g298085-d7191889-Reviews-Be_Man_Seafood-Da_Nang.html" target="_blank">查看評價 →</a>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1562565652-a0d8f0c59eb4?w=600&q=80" alt="Pho">
+                    <h3>Pho 29</h3>
+                    <p>地道牛肉河粉，峴港最受歡迎</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">價格: ~HK$40/人</p>
+                    <a href="https://www.tripadvisor.com/Restaurant_Review-g298085-d13935803-Reviews-Pho_29-Da_Nang.html" target="_blank">查看評價 →</a>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&q=80" alt="Vietnamese Coffee">
+                    <h3>Cong Caphe</h3>
+                    <p>特色咖啡廳，椰子冰沙咖啡必試</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">價格: ~HK$40/人</p>
+                    <a href="https://www.tripadvisor.com/Restaurant_Review-g298085-d10829742-Reviews-Cong_Caphe-Da_Nang.html" target="_blank">查看評價 →</a>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?w=600&q=80" alt="Vietnamese Cuisine">
+                    <h3>Madam Lan</h3>
+                    <p>古色古香，傳統越南菜</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">價格: ~HK$120/人</p>
+                    <a href="https://www.tripadvisor.com/Restaurant_Review-g298085-d10007832-Reviews-Madam_Lan-Da_Nang.html" target="_blank">查看評價 →</a>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=600&q=80" alt="Lantern">
+                    <h3>Morning Glory</h3>
+                    <p>會安特色菜，白玫瑰餃、Cao Lau</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">價格: ~HK$120/人</p>
+                    <a href="https://www.tripadvisor.com/Restaurant_Review-g298082-d816920-Reviews-Morning_Glory_Original-Hoi_An_Quang_Nam_Province.html" target="_blank">查看評價 →</a>
+                </div>
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=80" alt="Street Food">
+                    <h3>Bánh Xèo Bà Dưỡng</h3>
+                    <p>越南煎餅，當地人隱藏美食</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">價格: ~HK$40/人</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Transportation -->
+        <section class="section">
+            <h2 class="section-title">🚗 交通攻略</h2>
+            <h3 style="margin-bottom: 15px;">包車費用（7人車）</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>類型</th>
+                            <th>時間</th>
+                            <th>價格/車</th>
+                            <th>適合</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>半日包車</td>
+                            <td>4小時</td>
+                            <td>~HK$470</td>
+                            <td>Day 3, 5</td>
+                        </tr>
+                        <tr>
+                            <td>全日包車</td>
+                            <td>8小時</td>
+                            <td>~HK$785</td>
+                            <td>Day 2, 4</td>
+                        </tr>
+                        <tr>
+                            <td>峴港↔會安</td>
+                            <td>~1小時</td>
+                            <td>~HK$125</td>
+                            <td>單程</td>
+                        </tr>
+                        <tr>
+                            <td>峴港↔順化</td>
+                            <td>含海雲嶺</td>
+                            <td>~HK$940</td>
+                            <td>全日</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 15px;"><strong>包車預訂：</strong> <a href="https://www.klook.com/activity/6266-private-car-charter-da-nang/" target="_blank">Klook 包車服務</a></p>
+            
+            <h3 style="margin: 25px 0 15px;">Grab 叫車</h3>
+            <p>下載 <a href="https://www.grab.com/vn/en/" target="_blank">Grab App</a>，峴港最方便的叫車方式：</p>
+            <ul class="feature-list" style="margin-top: 10px;">
+                <li>峴港市區內：~HK$15-30</li>
+                <li>峴港↔會安：~HK$95-125</li>
+                <li>機場接送：~HK$60-80</li>
+            </ul>
+        </section>
+        
+        <!-- Spa -->
+        <section class="section">
+            <h2 class="section-title">💆 Spa 按摩推薦</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Herbal Spa ⭐</h3>
+                    <p>傳統草藥療法，Tripadvisor好評最多</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">90分鐘 ~HK$155</p>
+                    <span class="price-tag">長輩最愛</span>
+                    <a href="https://herbalspa.vn/en" target="_blank" style="display: block; margin-top: 10px;">官網 →</a>
+                </div>
+                <div class="card">
+                    <h3>Golden Lotus Spa</h3>
+                    <p>快速、乾淨、友善，性價比高</p>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">60分鐘 ~HK$95</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Shopping -->
+        <section class="section">
+            <h2 class="section-title">🛍️ 會安購物攻略</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>必買物品</th>
+                            <th>推薦店舖</th>
+                            <th>價格參考</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>🏮 燈籠</td>
+                            <td>Thang Loi Lantern (27 Nguyen Thai Hoc St)</td>
+                            <td>HK$12-60</td>
+                        </tr>
+                        <tr>
+                            <td>👔 訂製衣服</td>
+                            <td>Aobaba Cloth Shop</td>
+                            <td>西裝 HK$390-780</td>
+                        </tr>
+                        <tr>
+                            <td>☕ 越南咖啡</td>
+                            <td>Hoi An Roastery</td>
+                            <td>HK$30-60/包</td>
+                        </tr>
+                        <tr>
+                            <td>🌿 香料</td>
+                            <td>會安市場</td>
+                            <td>HK$15-30/包</td>
+                        </tr>
+                        <tr>
+                            <td>🏺 陶瓷</td>
+                            <td>Thanh Ha 陶瓷村</td>
+                            <td>HK$10-45</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top: 15px;"><strong>💡 訂製衣服時間：</strong>需預留至少24小時試身修改</p>
+        </section>
+        
+        <!-- Practical Tips -->
+        <section id="tips" class="section">
+            <h2 class="section-title">💡 實用攻略</h2>
+            
+            <h3 style="margin-bottom: 15px;">📱 SIM卡/eSIM</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>類型</th>
+                            <th>推薦選項</th>
+                            <th>價格</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>實體SIM</td>
+                            <td>Viettel 4GB/日</td>
+                            <td>~HK$23-40</td>
+                        </tr>
+                        <tr>
+                            <td>eSIM</td>
+                            <td>Orbit Mobile</td>
+                            <td>HK$23 起</td>
+                        </tr>
+                        <tr>
+                            <td>eSIM</td>
+                            <td>Airalo</td>
+                            <td>HK$40-120</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3 style="margin: 25px 0 15px;">💰 換錢貼士</h3>
+            <ul class="feature-list">
+                <li><strong>美元換越盾：</strong>~1 USD = 25,000 VND ✅ 最佳選擇</li>
+                <li><strong>港幣換越盾：</strong>~1 HKD = 3,100 VND ❌ 匯率較差</li>
+                <li><strong>建議：</strong>香港先換美元，到當地再換越盾</li>
+                <li><strong>換錢地點：</strong>珠寶店金行匯率最好（約1%手續費）</li>
+            </ul>
+            
+            <h3 style="margin: 25px 0 15px;">🛡️ 安全與防騙</h3>
+            <ul class="feature-list">
+                <li>峴港非常安全，暴力罪案極少 ✅</li>
+                <li>避免邊走邊用手機，防止飛車搶劫 ⚠️</li>
+                <li>游泳時勿留貴重物品在沙灘 ⚠️</li>
+                <li>用 Grab 最安全，幾乎無的士騙局 ✅</li>
+                <li>市場購物可殺價30-50%，預先講好價錢 ⚠️</li>
+            </ul>
+            
+            <h3 style="margin: 25px 0 15px;">📸 最佳攝影時間</h3>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>時間</th>
+                            <th>最佳地點</th>
+                            <th>拍攝內容</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>日出 5:30-6:30</td>
+                            <td>美溪沙灘、海雲嶺</td>
+                            <td>沙灘空鏡、海岸線</td>
+                        </tr>
+                        <tr>
+                            <td>黃金時刻 5:00-6:00 PM</td>
+                            <td>龍橋、韓江畔</td>
+                            <td>柔光、河景</td>
+                        </tr>
+                        <tr>
+                            <td>藍調時刻 6:00-7:00 PM</td>
+                            <td>會安古城</td>
+                            <td>燈籠初亮</td>
+                        </tr>
+                        <tr>
+                            <td>夜晚 8:00-10:00 PM</td>
+                            <td>會安秋盆河</td>
+                            <td>放水燈、夜景</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <h3 style="margin: 25px 0 15px;">🎆 八月特別活動</h3>
+            <div class="alert" style="background: #FFF8E1; border-color: var(--warning);">
+                <div class="alert-title" style="color: var(--warning);">🔥 龍橋噴火秀</div>
+                <p><strong>時間：</strong>每週五、六、日 21:00<br>
+                <strong>地點：</strong>Dragon Bridge<br>
+                <strong>時長：</strong>噴火約2分鐘<br>
+                <strong>建議：</strong>提前20分鐘到達佔位</p>
+            </div>
+            
+            <div class="alert" style="background: #E8F5E9; border-color: var(--success);">
+                <div class="alert-title" style="color: var(--success);">🏮 會安燈籠節</div>
+                <p><strong>時間：</strong>每月農曆十五<br>
+                <strong>特色：</strong>全城關燈、河邊放水燈<br>
+                <a href="https://hoiandaytrip.com/hoi-an-lantern-festival/" target="_blank">查看2026年日期 →</a></p>
+            </div>
+        </section>
+        
+        <!-- Packing List -->
+        <section id="checklist" class="section">
+            <h2 class="section-title">🎒 必備物品清單</h2>
+            <div class="checklist">
+                <label class="checklist-item">
+                    <input type="checkbox"> 護照（有效期6個月以上）
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 萬用轉接頭（越南A/C/F插頭）
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 防曬霜 SPF50+
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 輕便雨衣
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 泳衣、拖鞋
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 防蚊液
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 常用藥物
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 太陽眼鏡
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 帽子
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 充電寶
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 輕薄透氣衣服
+                </label>
+                <label class="checklist-item">
+                    <input type="checkbox"> 保溫水壺
+                </label>
+            </div>
+            <div class="alert" style="margin-top: 20px;">
+                <div class="alert-title">🌤️ 八月天氣</div>
+                <p>溫度：25-32°C | 濕度高 | 午後偶有雷陣雨</p>
+            </div>
+        </section>
+        
+        <!-- Budget Summary -->
+        <section class="section">
+            <div class="summary-box">
+                <h3>💰 每人預算明細</h3>
+                <div class="summary-amount">HK$ 5,235</div>
+                <div class="summary-breakdown">
+                    <div class="summary-item"><span>✈️ 機票（目標）</span><span>$2,000</span></div>
+                    <div class="summary-item"><span>🏨 住宿（5晚）</span><span>$1,000</span></div>
+                    <div class="summary-item"><span>🚗 包車（分攤）</span><span>$400</span></div>
+                    <div class="summary-item"><span>🎫 門票</span><span>$590</span></div>
+                    <div class="summary-item"><span>🍽️ 餐飲</span><span>$860</span></div>
+                    <div class="summary-item"><span>💆 Spa</span><span>$155</span></div>
+                    <div class="summary-item"><span>📱 SIM卡</span><span>$30</span></div>
+                    <div class="summary-item"><span>💰 雜費</span><span>$200</span></div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Quick Links -->
+        <section class="section">
+            <h2 class="section-title">🔗 實用連結</h2>
+            <div class="card-grid">
+                <a href="https://www.klook.com/activity/13283-ba-na-hills-ticket-da-nang/" target="_blank" class="btn" style="text-align: center;">🎫 巴拿山門票</a>
+                <a href="https://www.klook.com/activity/6266-private-car-charter-da-nang/" target="_blank" class="btn" style="text-align: center;">🚗 包車服務</a>
+                <a href="https://www.tripadvisor.com/Hotel_Review-g298085-d13846812-Reviews-Altara_Suites-Da_Nang.html" target="_blank" class="btn" style="text-align: center;">🏨 Altara Suites</a>
+                <a href="https://herbalspa.vn/en" target="_blank" class="btn" style="text-align: center;">💆 Herbal Spa</a>
+                <a href="https://www.grab.com/vn/en/" target="_blank" class="btn" style="text-align: center;">📱 Grab App</a>
+                <a href="https://danangfantasticity.com/en/discovery/danang-2026-the-official-events-festivals-calendar" target="_blank" class="btn" style="text-align: center;">🎆 峴港活動日曆</a>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <p>🇻🇳 峴港+會安 6日5夜旅遊攻略</p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">📅 2026年8月11日 - 8月16日 | 👨‍👩‍👧‍👦 5位成人</p>
+        <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.7;">Created with ❤️ for your family trip</p>
+    </footer>
+    
+    <script>
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Mobile menu toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        if (menuToggle) {
+            menuToggle.addEventListener('click', () => {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+        
+        // Save checklist state to localStorage
+        const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+        checkboxes.forEach((checkbox, index) => {
+            const key = `danang-checklist-${index}`;
+            checkbox.checked = localStorage.getItem(key) === 'true';
+            checkbox.addEventListener('change', () => {
+                localStorage.setItem(key, checkbox.checked);
+            });
+        });
+    </script>
+</body>
+</html>
