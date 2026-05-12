@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>峴港家庭之旅 · 2026年8月</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  color: #222222;
+  background: #ffffff;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: #ff385c; text-decoration: none; }
+
+/* Header */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  background: #fff;
+  border-bottom: 1px solid #ebebeb;
+  padding: 14px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.header-logo {
+  font-size: 20px; font-weight: 700; color: #ff385c;
+  display: flex; align-items: center; gap: 6px;
+}
+.header-info { font-size: 14px; color: #6a6a6a; }
+.header-flight {
+  font-size: 13px; font-weight: 500; color: #222;
+  display: flex; gap: 16px; align-items: center;
+}
+.header-flight span { padding: 4px 10px; background: #f7f7f7; border-radius: 20px; }
+
+/* Hero */
+.hero {
+  position: relative;
+  padding: 60px 24px 40px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+.hero h1 {
+  font-size: 32px; font-weight: 700; letter-spacing: -0.44px;
+  color: #222; margin-bottom: 8px;
+}
+.hero .sub { font-size: 16px; color: #6a6a6a; font-weight: 400; }
+.hero .meta {
+  display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;
+}
+.hero .meta-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 500;
+  padding: 8px 14px; background: #f7f7f7; border-radius: 20px;
+}
+
+/* Day Tabs - Airbnb category style */
+.day-tabs {
+  position: sticky; top: 60px; z-index: 90;
+  background: #fff;
+  border-bottom: 1px solid #ebebeb;
+  padding: 0 24px;
+}
+.day-nav {
+  display: flex; gap: 24px;
+  overflow-x: auto; max-width: 1120px; margin: 0 auto;
+  padding: 12px 0;
+}
+.day-nav::-webkit-scrollbar { display: none; }
+.day-tab {
+  flex-shrink: 0;
+  font-size: 14px; font-weight: 500; color: #6a6a6a;
+  padding: 8px 0; cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s;
+  white-space: nowrap;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.day-tab:hover { color: #222; }
+.day-tab.active { color: #222; border-bottom-color: #222; }
+.day-tab .tab-emoji { font-size: 20px; }
+
+/* Main Content Grid */
+.content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 40px;
+}
+@media (max-width: 900px) {
+  .content { grid-template-columns: 1fr; }
+}
+
+/* Timeline */
+.panel { display: none; }
+.panel.active { display: block; }
+
+.day-title {
+  font-size: 22px; font-weight: 600; letter-spacing: -0.44px;
+  margin-bottom: 4px;
+}
+.day-date { font-size: 14px; color: #6a6a6a; margin-bottom: 24px; }
+
+.timeline-item {
+  display: flex; gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #ebebeb;
+}
+.timeline-item:last-child { border-bottom: none; }
+.t-time {
+  min-width: 50px; font-size: 14px; font-weight: 600;
+  color: #222; padding-top: 2px;
+}
+.t-body { flex: 1; }
+.t-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.t-desc { font-size: 14px; color: #6a6a6a; line-height: 1.5; }
+.t-tip {
+  margin-top: 8px; font-size: 13px;
+  padding: 8px 12px; background: #f7f7f7;
+  border-radius: 8px; color: #6a6a6a;
+}
+.t-tag {
+  display: inline-block; font-size: 11px; font-weight: 600;
+  padding: 3px 10px; background: #f7f7f7; border-radius: 999px;
+  color: #222; margin-top: 6px; margin-right: 4px;
+}
+
+/* Map Panel */
+.map-section {
+  position: sticky; top: 130px;
+}
+.map-section h3 {
+  font-size: 16px; font-weight: 600; margin-bottom: 12px;
+}
+#map {
+  height: 500px; width: 100%;
+  border-radius: 12px;
+  box-shadow: rgba(0,0,0,0.02) 0px 0px 0px 1px,
+              rgba(0,0,0,0.04) 0px 2px 6px,
+              rgba(0,0,0,0.1) 0px 4px 8px;
+}
+.map-legend {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+}
+.legend-item {
+  font-size: 12px; color: #6a6a6a;
+  display: flex; align-items: center; gap: 4px;
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+
+/* Info Sections */
+.info-section {
+  max-width: 1120px; margin: 0 auto;
+  padding: 0 24px 60px;
+}
+.section-divider {
+  border: none; border-top: 1px solid #ebebeb;
+  margin: 0 0 40px;
+}
+.section-title {
+  font-size: 22px; font-weight: 600; letter-spacing: -0.44px;
+  margin-bottom: 20px;
+}
+.info-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+}
+.info-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #ebebeb;
+  box-shadow: rgba(0,0,0,0.02) 0px 0px 0px 1px,
+              rgba(0,0,0,0.04) 0px 2px 6px,
+              rgba(0,0,0,0.1) 0px 4px 8px;
+  padding: 20px;
+  transition: box-shadow 0.2s;
+}
+.info-card:hover {
+  box-shadow: rgba(0,0,0,0.08) 0px 4px 12px;
+}
+.info-card h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+.info-card p { font-size: 14px; color: #6a6a6a; }
+
+/* Visa Warning */
+.visa-warn {
+  background: #fff3cd; border-left: 3px solid #d69e2e;
+  padding: 16px 20px; border-radius: 0 8px 8px 0;
+  font-size: 14px; color: #856404; margin-bottom: 16px;
+}
+.visa-table { width: 100%; font-size: 14px; }
+.visa-table td { padding: 8px 12px; border-bottom: 1px solid #ebebeb; }
+.visa-table td:first-child { font-weight: 600; min-width: 120px; }
+
+/* E-Visa always visible card */
+.visa-card {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #ebebeb;
+  box-shadow: rgba(0,0,0,0.02) 0px 0px 0px 1px,
+              rgba(0,0,0,0.04) 0px 2px 6px,
+              rgba(0,0,0,0.1) 0px 4px 8px;
+  padding: 24px;
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-logo">🇻🇳 峴港之旅</div>
+  <div class="header-flight">
+    <span>✈️ UO552 08:25</span>
+    <span>PNR: D7TGKZ</span>
+    <span>✈️ UO553 10:05</span>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>峴港家庭之旅</h1>
+  <div class="sub">2026年8月11日（週二）— 8月16日（週日）· 5晚6天</div>
+  <div class="meta">
+    <div class="meta-item">👥 五位成人</div>
+    <div class="meta-item">✈️ HK Express</div>
+    <div class="meta-item">📍 香港 → 峴港</div>
+  </div>
+</section>
+
+<nav class="day-tabs">
+  <div class="day-nav">
+    <div class="day-tab active" onclick="switchDay(1)"><span class="tab-emoji">🏖️</span>Day 1 抵達</div>
+    <div class="day-tab" onclick="switchDay(2)"><span class="tab-emoji">🏔️</span>Day 2 巴拿山</div>
+    <div class="day-tab" onclick="switchDay(3)"><span class="tab-emoji">🏛️</span>Day 3 會安</div>
+    <div class="day-tab" onclick="switchDay(4)"><span class="tab-emoji">⛰️</span>Day 4 五行山</div>
+    <div class="day-tab" onclick="switchDay(5)"><span class="tab-emoji">🎉</span>Day 5 市區</div>
+    <div class="day-tab" onclick="switchDay(6)"><span class="tab-emoji">✈️</span>Day 6 返程</div>
+  </div>
+</nav>
+
+<div class="content">
+  <!-- LEFT: Day Panels -->
+  <div>
+    <!-- D1 -->
+    <div class="panel active" id="panel1">
+      <div class="day-title">抵達峴港 · 輕鬆適應</div>
+      <div class="day-date">8月11日（週二）</div>
+      <div class="timeline-item"><div class="t-time">08:25</div><div class="t-body"><div class="t-title">✈️ 香港國際機場起飛</div><div class="t-desc">航班 UO552，建議 06:25 前到達機場。</div></div></div>
+      <div class="timeline-item"><div class="t-time">09:20</div><div class="t-body"><div class="t-title">🛬 抵達峴港國際機場</div><div class="t-desc">過關、取行李約30分鐘。機場離市區僅10-15分鐘。</div><div class="t-tip">💡 5人需叫2台Grab或預約7人車接機（約 150,000-200,000 VND）</div></div></div>
+      <div class="timeline-item"><div class="t-time">10:00</div><div class="t-body"><div class="t-title">🏠 前往 Airbnb 辦理入住 / 寄存行李</div></div></div>
+      <div class="timeline-item"><div class="t-time">11:00</div><div class="t-body"><div class="t-title">🍜 午餐 — 越南米粉 Pho</div><div class="t-desc">推薦：Bun Cha Ca 109（魚餅檬粉）</div><div class="t-tip">💰 人均約 30,000-50,000 VND（HK$10-17）</div></div></div>
+      <div class="timeline-item"><div class="t-time">12:30</div><div class="t-body"><div class="t-title">🏨 回 Airbnb 午休</div></div></div>
+      <div class="timeline-item"><div class="t-time">15:30</div><div class="t-body"><div class="t-title">🏖️ 美溪海灘漫步</div><div class="t-desc">福布斯全球最美海灘之一，適合帶長輩散步。</div><div class="t-tag">輕鬆</div><div class="t-tag">海灘</div></div></div>
+      <div class="timeline-item"><div class="t-time">18:00</div><div class="t-body"><div class="t-title">🦐 海鮮大餐</div><div class="t-desc">推薦：Be Man Seafood 或 Hai San Nam Duong</div><div class="t-tip">💰 人均約 150,000-250,000 VND</div></div></div>
+      <div class="timeline-item"><div class="t-time">19:30</div><div class="t-body"><div class="t-title">🌉 漢江河畔散步 · 龍橋</div><div class="t-desc">週六/週日21:00有噴火表演（8/11週二無）</div></div></div>
+    </div>
+    <!-- D2 -->
+    <div class="panel" id="panel2">
+      <div class="day-title">巴拿山 · 黃金橋 · 法式小鎮</div>
+      <div class="day-date">8月12日（週三）</div>
+      <div class="timeline-item"><div class="t-time">07:30</div><div class="t-body"><div class="t-title">🥣 早餐 — Banh Mi / Xoi Ga</div></div></div>
+      <div class="timeline-item"><div class="t-time">08:00</div><div class="t-body"><div class="t-title">🚗 出發前往巴拿山</div><div class="t-desc">車程約45分鐘。建議包7人車。</div></div></div>
+      <div class="timeline-item"><div class="t-time">09:00</div><div class="t-body"><div class="t-title">🚠 纜車上山</div><div class="t-desc">世界最長纜車之一，全長約5,800米。</div><div class="t-tag">必體驗</div></div></div>
+      <div class="timeline-item"><div class="t-time">09:30</div><div class="t-body"><div class="t-title">🌉 黃金橋</div><div class="t-desc">巨型「佛手」托起的金色步道，海拔1,400米。</div></div></div>
+      <div class="timeline-item"><div class="t-time">10:30</div><div class="t-body"><div class="t-title">🏰 法式小鎮</div></div></div>
+      <div class="timeline-item"><div class="t-time">12:00</div><div class="t-body"><div class="t-title">🍽️ 午餐 — 山上自助餐廳</div></div></div>
+      <div class="timeline-item"><div class="t-time">13:00</div><div class="t-body"><div class="t-title">🎢 Fantasy Park 室內遊樂園</div></div></div>
+      <div class="timeline-item"><div class="t-time">15:30</div><div class="t-body"><div class="t-title">🌸 靈應寺 + 花花園</div></div></div>
+      <div class="timeline-item"><div class="t-time">16:00</div><div class="t-body"><div class="t-title">🚠 纜車下山 → 回 Airbnb</div></div></div>
+      <div class="timeline-item"><div class="t-time">18:30</div><div class="t-body"><div class="t-title">🍲 晚餐 — Mi Quang（廣南面）</div></div></div>
+    </div>
+    <!-- D3 -->
+    <div class="panel" id="panel3">
+      <div class="day-title">會安古鎮 · 椰子船 · 燈籠之夜</div>
+      <div class="day-date">8月13日（週四）</div>
+      <div class="timeline-item"><div class="t-time">09:00</div><div class="t-body"><div class="t-title">🚗 出發前往會安</div><div class="t-desc">車程約30-40分鐘。</div></div></div>
+      <div class="timeline-item"><div class="t-time">10:00</div><div class="t-body"><div class="t-title">🏛️ 會安古鎮漫步（UNESCO）</div><div class="t-desc">日本廊橋、譚家老宅、福建會館、中央市場</div><div class="t-tag">必遊</div><div class="t-tag">文化</div><div class="t-tag">拍照</div></div></div>
+      <div class="timeline-item"><div class="t-time">12:00</div><div class="t-body"><div class="t-title">🍗 午餐 — Cao Lau、Com Ga、Banh Mi</div></div></div>
+      <div class="timeline-item"><div class="t-time">15:00</div><div class="t-body"><div class="t-title">🛶 椰林竹籃船體驗</div><div class="t-desc">Cam Thanh 椰子村，圓形竹籃船穿梭水椰林。</div><div class="t-tag">體驗</div></div></div>
+      <div class="timeline-item"><div class="t-time">16:30</div><div class="t-body"><div class="t-title">🏖️ 安邦海灘</div></div></div>
+      <div class="timeline-item"><div class="t-time">19:00</div><div class="t-body"><div class="t-title">🏮 會安夜景 · 放河燈</div><div class="t-desc">整條河漂滿燈籠。</div><div class="t-tag">必體驗</div></div></div>
+    </div>
+    <!-- D4 -->
+    <div class="panel" id="panel4">
+      <div class="day-title">五行山 · 山茶半島 · 美溪海灘</div>
+      <div class="day-date">8月14日（週五）</div>
+      <div class="timeline-item"><div class="t-time">08:30</div><div class="t-body"><div class="t-title">⛰️ 五行山</div><div class="t-desc">五座石灰岩山峰，洞穴、佛寺和山頂觀景臺。</div><div class="t-tag">文化</div><div class="t-tag">輕度登山</div></div></div>
+      <div class="timeline-item"><div class="t-time">13:30</div><div class="t-body"><div class="t-title">🙏 靈應寺（山茶半島）</div><div class="t-desc">67米白色觀音像，越南最高佛像。</div><div class="t-tag">必遊</div></div></div>
+      <div class="timeline-item"><div class="t-time">16:00</div><div class="t-body"><div class="t-title">🏖️ 返回美溪海灘放鬆</div></div></div>
+      <div class="timeline-item"><div class="t-time">19:30</div><div class="t-body"><div class="t-title">🌉 漢江夜景 · 愛情橋</div></div></div>
+    </div>
+    <!-- D5 -->
+    <div class="panel" id="panel5">
+      <div class="day-title">自由探索 · 龍橋噴火秀</div>
+      <div class="day-date">8月15日（週六）</div>
+      <div class="timeline-item"><div class="t-time">09:30</div><div class="t-body"><div class="t-title">🏛️ 佔族雕塑博物館</div><div class="t-desc">全球最完整的佔婆雕塑收藏。</div></div></div>
+      <div class="timeline-item"><div class="t-time">11:00</div><div class="t-body"><div class="t-title">🛒 漢市場</div><div class="t-desc">購買特產：咖啡、腰果、魚露。</div></div></div>
+      <div class="timeline-item"><div class="t-time">14:00</div><div class="t-body"><div class="t-title">💆 按摩 / SPA 放鬆</div><div class="t-desc">越南按摩性價比極高。</div><div class="t-tag">放鬆</div></div></div>
+      <div class="timeline-item"><div class="t-time">18:00</div><div class="t-body"><div class="t-title">🎉 告別晚餐 — 精緻越南海鮮大餐</div></div></div>
+      <div class="timeline-item"><div class="t-time">20:30</div><div class="t-body"><div class="t-title">🔥🐉 龍橋噴火表演</div><div class="t-desc">每週六、週日 21:00！提前到漢江邊佔位。</div><div class="t-tag">必看</div><div class="t-tag">週六限定</div></div></div>
+    </div>
+    <!-- D6 -->
+    <div class="panel" id="panel6">
+      <div class="day-title">返程</div>
+      <div class="day-date">8月16日（週日）</div>
+      <div class="timeline-item"><div class="t-time">07:00</div><div class="t-body"><div class="t-title">🚗 出發前往峴港機場</div><div class="t-desc">建議 08:05 前到達。</div></div></div>
+      <div class="timeline-item"><div class="t-time">10:05</div><div class="t-body"><div class="t-title">✈️ 峴港起飛 → 香港</div><div class="t-desc">航班 UO553，預計 13:40 抵達。</div></div></div>
+      <div class="timeline-item"><div class="t-time">13:40</div><div class="t-body"><div class="t-title">🛬 抵達香港，旅程圓滿結束 🎉</div></div></div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Map (sticky) -->
+  <div class="map-section">
+    <h3>📍 地圖</h3>
+    <div id="map"></div>
+    <div class="map-legend">
+      <div class="legend-item"><span class="legend-dot" style="background:#ff385c"></span> D1</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#3182ce"></span> D2</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#38a169"></span> D3</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#d69e2e"></span> D4</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#805ad5"></span> D5</div>
+    </div>
+  </div>
+</div>
+
+<!-- Info Sections -->
+<div class="info-section">
+  <hr class="section-divider">
+
+  <!-- Visa - always visible -->
+  <div class="section-title">🛂 越南電子簽證</div>
+  <div class="visa-card">
+    <div class="visa-warn">⚠️ 香港特區護照前往越南需要申請電子簽證（E-Visa），不是免簽！建議出發前至少 7-10 個工作日申請。</div>
+    <table class="visa-table">
+      <tr><td>🔗 申請網址</td><td><a href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank">evisa.xuatnhapcanh.gov.vn</a></td></tr>
+      <tr><td>💰 費用</td><td>USD $25（單次入境，25天有效期）</td></tr>
+      <tr><td>⏱️ 處理時間</td><td>官方 3-5 工作日</td></tr>
+      <tr><td>📄 所需文件</td><td>護照掃描件、證件相（白底）、入住地址</td></tr>
+      <tr><td>👥 申請方式</td><td>每人獨立申請（5人需5份），建議一人統一操作</td></tr>
+    </table>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- Budget -->
+  <div class="section-title">💰 預算估算（5人總計）</div>
+  <div class="info-grid">
+    <div class="info-card"><h4>✈️ 機票</h4><p>待確認 · HK Express UO552/UO553</p></div>
+    <div class="info-card"><h4>🏠 Airbnb（5晚）</h4><p>~HK$3,500-5,500</p></div>
+    <div class="info-card"><h4>🍜 餐飲</h4><p>~HK$2,500-3,500 · 5天×5人</p></div>
+    <div class="info-card"><h4>🚗 交通</h4><p>~HK$800-1,200 · Grab/包車</p></div>
+    <div class="info-card"><h4>🎫 景點門票</h4><p>~HK$1,500-2,000 · 巴拿山佔大頭</p></div>
+    <div class="info-card"><h4>💆 SPA/按摩</h4><p>~HK$800-1,300 · 1-2次/人</p></div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- Tips -->
+  <div class="section-title">📋 行前準備</div>
+  <div class="info-grid">
+    <div class="info-card"><h4>📱 必備 App</h4><p>Grab · Google Translate · Google Maps · XE Currency</p></div>
+    <div class="info-card"><h4>💳 支付方式</h4><p>大部分餐廳接受 Visa/MC · 路邊攤只收現金（VND）</p></div>
+    <div class="info-card"><h4>🌤️ 8月天氣</h4><p>25-35°C，炎熱潮濕 · 防曬霜 SPF50+ 必備</p></div>
+    <div class="info-card"><h4>⚠️ 注意事項</h4><p>進入寺廟需穿長褲 · 飲用水買瓶裝 · Grab 比路邊打車安全</p></div>
+  </div>
+</div>
+
+<script>
+var currentDay = 1;
+window.switchDay = function(n) {
+  document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.day-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.getElementById('panel'+n).classList.add('active');
+  document.querySelectorAll('.day-tab')[n-1].classList.add('active');
+  currentDay = n;
+};
+
+// Map
+(function(){
+  function init(){
+    if(typeof L==='undefined'){setTimeout(init,100);return;}
+    var map=L.map('map',{center:[16.0544,108.2022],zoom:12});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
+    var colors={d1:'#ff385c',d2:'#3182ce',d3:'#38a169',d4:'#d69e2e',d5:'#805ad5'};
+    function mkIcon(c,emoji){
+      var svg='<svg xmlns="http://www.w3.org/2000/svg" width="28" height="38"><circle cx="14" cy="14" r="12" fill="'+c+'" stroke="#fff" stroke-width="2"/><text x="14" y="19" text-anchor="middle" fill="#fff" font-size="13">'+emoji+'</text><polygon points="14,26 10,36 18,36" fill="'+c+'"/></svg>';
+      return L.divIcon({html:svg,className:'',iconSize:[28,38],iconAnchor:[14,38]});
+    }
+    function addM(lat,lng,title,day,emoji){
+      L.marker([lat,lng],{icon:mkIcon(colors[day],emoji)}).bindPopup('<b>'+title+'</b>').addTo(map);
+    }
+    addM(16.0437,108.1995,'✈️ 峴港機場','d1','✈');
+    addM(16.0518,108.2445,'🏖️ 美溪海灘','d1','⭐');
+    addM(16.0678,108.2308,'🌉 龍橋','d1','⭐');
+    addM(16.0635,107.9765,'🏔️ 巴拿山','d2','⭐');
+    addM(15.8801,108.3380,'🏛️ 會安古鎮','d3','⭐');
+    addM(15.8715,108.3605,'🛶 椰林竹籃船','d3','⭐');
+    addM(16.0050,108.2590,'⛰️ 五行山','d4','⭐');
+    addM(16.1100,108.2480,'🙏 靈應寺','d4','⭐');
+    addM(16.0545,108.2225,'🏛️ 佔族博物館','d5','⭐');
+    addM(16.0665,108.2210,'🛒 漢市場','d5','⭐');
+    addM(16.0580,108.2400,'🏨 住宿區域','d1','🏨');
+  }
+  if(document.readyState==='complete')init(); else window.addEventListener('load',init);
+})();
+</script>
+
+</body>
+</html>
