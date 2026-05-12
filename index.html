@@ -330,6 +330,14 @@ a:hover { text-decoration: underline; }
   font-family: var(--mono);
   font-size: 10px; color: var(--muted);
 }
+.leg-group { display: flex; flex-wrap: wrap; gap: 8px; }
+.leg-label {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--rule);
+  margin-right: 2px;
+}
 .leg-dot { display: inline-block; width: 6px; height: 6px; margin-right: 3px; }
 .leg-dot.dim { opacity: 0.2; }
 
@@ -880,11 +888,27 @@ a:hover { text-decoration: underline; }
       <div class="map-header">行程地圖</div>
       <div id="map"></div>
       <div class="map-legend">
-        <span><span class="leg-dot" style="background:#1c1917" data-legend="1"></span>01 抵達</span>
-        <span><span class="leg-dot" style="background:#0369a1" data-legend="2"></span>02 巴拿山</span>
-        <span><span class="leg-dot" style="background:#d97706" data-legend="3"></span>03 會安</span>
-        <span><span class="leg-dot" style="background:#dc2626" data-legend="4"></span>04 五行山</span>
-        <span><span class="leg-dot" style="background:#7c3aed" data-legend="5"></span>05 市區</span>
+        <div class="leg-group">
+          <div class="leg-label">日程</div>
+          <span><span class="leg-dot" style="background:#1c1917" data-legend="1"></span>01 抵達</span>
+          <span><span class="leg-dot" style="background:#0369a1" data-legend="2"></span>02 巴拿山</span>
+          <span><span class="leg-dot" style="background:#d97706" data-legend="3"></span>03 會安</span>
+          <span><span class="leg-dot" style="background:#dc2626" data-legend="4"></span>04 五行山</span>
+          <span><span class="leg-dot" style="background:#7c3aed" data-legend="5"></span>05 市區</span>
+        </div>
+        <div class="leg-group" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
+          <div class="leg-label">地標類型</div>
+          <span>✈ 機場</span>
+          <span>⛱ 海灘</span>
+          <span>⌒ 橋樑</span>
+          <span>⛰ 山峰</span>
+          <span>鎮 古鎮</span>
+          <span>⛵ 水上</span>
+          <span>⛩ 寺廟</span>
+          <span>博 博物館</span>
+          <span>市 市場</span>
+          <span>宿 住宿</span>
+        </div>
       </div>
     </div>
 
@@ -1019,26 +1043,30 @@ var map;
     map = L.map('map',{center:[16.0544,108.2022],zoom:11});
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
     var c={1:'#1c1917',2:'#0369a1',3:'#d97706',4:'#dc2626',5:'#7c3aed'};
-    var emojis={1:'✈',2:'⛰',3:'🏮',4:'🗿',5:'🌉'};
-    function mk(color,emoji){
-      var s='<svg xmlns="http://www.w3.org/2000/svg" width="24" height="34"><circle cx="12" cy="12" r="10" fill="'+color+'" stroke="#fff" stroke-width="2"/><text x="12" y="16" text-anchor="middle" fill="#fff" font-size="11">'+emoji+'</text><polygon points="12,22 8,32 16,32" fill="'+color+'"/></svg>';
-      return L.divIcon({html:s,className:'',iconSize:[24,34],iconAnchor:[12,34]});
+    // Per-point icon by place type
+    var types={
+      airport:'✈', beach:'⛱', bridge:'⌒', mountain:'⛰', oldtown:'鎮',
+      boat:'⛵', temple:'⛩', museum:'博', market:'市', hotel:'宿'
+    };
+    function mk(color,icon){
+      var s='<svg xmlns="http://www.w3.org/2000/svg" width="26" height="36"><circle cx="13" cy="13" r="11" fill="'+color+'" stroke="#fff" stroke-width="2"/><text x="13" y="17.5" text-anchor="middle" fill="#fff" font-size="12">'+icon+'</text><polygon points="13,24 8,34 18,34" fill="'+color+'"/></svg>';
+      return L.divIcon({html:s,className:'',iconSize:[26,36],iconAnchor:[13,36]});
     }
     var pts=[
-      {lat:16.0437,lng:108.1995,title:'峴港機場',day:1},
-      {lat:16.0518,lng:108.2445,title:'美溪海灘',day:1},
-      {lat:16.0678,lng:108.2308,title:'龍橋',day:1},
-      {lat:16.0635,lng:107.9765,title:'巴拿山',day:2},
-      {lat:15.8801,lng:108.3380,title:'會安古鎮',day:3},
-      {lat:15.8715,lng:108.3605,title:'椰林竹籃船',day:3},
-      {lat:16.0050,lng:108.2590,title:'五行山',day:4},
-      {lat:16.1100,lng:108.2480,title:'靈應寺',day:4},
-      {lat:16.0545,lng:108.2225,title:'佔族博物館',day:5},
-      {lat:16.0665,lng:108.2210,title:'漢市場',day:5},
-      {lat:16.0580,lng:108.2400,title:'住宿區域',day:1},
+      {lat:16.0437,lng:108.1995,title:'峴港機場',day:1,type:'airport'},
+      {lat:16.0518,lng:108.2445,title:'美溪海灘',day:1,type:'beach'},
+      {lat:16.0678,lng:108.2308,title:'龍橋',day:1,type:'bridge'},
+      {lat:16.0580,lng:108.2400,title:'住宿區域',day:1,type:'hotel'},
+      {lat:16.0635,lng:107.9765,title:'巴拿山',day:2,type:'mountain'},
+      {lat:15.8801,lng:108.3380,title:'會安古鎮',day:3,type:'oldtown'},
+      {lat:15.8715,lng:108.3605,title:'椰林竹籃船',day:3,type:'boat'},
+      {lat:16.0050,lng:108.2590,title:'五行山',day:4,type:'mountain'},
+      {lat:16.1100,lng:108.2480,title:'靈應寺',day:4,type:'temple'},
+      {lat:16.0545,lng:108.2225,title:'佔族博物館',day:5,type:'museum'},
+      {lat:16.0665,lng:108.2210,title:'漢市場',day:5,type:'market'},
     ];
     pts.forEach(function(p){
-      var m=L.marker([p.lat,p.lng],{icon:mk(c[p.day],emojis[p.day]||'·')}).bindPopup('<b>'+p.title+'</b>').addTo(map);
+      var m=L.marker([p.lat,p.lng],{icon:mk(c[p.day],types[p.type])}).bindPopup('<b>'+p.title+'</b>').addTo(map);
       m._day=p.day;
       allMarkers.push(m);
     });
