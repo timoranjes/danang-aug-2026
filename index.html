@@ -309,79 +309,34 @@ html { scroll-behavior: smooth; }
   #map { height: 260px; }
 }
 
-/* ===== Spot Modal ===== */
-.modal-overlay { display:none; position:fixed; top:0;left:0;right:0;bottom:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; padding:20px; animation:fadeIn 0.2s ease; }
-.modal-overlay.show { display:flex; }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
-@keyframes slideUp { from{transform:translateY(30px);opacity:0} to{transform:translateY(0);opacity:1} }
-.modal-card { background:var(--card); border-radius:16px; max-width:520px; width:100%; max-height:80vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:slideUp 0.3s ease; position:relative; }
-.modal-header { padding:20px 20px 0; display:flex; align-items:flex-start; gap:12px; }
-.modal-header .emoji { font-size:36px; }
-.modal-header .title-area h2 { font-size:20px; color:var(--primary); margin:0; line-height:1.3; }
-.modal-header .title-area .subtitle { font-size:13px; color:var(--muted); margin-top:2px; }
-.modal-close { position:absolute; top:12px;right:12px; width:32px;height:32px; border:none; background:var(--bg); border-radius:50%; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text); }
-.modal-close:hover { background:var(--border); }
-.modal-body { padding:16px 20px 24px; }
-.modal-body p { font-size:14px; line-height:1.8; margin:0 0 12px; }
-.modal-body .highlight { background:rgba(197,150,12,0.08); border-left:3px solid var(--accent); padding:10px 14px; border-radius:0 8px 8px 0; font-size:13px; margin:12px 0; }
-.modal-body .tag-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
-.modal-body .tag { font-size:11px; padding:2px 8px; border-radius:12px; background:var(--accent); color:#fff; }
-.modal-body .info-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
-.modal-body .info-item { background:var(--bg); padding:8px 12px; border-radius:8px; font-size:13px; }
-.modal-body .info-item .label { color:var(--muted); font-size:11px; text-transform:uppercase; }
-.modal-body .info-item .val { font-weight:bold; color:var(--primary); margin-top:2px; }
-.spot-info-btn { display:inline-block; padding:1px 7px; margin-left:6px; border:1px solid var(--accent); background:transparent; color:var(--accent); border-radius:50%; font-size:12px; cursor:pointer; vertical-align:middle; transition:all 0.2s; line-height:1.4; }
-.spot-info-btn:hover { background:var(--accent); color:#fff; }
-@media(max-width:640px){ .modal-overlay{padding:12px;align-items:flex-end} .modal-card{max-height:70vh;border-radius:16px 16px 0 0} .modal-header .emoji{font-size:28px} .modal-header .title-area h2{font-size:18px} .modal-body{padding:12px 16px 20px} .modal-body .info-grid{grid-template-columns:1fr} }
+/* ===== Spot Info Modal ===== */
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);z-index:2000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+@keyframes mfadeIn{from{opacity:0}to{opacity:1}}
+@keyframes mslideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-card{background:#fff;border-radius:16px;max-width:500px;width:100%;max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.35);animation:mslideUp .3s ease;position:relative}
+.modal-header{padding:20px 20px 0;display:flex;align-items:flex-start;gap:12px}
+.modal-header .memoji{font-size:36px;flex-shrink:0}
+.modal-header h2{font-size:19px;color:#c5960c;margin:0 0 2px}
+.modal-header .msub{font-size:13px;color:#666}
+.modal-close{position:absolute;top:10px;right:10px;width:30px;height:30px;border:none;background:#f0f0f0;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#333}
+.modal-close:hover{background:#ddd}
+.modal-body{padding:16px 20px 24px}
+.modal-body p{font-size:14px;line-height:1.8;margin:0 0 10px;color:#333}
+.modal-body .mhl{background:rgba(197,150,12,0.08);border-left:3px solid #c5960c;padding:10px 14px;border-radius:0 8px 8px 0;font-size:13px;margin:12px 0}
+.modal-body .itag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:12px;background:#c5960c;color:#fff;margin:2px 4px 2px 0}
+.modal-body .igrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.modal-body .iitem{background:#f7f5f2;padding:8px 12px;border-radius:8px}
+.modal-body .iitem .ilbl{font-size:11px;color:#888}
+.modal-body .iitem .ival{font-weight:bold;color:#333;font-size:13px;margin-top:2px}
+.spot-info-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin:0 4px;border:1px solid #c5960c;background:transparent;color:#c5960c;border-radius:50%;font-size:11px;cursor:pointer;vertical-align:middle;transition:all .2s;padding:0}
+.spot-info-btn:hover{background:#c5960c;color:#fff}
+@media(max-width:640px){.modal-overlay{padding:10px;align-items:flex-end}.modal-card{max-height:65vh;border-radius:16px 16px 0 0}.modal-body .igrid{grid-template-columns:1fr}}
+
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-  
-// ===== SPOT DATA =====
-var SPOT_DATA = {
-  "my-khe-beach": { emoji:"🏖️", title:"美溪海灘", subtitle:"My Khe Beach · 全球最美海灘之一",
-    body:"<p>美溪海灘被《福布斯雜誌》評爲全球最美海灘之一，全長約20公里，沙質潔白細膩，海水清澈見底，浪況平緩。</p><p>1975年前這裏曾是美軍士兵的度假海灘。如今沿岸佈滿度假村、咖啡館和海鮮餐廳。</p><div class='highlight'>💡 最佳時段：清晨6-7點看日出，或傍晚17:00-18:30看日落</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>免費</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>1.5-2小時</div></div><div class='info-item'><div class='label'>設施</div><div class='val'>躺椅、淋浴、餐廳</div></div><div class='info-item'><div class='label'>交通</div><div class='val'>Grab約30K VND</div></div></div>" },
-  "dragon-bridge": { emoji:"🌉", title:"龍橋", subtitle:"Dragon Bridge · 峴港地標",
-    body:"<p>龍橋全長666米，橫跨漢江，2013年建成，是峴港最具標誌性的建築。</p><p><strong>🔥 噴火表演：</strong>每週六、週日晚上21:00，龍頭會噴出火焰和水柱。</p><div class='highlight'>💡 最佳觀賞位置：龍橋東側河岸（靠近Sun Wheel）</div><div class='info-grid'><div class='info-item'><div class='label'>長度</div><div class='val'>666米</div></div><div class='info-item'><div class='label'>噴火時間</div><div class='val'>週六/日21:00</div></div><div class='info-item'><div class='label'>門票</div><div class='val'>免費</div></div><div class='info-item'><div class='label'>建成</div><div class='val'>2013年</div></div></div>" },
-  "bana-hills": { emoji:"🏔️", title:"巴拿山", subtitle:"Ba Na Hills · 世界最長纜車之一",
-    body:"<p>巴拿山位於峴港以西約40公里的山上，海拔1,487米。法國殖民時期曾是避暑勝地。</p><p><strong>🌟 三大亮點：</strong>1️⃣纜車(全長5,801米) 2️⃣黃金橋(Golden Bridge) 3️⃣法式小鎮</p><div class='highlight'>⚠️ 山上氣溫比市區低5-10°C，建議帶薄外套</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>~HK$250/人</div></div><div class='info-item'><div class='label'>纜車</div><div class='val'>15-20分鐘</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>4-6小時</div></div><div class='info-item'><div class='label'>海拔</div><div class='val'>1,487米</div></div></div>" },
-  "hoi-an": { emoji:"🏛️", title:"會安古鎮", subtitle:"Hoi An · UNESCO世界遺產",
-    body:"<p>會安古鎮是越南保存最完好的傳統貿易港口，1999年被列爲UNESCO世界遺產。15-19世紀曾是中國、日本、歐洲商人的貿易樞紐。</p><p><strong>🌟 必看：</strong>日本廊橋(1593年)、福建會館、Tan Ky古宅(200年歷史)</p><p>🏮 每月農曆14日「滿月之夜」，古鎮只點燈籠，美如仙境。</p><div class='highlight'>💡 建議下午3點後到達，先逛景點，傍晚看日落，晚上賞燈籠</div><div class='info-grid'><div class='info-item'><div class='label'>聯票</div><div class='val'>120K VND</div></div><div class='info-item'><div class='label'>交通</div><div class='val'>距峴港約30km</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>半天至一天</div></div><div class='info-item'><div class='label'>UNESCO</div><div class='val'>1999年</div></div></div>" },
-  "coconut-village": { emoji:"🛶", title:"椰林竹籃船", subtitle:"Cam Thanh Coconut Village",
-    body:"<p>Cam Thanh椰子村位於會安郊區，河邊長滿水椰子林。最出名的是竹籃船(Thung Chai)——圓形竹編小船。</p><p>船夫會帶你穿梭在椰子林河道中，表演旋轉竹船、撒網捕魚等絕技！</p><div class='highlight'>💡 費用約100-150K VND/人，體驗30-40分鐘</div><div class='info-grid'><div class='info-item'><div class='label'>費用</div><div class='val'>~100-150K VND</div></div><div class='info-item'><div class='label'>體驗時間</div><div class='val'>30-40分鐘</div></div><div class='info-item'><div class='label'>適合</div><div class='val'>全家大小</div></div><div class='info-item'><div class='label'>位置</div><div class='val'>會安郊區</div></div></div>" },
-  "marble-mtn": { emoji:"⛰️", title:"五行山", subtitle:"Marble Mountains · 石灰岩山峰群",
-    body:"<p>五行山由五座石灰岩山峰組成，以五行命名。水山(Thu Son)最高(108米)。</p><p>最著名的洞穴是華嚴洞(Huyen Khong)，高30米，內有佛像和天然採光窗。</p><p>⚠️ 可搭電梯(15K VND)到半山腰再走少量階梯。</p><div class='highlight'>💡 建議早上去，穿防滑鞋(洞穴地面濕滑)</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>40K VND</div></div><div class='info-item'><div class='label'>電梯</div><div class='val'>15K VND</div></div><div class='info-item'><div class='label'>最高峰</div><div class='val'>108米</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>1.5-2小時</div></div></div>" },
-  "linh-ung-pagoda": { emoji:"🙏", title:"靈應寺", subtitle:"Linh Ung Pagoda · 山茶半島",
-    body:"<p>靈應寺位於山茶半島山腰，寺內矗立著高達67米的白色觀音像(Lady Buddha)，是越南最高的觀音像。</p><p>從觀音像底座可以360度俯瞰整個峴港海岸線。</p><div class='highlight'>💡 免費入場。寺廟需穿長褲/過膝裙</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>免費</div></div><div class='info-item'><div class='label'>觀音像高</div><div class='val'>67米</div></div><div class='info-item'><div class='label'>位置</div><div class='val'>山茶半島</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>30-45分鐘</div></div></div>" },
-  "cham-museum": { emoji:"🏛️", title:"佔族博物館", subtitle:"Museum of Cham Sculpture",
-    body:"<p>佔族博物館成立於1915年，是全球收藏佔婆(Champa)文明雕塑最完整的博物館。</p><p>館內展出約300件5-15世紀的佔婆石雕，包括濕婆像、林迦、優尼等。</p><div class='highlight'>💡 與漢市場步行距離很近，可安排一起參觀</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>40K VND</div></div><div class='info-item'><div class='label'>成立</div><div class='val'>1915年</div></div><div class='info-item'><div class='label'>展品</div><div class='val'>約300件</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>45-60分鐘</div></div></div>" },
-  "han-market": { emoji:"🛒", title:"漢市場", subtitle:"Han Market · 峴港最大傳統市場",
-    body:"<p>漢市場是峴港歷史最悠久、規模最大的傳統市場。1樓：水果、蔬菜、魚類；2樓：服裝、特產、伴手禮。</p><p>⚠️ 記得砍價！通常從開價的50-60%開始談。</p><div class='highlight'>💡 推薦購買：越南咖啡、腰果、魚露、龍眼乾。現金交易爲主。</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>免費</div></div><div class='info-item'><div class='label'>營業時間</div><div class='val'>6:00-19:00</div></div><div class='info-item'><div class='label'>位置</div><div class='val'>市中心</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>45-60分鐘</div></div></div>" },
-  "spa-massage": { emoji:"💆", title:"越式SPA / 按摩", subtitle:"Vietnamese Massage & Spa",
-    body:"<p>越南的按摩和水療性價比極高。</p><p>• 足底按摩：~HK$50/小時<br>• 全身油壓：~HK$100-170/90分鐘<br>• 越式傳統按摩：~HK$70-120/小時</p><div class='highlight'>💡 建議提前預約。小費自願，一般給10-20%</div><div class='info-grid'><div class='info-item'><div class='label'>足底按摩</div><div class='val'>~HK$50/hr</div></div><div class='info-item'><div class='label'>全身油壓</div><div class='val'>~HK$100-170</div></div><div class='info-item'><div class='label'>預約</div><div class='val'>建議提前</div></div><div class='info-item'><div class='label'>小費</div><div class='val'>自願10-20%</div></div></div>" }
-};
-
-window.openSpotModal = function(id) {
-  var spot = SPOT_DATA[id];
-  if (!spot) return;
-  document.getElementById('modalEmoji').textContent = spot.emoji;
-  document.getElementById('modalTitle').textContent = spot.title;
-  document.getElementById('modalSubtitle').textContent = spot.subtitle;
-  document.getElementById('modalBody').innerHTML = spot.body;
-  document.getElementById('spotModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
-};
-
-window.closeModal = function() {
-  document.getElementById('spotModal').classList.remove('show');
-  document.body.style.overflow = '';
-};
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeModal();
-});
-
-// ===== goToDay function =====
+  // ===== goToDay function =====
   window.goToDay = function(id) {
     document.querySelectorAll('details').forEach(function(d) { d.open = false; });
     var anchor = document.getElementById(id);
@@ -444,7 +399,7 @@ document.addEventListener('keydown', function(e) {
   <div class="info-card">
     <div class="label">住宿</div>
     <div class="value">Airbnb（待確認）</div>
-    <div style="font-size:13px;color:var(--muted);margin-top:4px;">7個候選待家人投票</div>
+    <div style="font-size:13px;color:var(--muted);margin-top:4px;">6個候選待家人投票</div>
   </div>
 </div>
 
@@ -525,7 +480,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">15:30</div>
         <div class="event-body">
-          <div class="title">🏖️ 美溪海灘 (My Khe Beach) 漫步<button class='spot-info-btn' onclick='openSpotModal("my-khe-beach")'>ℹ️</button></div>
+          <div class="title">🏖️ 美溪海灘 (My Khe Beach) 漫步<button class="spot-info-btn" onclick="openSpotModal('my-khe')">&#8505;</button></div>
           <div class="desc">被福布斯評爲全球最美海灘之一。白色沙灘、平緩海浪，非常適合帶長輩散步、踩水。可租躺椅休息。</div>
           <div class="tag">輕鬆</div> <div class="tag">海灘</div>
         </div>
@@ -541,7 +496,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">19:30</div>
         <div class="event-body">
-          <div class="title">🌉 漢江河畔散步 · 龍橋 (Dragon Bridge)<button class='spot-info-btn' onclick='openSpotModal("dragon-bridge")'>ℹ️</button></div>
+          <div class="title">🌉 漢江河畔散步 · 龍橋 (Dragon Bridge)<button class="spot-info-btn" onclick="openSpotModal('dragon')">&#8505;</button></div>
           <div class="desc">欣賞龍橋夜景。龍身全長666米，造型震撼。週六/週日晚上21:00有噴火表演。</div>
           <div class="tip">💡 8月11日是週二，無噴火表演，但夜景依然很美</div>
         </div>
@@ -571,7 +526,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">08:00</div>
         <div class="event-body">
-          <div class="title"><span class="transport">🚗</span> 出發前往巴拿山 (Ba Na Hills)<button class='spot-info-btn' onclick='openSpotModal("bana-hills")'>ℹ️</button></div>
+          <div class="title"><span class="transport">🚗</span> 出發前往巴拿山 (Ba Na Hills)<button class="spot-info-btn" onclick="openSpotModal('bana')">&#8505;</button></div>
           <div class="desc">車程約45分鐘。建議提前預訂7人包車（約 1,200,000-1,500,000 VND/天），也可報當地一日遊團（含接送+門票+午餐，約 650,000-800,000 VND/人）。</div>
           <div class="tip">💡 早出發可避開人流高峯，纜車排隊更少</div>
         </div>
@@ -654,7 +609,7 @@ document.addEventListener('keydown', function(e) {
 <!-- ========== DAY 3 ========== -->
 <span class="day-anchor" id="day3"></span>
 <details>
-  <summary>Day 3 · 8月13日（週四）— 會安古鎮<button class='spot-info-btn' onclick='openSpotModal("hoi-an")'>ℹ️</button> · 椰子船 · 燈籠之夜</summary>
+  <summary>Day 3 · 8月13日（週四）— 會安古鎮<button class="spot-info-btn" onclick="openSpotModal('hoian')">&#8505;</button> · 椰子船 · 燈籠之夜</summary>
   <div class="day-content">
     <div class="timeline">
       <div class="event">
@@ -675,7 +630,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">10:00</div>
         <div class="event-body">
-          <div class="title">🏛️ 會安古鎮漫步（UNESCO 世界遺產）<button class='spot-info-btn' onclick='openSpotModal("hoi-an")'>ℹ️</button></div>
+          <div class="title">🏛️ 會安古鎮漫步（UNESCO 世界遺產）<button class="spot-info-btn" onclick="openSpotModal('hoian')">&#8505;</button></div>
           <div class="desc">黃色法式建築、燈籠小巷、百年老宅。參觀景點：<br>
             • 🌉 <strong>日本廊橋</strong>（16世紀，會安標誌）<br>
             • 🏠 <strong>譚家老宅</strong>（Tan Ky House，200年曆史）<br>
@@ -707,7 +662,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">15:00</div>
         <div class="event-body">
-          <div class="title">🛶 椰林竹籃船體驗 (Cam Thanh Coconut Village)<button class='spot-info-btn' onclick='openSpotModal("coconut-village")'>ℹ️</button></div>
+          <div class="title">🛶 椰林竹籃船體驗 (Cam Thanh Coconut Village)<button class="spot-info-btn" onclick="openSpotModal('coconut')">&#8505;</button></div>
           <div class="desc">坐在圓形竹籃船中穿梭於水椰林之間，船伕會表演旋轉、釣魚等。安全有趣，適合全家。</div>
           <div class="tag">體驗</div> <div class="tag">適合長輩</div>
           <div class="tip">💰 約 100,000-150,000 VND/船（可坐2人）</div>
@@ -753,7 +708,7 @@ document.addEventListener('keydown', function(e) {
 <!-- ========== DAY 4 ========== -->
 <span class="day-anchor" id="day4"></span>
 <details>
-  <summary>Day 4 · 8月14日（週五）— 五行山<button class='spot-info-btn' onclick='openSpotModal("marble-mtn")'>ℹ️</button> · 山茶半島 · 美溪海灘</summary>
+  <summary>Day 4 · 8月14日（週五）— 五行山<button class="spot-info-btn" onclick="openSpotModal('marble')">&#8505;</button> · 山茶半島 · 美溪海灘</summary>
   <div class="day-content">
     <div class="timeline">
       <div class="event">
@@ -766,7 +721,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">08:30</div>
         <div class="event-body">
-          <div class="title">⛰️ 五行山 (Marble Mountains / Ngu Hanh Son)<button class='spot-info-btn' onclick='openSpotModal("marble-mtn")'>ℹ️</button></div>
+          <div class="title">⛰️ 五行山 (Marble Mountains / Ngu Hanh Son)<button class="spot-info-btn" onclick="openSpotModal('marble')">&#8505;</button></div>
           <div class="desc">五座石灰岩山峯組成的風景區，有洞穴、佛寺和山頂觀景臺。<br>
             • <strong>玄空洞 (Huyen Khong Cave)</strong> — 最大最壯觀的洞穴<br>
             • <strong>陰府洞 (Am Phu Cave)</strong> — 地獄主題洞穴，獨特體驗<br>
@@ -799,7 +754,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">13:30</div>
         <div class="event-body">
-          <div class="title">🙏 靈應寺 (Linh Ung Pagoda)<button class='spot-info-btn' onclick='openSpotModal("linh-ung-pagoda")'>ℹ️</button> · 觀音像</div>
+          <div class="title">🙏 靈應寺 (Linh Ung Pagoda)<button class="spot-info-btn" onclick="openSpotModal('pagoda')">&#8505;</button> · 觀音像</div>
           <div class="desc">67米高的白色觀音立像面朝大海，是峴港最高佛像。寺院清幽、視野開闊，可遠眺整個峴港海岸線。</div>
           <div class="tag">必遊</div> <div class="tag">適合長輩</div> <div class="tag">拍照</div>
         </div>
@@ -815,7 +770,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">16:00</div>
         <div class="event-body">
-          <div class="title">🏖️ 返回美溪海灘<button class='spot-info-btn' onclick='openSpotModal("my-khe-beach")'>ℹ️</button> / 峴港海灘</div>
+          <div class="title">🏖️ 返回美溪海灘<button class="spot-info-btn" onclick="openSpotModal('my-khe')">&#8505;</button> / 峴港海灘</div>
           <div class="desc">下午回海灘放鬆，游泳、日光浴或海邊散步。可體驗水上項目（衝浪板、摩托艇等，視體力而定）。</div>
         </div>
       </div>
@@ -831,7 +786,7 @@ document.addEventListener('keydown', function(e) {
         <div class="event-body">
           <div class="title">🌉 漢江夜景 · 愛情橋 (Love Lock Bridge)</div>
           <div class="desc">沿漢江河畔散步，經過愛情橋、魚龍橋等景觀橋，欣賞燈光。</div>
-          <div class="tip">💡 8月15日（週六）龍橋噴火秀<button class='spot-info-btn' onclick='openSpotModal("dragon-bridge")'>ℹ️</button> 21:00 — 明天可再看</div>
+          <div class="tip">💡 8月15日（週六）龍橋噴火秀<button class="spot-info-btn" onclick="openSpotModal('dragon')">&#8505;</button> 21:00 — 明天可再看</div>
         </div>
       </div>
     </div>
@@ -846,7 +801,7 @@ document.addEventListener('keydown', function(e) {
 <!-- ========== DAY 5 ========== -->
 <span class="day-anchor" id="day5"></span>
 <details>
-  <summary>Day 5 · 8月15日（週六）— 自由探索 · 佔族博物館<button class='spot-info-btn' onclick='openSpotModal("cham-museum")'>ℹ️</button> · 龍橋噴火秀<button class='spot-info-btn' onclick='openSpotModal("dragon-bridge")'>ℹ️</button></summary>
+  <summary>Day 5 · 8月15日（週六）— 自由探索 · 佔族博物館<button class="spot-info-btn" onclick="openSpotModal('cham')">&#8505;</button> · 龍橋噴火秀</summary>
   <div class="day-content">
     <div class="timeline">
       <div class="event">
@@ -868,7 +823,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">11:00</div>
         <div class="event-body">
-          <div class="title">🛒 漢市場 (Han Market)<button class='spot-info-btn' onclick='openSpotModal("han-market")'>ℹ️</button> / 大市場 (Con Market)</div>
+          <div class="title">🛒 漢市場 (Han Market)<button class="spot-info-btn" onclick="openSpotModal('market')">&#8505;</button> / 大市場 (Con Market)</div>
           <div class="desc">峴港最大的傳統市場，可購買特產：咖啡、腰果、魚露、絲綢、紀念品等。</div>
           <div class="tip">💡 記得砍價！通常可砍到喊價的60-70%</div>
         </div>
@@ -883,7 +838,7 @@ document.addEventListener('keydown', function(e) {
       <div class="event">
         <div class="event-time">14:00</div>
         <div class="event-body">
-          <div class="title">💆 按摩 / SPA 放鬆</div>
+          <div class="title">💆 按摩 / SPA 放鬆<button class="spot-info-btn" onclick="openSpotModal('spa')">&#8505;</button></div>
           <div class="desc">越南按摩性價比極高。推薦足底按摩或全身精油按摩，消除前幾天的疲勞。</div>
           <div class="tag">放鬆</div> <div class="tag">長輩最愛</div>
           <div class="tip">💰 足底按摩約 150,000-250,000 VND/小時，全身按摩約 300,000-500,000 VND</div>
@@ -916,7 +871,7 @@ document.addEventListener('keydown', function(e) {
       </div>
     </div>
     <div class="tip-box">
-      📌 <strong>Day 5 關鍵詞：</strong>文化探索、SPA放鬆、龍橋噴火秀<button class='spot-info-btn' onclick='openSpotModal("dragon-bridge")'>ℹ️</button><br>
+      📌 <strong>Day 5 關鍵詞：</strong>文化探索、SPA放鬆、龍橋噴火秀<br>
       🎒 <strong>攜帶：</strong>防曬霜、相機、現金（市場砍價用）、舒適的鞋子
     </div>
   </div>
@@ -972,117 +927,51 @@ document.addEventListener('keydown', function(e) {
 
 <!-- ========== AIRBNB COMPARISON ========== -->
 <details>
-  <summary>🏠 住宿選項比較（7個候選 · 待家人投票決定）</summary>
+  <summary>🏠 住宿選項比較（6個候選 · 待家人投票決定）</summary>
   <div class="day-content">
     <div class="tip-box">
-      📌 以下 7 個 Airbnb 為姐姐在 WhatsApp 群組分享<br>
+      📌 以下 6 個 Airbnb 為姐姐在 WhatsApp 群組分享<br>
       入住：2026年8月11日 · 退房：8月16日（5晚）· 5位成人
     </div>
 
     <div class="section-title">🏆 首選推薦</div>
     <table class="budget-table">
-      <tr><th></th><th><strong>海岸別墅</strong></th><th><strong>Casa del Sol</strong></th></tr>
-      <tr>
-        <td>房型</td>
-        <td>4房4床5衛（8人）</td>
-        <td>4房4床4衛（8人）</td>
-      </tr>
-      <tr>
-        <td>評分</td>
-        <td>⭐ 4.99（99評）<br>🏅 Superhost · 排名頭5%</td>
-        <td>待查</td>
-      </tr>
-      <tr>
-        <td>價格（5晚）</td>
-        <td class="cost">待查（需入日期）</td>
-        <td>待查</td>
-      </tr>
-      <tr>
-        <td>位置</td>
-        <td>美溪海灘步行7分鐘<br>龍橋5分鐘車程</td>
-        <td>五行山區</td>
-      </tr>
-      <tr>
-        <td>特色</td>
-        <td>按摩浴池、Netflix、免費泊車<br>廚房齊全、每2-3天免費清潔</td>
-        <td>巴厘島熱帶風格別墅</td>
-      </tr>
-      <tr>
-        <td>備註</td>
-        <td><strong>🌟 4房空間最大，長者友好<br>Superhost 評分最高</strong></td>
-        <td>4房空間充足</td>
-      </tr>
+      <tr><th></th><th><strong>海岸別墅</strong> ⭐</th><th><strong>公寓 2</strong> 💰</th></tr>
+      <tr><td>房型</td><td>整棟別墅 · 4房4床5衛（8人）</td><td>2房4床2衛（6人）</td></tr>
+      <tr><td>評分</td><td>⭐ 4.99（99評）· 🏅 Top 5%</td><td>⭐ 4.97（226評）· 🏅 Superhost</td></tr>
+      <tr><td>價格（5晚）</td><td class="cost">需入日期查詢</td><td class="cost">$3,034 HKD</td></tr>
+      <tr><td>位置</td><td>Sơn Trà · 84 Đường Tự Minh<br>美溪海灘步行7分鐘</td><td>Sơn Trà · 美溪海灘步行5分鐘</td></tr>
+      <tr><td>特色</td><td>按摩浴池、Netflix、免費泊車<br>廚房齊全、每2-3天免費清潔</td><td>電梯、城市天際線景觀<br>每日清潔、免費洗衣</td></tr>
+      <tr><td>備註</td><td><strong>🌟 4房空間最大，長者友好<br>Superhost 評分最高</strong></td><td>⚠️ 2房對5人可能較擠<br>但價格最實惠</td></tr>
     </table>
 
     <div class="section-title" style="margin-top:24px;">其他候選</div>
     <table class="budget-table">
-      <tr><th></th><th>公寓 2</th><th>Soly Villa</th><th>Son Tra 公寓</th><th>日落天堂</th><th>Zen Villa</th></tr>
-      <tr>
-        <td>房型</td>
-        <td>2房4床2衛（6人）</td>
-        <td>3房4床4衛（7人）</td>
-        <td>3房3床3衛（8人）</td>
-        <td>2房3床2衛（5人）</td>
-        <td>3房3床3衛</td>
-      </tr>
-      <tr>
-        <td>評分</td>
-        <td>⭐ 4.97（226評）<br>🏅 Superhost</td>
-        <td>待查</td>
-        <td>待查</td>
-        <td>⭐ 4.98（95評）</td>
-        <td>全新（0評）</td>
-      </tr>
-      <tr>
-        <td>價格（5晚）</td>
-        <td>待查</td>
-        <td>待查</td>
-        <td>待查</td>
-        <td>待查</td>
-        <td class="cost">$6,612 HKD</td>
-      </tr>
-      <tr>
-        <td>位置</td>
-        <td>美溪海灘步行5分鐘</td>
-        <td>海灘步行5分鐘</td>
-        <td>My Khe步行5分鐘</td>
-        <td>美溪海灘旁</td>
-        <td>山茶區</td>
-      </tr>
-      <tr>
-        <td>特色</td>
-        <td>電梯、每日清潔、Superhost</td>
-        <td>按摩浴缸、LED燈</td>
-        <td>3房3衛</td>
-        <td>屋頂泳池</td>
-        <td>私人泳池</td>
-      </tr>
-      <tr>
-        <td>備註</td>
-        <td>⚠️ 2房對5人可能較擠</td>
-        <td>✅ 空間夠</td>
-        <td>✅ 空間夠</td>
-        <td>⚠️ 正好5人上限</td>
-        <td>⚠️ 全新無評價</td>
-      </tr>
+      <tr><th></th><th>Soly Villa</th><th>Son Tra 公寓</th><th>日落天堂</th><th>Zen Villa</th></tr>
+      <tr><td>房型</td><td>整棟別墅 · 3房4床4衛（7人）</td><td>3房3床3衛（8人）</td><td>酒店公寓 · 2房3床2衛（5人）</td><td>整棟別墅 · 3房3床3衛（6人）</td></tr>
+      <tr><td>評分</td><td>⭐ 5.0（9評）· 🏅 旅人至愛<br>非Superhost（新手房東）</td><td>⭐ 4.9（101評）· 🏅 旅人至愛<br>✅ Superhost</td><td>⭐ 4.98（95評）· 🏅 旅人至愛<br>✅ Superhost</td><td>全新（0評）<br>非Superhost</td></tr>
+      <tr><td>價格（5晚）</td><td>需入日期查詢</td><td>需入日期查詢</td><td>需入日期查詢</td><td>需入日期查詢</td></tr>
+      <tr><td>位置</td><td>Sơn Trà · 海灘步行5分鐘</td><td>Sơn Trà · 海灘步行5分鐘</td><td>Sơn Trà · 四星級酒店內<br>海灘0.1km（1分鐘）</td><td>Sơn Trà · 近山茶半島<br>海灘5分鐘</td></tr>
+      <tr><td>特色</td><td>按摩浴缸+LED燈<br>250平方呎三層別墅</td><td>海景 · 屋頂BBQ<br>Netflix · 免費泊車</td><td>屋頂無邊際泳池（額外收費）<br>桑拿 · 酒店SPA可選</td><td>私人泳池<br>每房1.8m大床</td></tr>
+      <tr><td>備註</td><td>✅ 空間夠 · 評分最高<br>⚠️ 僅9個評價</td><td>✅ 空間大 · Superhost<br>✅ 性價比高</td><td>⚠️ 剛好5人上限<br>泳池需額外付費</td><td>⚠️ 全新無評價<br>風險較高</td></tr>
     </table>
 
     <div class="tip-box" style="margin-top:16px;">
-      💡 <strong>建議</strong>：5人出行建議選 3-4 房住宿，每人有獨立空間更舒適。<br>
-      首選「海岸別墅」（4房5衛、4.99分、Superhost）或「Casa del Sol」（4房4衛）<br>
-      如預算有限可考慮「Zen Villa」（$6,612 HKD/5晚、有私人泳池但無評價）<br><br>
-      ⚠️ 需點擊各連結輸入日期（8/11-8/16, 5人）才能查看實際價格
+      💡 <strong>建議</strong>：<br>
+      🥇 首選「海岸別墅」（4房5衛、4.99分、空間最寬敞適合長者）<br>
+      🥈 次選「Son Tra 公寓」（3房3衛、Superhost、海景、101評）<br>
+      🥉 預算首選「公寓 2」（$3,034 HKD/5晚、Superhost、但2房較擠）<br><br>
+      ⚠️ <strong>不推薦</strong>：Casa del Sol（該時段不可預訂）、Zen Villa（全新無評價）、日落天堂（5人上限+泳池額外付費）
     </div>
 
     <div class="section-title" style="margin-top:24px;">🔗 Airbnb 連結</div>
     <ul style="margin:10px 0 20px 20px; line-height:2.2; font-size:14px;">
-      <li><strong>海岸別墅</strong> — <a href="https://www.airbnb.com.hk/rooms/1386561874530554467" target="_blank">airbnb.com.hk/rooms/1386...</a></li>
-      <li><strong>Casa del Sol</strong> — <a href="https://www.airbnb.com.hk/rooms/1636048745668796805" target="_blank">airbnb.com.hk/rooms/1636...</a></li>
-      <li><strong>公寓 2</strong> — <a href="https://www.airbnb.com.hk/rooms/801862513451888924" target="_blank">airbnb.com.hk/rooms/8018...</a> ⭐ Superhost</li>
-      <li><strong>Soly Villa</strong> — <a href="https://www.airbnb.com.hk/rooms/1636072546951071075" target="_blank">airbnb.com.hk/rooms/1636...</a></li>
-      <li><strong>Son Tra 公寓</strong> — <a href="https://www.airbnb.com.hk/rooms/1196718800845344933" target="_blank">airbnb.com.hk/rooms/1196...</a></li>
-      <li><strong>日落天堂</strong> — <a href="https://www.airbnb.com.hk/rooms/1326588480105571866" target="_blank">airbnb.com.hk/rooms/1326...</a></li>
-      <li><strong>Zen Villa</strong> — <a href="https://www.airbnb.com.hk/rooms/1675939415441225333" target="_blank">airbnb.com.hk/rooms/1675...</a> $6,612</li>
+      <li><strong>海岸別墅</strong> — <a href="https://www.airbnb.com.hk/rooms/1386561874530554467" target="_blank">airbnb.com.hk/rooms/1386...</a> ⭐ 4.99 · 4房5衛</li>
+      <li><strong>公寓 2</strong> — <a href="https://www.airbnb.com.hk/rooms/801862513451888924" target="_blank">airbnb.com.hk/rooms/8018...</a> 💰 $3,034 · 2房 · Superhost</li>
+      <li><strong>Soly Villa</strong> — <a href="https://www.airbnb.com.hk/rooms/1636072546951071075" target="_blank">airbnb.com.hk/rooms/1636...</a> ⭐ 5.0 · 3房 · 按摩浴缸</li>
+      <li><strong>Son Tra 公寓</strong> — <a href="https://www.airbnb.com.hk/rooms/1196718800845344933" target="_blank">airbnb.com.hk/rooms/1196...</a> ✅ Superhost · 3房 · 海景</li>
+      <li><strong>日落天堂</strong> — <a href="https://www.airbnb.com.hk/rooms/1326588480105571866" target="_blank">airbnb.com.hk/rooms/1326...</a> ⭐ 4.98 · 酒店公寓 · 屋頂泳池</li>
+      <li><strong>Zen Villa</strong> — <a href="https://www.airbnb.com.hk/rooms/1675939415441225333" target="_blank">airbnb.com.hk/rooms/1675...</a> 全新 · 3房 · 私人泳池</li>
     </ul>
   </div>
 </details>
@@ -1154,6 +1043,85 @@ document.addEventListener('keydown', function(e) {
 
 
 <script>
+// ===== Spot Info Data =====
+var SPOT_DATA = {
+  "my-khe": { emoji:"🏖️", title:"美溪海灘", subtitle:"My Khe Beach",
+    tags:["海灘","免費","長者友好"],
+    body:"<p>被《福布斯》評爲全球最美海灘之一，全長約20公里，沙質潔白，海水清澈。</p>",
+    hl:"💡 最佳時段：清晨6-7點看日出，或傍晚17:00-18:30看日落",
+    info:[["門票","免費"],["建議停留","1.5-2小時"],["設施","躺椅、淋浴、餐廳"],["交通","Grab約30K VND"]] },
+  "dragon": { emoji:"🌉", title:"龍橋", subtitle:"Dragon Bridge",
+    tags:["地標","免費","夜景"],
+    body:"<p>龍橋全長666米，橫跨漢江，2013年建成。🔥 每週六、週日晚上21:00噴火表演。</p>",
+    hl:"8月11日（週二）無噴火表演。可等到8月15日（週六）觀賞。",
+    info:[["長度","666米"],["噴火","週六/日 21:00"],["門票","免費"],["建成","2013年"]] },
+  "bana": { emoji:"🏔️", title:"巴拿山", subtitle:"Ba Na Hills",
+    tags:["景點","門票","一日遊"],
+    body:"<p>海拔1,487米。三大亮點：1️⃣纜車(5,801米) 2️⃣黃金橋 3️⃣法式小鎮</p>",
+    hl:"⚠️ 山上氣溫比市區低5-10°C，建議帶薄外套。",
+    info:[["門票","~HK$250/人"],["纜車","15-20分鐘"],["停留","4-6小時"],["海拔","1,487米"]] },
+  "hoian": { emoji:"🏛️", title:"會安古鎮", subtitle:"Hoi An · UNESCO世界遺產",
+    tags:["UNESCO","文化","燈籠"],
+    body:"<p>1999年UNESCO世界遺產。必看：日本廊橋(1593年)、福建會館、Tan Ky古宅。</p><p>🏮 每月農曆14日「滿月之夜」只點燈籠。</p>",
+    hl:"💡 建議下午3點後到達，先逛景點，傍晚看日落，晚上賞燈籠",
+    info:[["聯票","120K VND"],["交通","距峴港約30km"],["停留","半天至一天"],["UNESCO","1999年"]] },
+  "coconut": { emoji:"🛶", title:"椰林竹籃船", subtitle:"Cam Thanh Coconut Village",
+    tags:["體驗","家庭","水上活動"],
+    body:"<p>Cam Thanh椰子村，河邊長滿水椰子林。竹籃船(Thung Chai)是當地特色。</p><p>船夫表演旋轉竹船、撒網捕魚等絕技！</p>",
+    hl:"💡 費用約100-150K VND/人，體驗30-40分鐘。",
+    info:[["費用","~100-150K VND"],["時間","30-40分鐘"],["適合","全家大小"],["位置","會安郊區"]] },
+  "marble": { emoji:"⛰️", title:"五行山", subtitle:"Marble Mountains",
+    tags:["自然","登山","洞穴"],
+    body:"<p>五座石灰岩山峰（金木水火土）。華嚴洞高30米，有佛像和天然採光窗。</p>",
+    hl:"💡 可搭電梯(15K VND)到半山腰。建議早上去，穿防滑鞋。",
+    info:[["門票","40K VND"],["電梯","15K VND"],["最高峰","108米"],["停留","1.5-2小時"]] },
+  "pagoda": { emoji:"🙏", title:"靈應寺", subtitle:"Linh Ung Pagoda · 山茶半島",
+    tags:["寺廟","免費","觀景"],
+    body:"<p>寺內矗立著高達67米的白色觀音像，是越南最高的觀音像。可360度俯瞰海岸線。</p>",
+    hl:"💡 免費入場。寺廟需穿長褲或過膝裙。",
+    info:[["門票","免費"],["觀音像高","67米"],["位置","山茶半島"],["停留","30-45分鐘"]] },
+  "cham": { emoji:"🏛️", title:"佔族博物館", subtitle:"Museum of Cham Sculpture",
+    tags:["博物館","文化","歷史"],
+    body:"<p>1915年成立，全球最完整的佔婆(Champa)文明雕塑收藏。約300件5-15世紀石雕。</p>",
+    hl:"💡 與漢市場步行距離很近，可安排一起參觀。",
+    info:[["門票","40K VND"],["成立","1915年"],["展品","約300件"],["停留","45-60分鐘"]] },
+  "market": { emoji:"🛒", title:"漢市場", subtitle:"Han Market · 峴港最大傳統市場",
+    tags:["市場","購物","美食"],
+    body:"<p>峴港歷史最悠久、規模最大的傳統市場。1樓：蔬果魚類；2樓：服裝特產。</p>",
+    hl:"💡 記得砍價！從開價的50-60%開始談。推薦：越南咖啡、腰果、魚露。",
+    info:[["門票","免費"],["營業","6:00-19:00"],["位置","市中心"],["停留","45-60分鐘"]] },
+  "spa": { emoji:"💆", title:"越式 SPA / 按摩", subtitle:"Vietnamese Massage & Spa",
+    tags:["放鬆","按摩","性價比"],
+    body:"<p>• 足底按摩：~HK$50/小時<br>• 全身油壓：~HK$100-170/90分鐘<br>• 越式傳統按摩：~HK$70-120/小時</p>",
+    hl:"💡 建議提前預約。小費自願，一般給10-20%。",
+    info:[["足底按摩","~HK$50/hr"],["全身油壓","~HK$100-170"],["預約","建議提前"],["小費","自願10-20%"]] }
+};
+
+window.openSpotModal = function(id) {
+  var s = SPOT_DATA[id];
+  if (!s) return;
+  document.getElementById('mEmoji').textContent = s.emoji;
+  document.getElementById('mTitle').textContent = s.title;
+  document.getElementById('mSub').textContent = s.subtitle;
+  var h = '';
+  if (s.tags) { for(var t=0;t<s.tags.length;t++) h += '<span class="itag">'+s.tags[t]+'</span>'; }
+  h += '<br>' + s.body + '<div class="mhl">'+s.hl+'</div><div class="igrid">';
+  for(var i=0;i<s.info.length;i++) h += '<div class="iitem"><div class="ilbl">'+s.info[i][0]+'</div><div class="ival">'+s.info[i][1]+'</div></div>';
+  h += '</div>';
+  document.getElementById('mBody').innerHTML = h;
+  document.getElementById('spotModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+};
+
+window.closeModal = function() {
+  document.getElementById('spotModal').classList.remove('show');
+  document.body.style.overflow = '';
+};
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
 (function() {
   var dayColors = {
     d1: '#e53e3e', d2: '#3182ce', d3: '#38a169',
@@ -1191,14 +1159,10 @@ document.addEventListener('keydown', function(e) {
 
   function addMarker(id, lat, lng, title, desc, day, icon) {
     var gmap = 'https://www.google.com/maps/search/?api=1&query='+lat+','+lng;
-    var popup = '<div style="min-width:200px"><b style="font-size:14px">'+title+'</b><br>'+
-      '<span style="font-size:12px;color:#666">'+desc+'</span><br><br>'+
-      '<a href="'+gmap+'" target="_blank" rel="noopener" '+
-      'style="display:inline-flex;align-items:center;gap:4px;background:#4285F4;color:#fff;padding:6px 12px;border-radius:16px;text-decoration:none;font-size:13px;font-weight:500;">'+
-      '📍 Google Maps</a></div>';
+    var ph = '<div style=\"min-width:180px\"><b style=\"font-size:14px\">'+title+'</b><br><span style=\"font-size:12px;color:#555\">'+desc+'</span><br><br><a href=\"'+gmap+'\" target=\"_blank\" rel=\"noopener\" style=\"display:inline-flex;align-items:center;gap:4px;background:#4285F4;color:#fff;padding:6px 14px;border-radius:20px;text-decoration:none;font-size:13px;font-weight:500;\">📍 Google Maps</a></div>';
     var m = L.marker([lat, lng], {
       icon: makeIcon(dayColors[day], icon)
-    }).bindPopup(popup);
+    }).bindPopup(ph);
     m._day = day;
     markers[id] = m;
     return m;
@@ -1222,7 +1186,7 @@ document.addEventListener('keydown', function(e) {
   addMarker('dragon_bridge', 16.0678, 108.2308, '🌉 龍橋 (Dragon Bridge)', '666米金色龍橋 · 週六21:00噴火', 'd1', '⭐');
 
   // Day 2 — Ba Na Hills (Blue)
-  addMarker('bana_hills', 16.0635, 107.9765, '🏔️ 巴拿山 (Ba Na Hills)<button class='spot-info-btn' onclick='openSpotModal("bana-hills")'>ℹ️</button>', '世界最長纜車 · 黃金橋 · 法式小鎮<br>門票 ~HK$250/人 · 車程45分鐘', 'd2', '⭐');
+  addMarker('bana_hills', 16.0635, 107.9765, '🏔️ 巴拿山 (Ba Na Hills)', '世界最長纜車 · 黃金橋 · 法式小鎮<br>門票 ~HK$250/人 · 車程45分鐘', 'd2', '⭐');
 
   // Day 3 — Hoi An (Green)
   addMarker('hoi_an', 15.8801, 108.3380, '🏛️ 會安古鎮', 'UNESCO 世界遺產 · 日本廊橋 · 燈籠<br>聯票 120,000 VND/人', 'd3', '⭐');
@@ -1235,8 +1199,8 @@ document.addEventListener('keydown', function(e) {
   addMarker('ban_co', 16.1250, 108.2650, '🗻 班哥峰觀景臺', '海拔700米 · 360度全景<br>⚠️ 山路彎多', 'd4', '⭐');
 
   // Day 5 — City (Purple)
-  addMarker('cham_museum', 16.0545, 108.2225, '🏛️ 佔族博物館<button class='spot-info-btn' onclick='openSpotModal("cham-museum")'>ℹ️</button>', '全球最完整佔婆雕塑收藏<br>門票 40,000 VND', 'd5', '⭐');
-  addMarker('han_market', 16.0665, 108.2210, '🛒 漢市場 (Han Market)<button class='spot-info-btn' onclick='openSpotModal("han-market")'>ℹ️</button>', '峴港最大傳統市場 · 特產伴手禮', 'd5', '⭐');
+  addMarker('cham_museum', 16.0545, 108.2225, '🏛️ 佔族博物館', '全球最完整佔婆雕塑收藏<br>門票 40,000 VND', 'd5', '⭐');
+  addMarker('han_market', 16.0665, 108.2210, '🛒 漢市場 (Han Market)', '峴港最大傳統市場 · 特產伴手禮', 'd5', '⭐');
   addMarker('spa', 16.0590, 108.2290, '💆 SPA / 按摩', '足底按摩 ~HK$50/小時<br>全身按摩 ~HK$100-170', 'd5', '💆');
 
   // Airbnb area (generic - Son Tra / My Khe)
@@ -1294,52 +1258,7 @@ document.addEventListener('keydown', function(e) {
   map.fitBounds(group.getBounds().pad(0.1));
 })();
 
-  
-// ===== SPOT DATA =====
-var SPOT_DATA = {
-  "my-khe-beach": { emoji:"🏖️", title:"美溪海灘", subtitle:"My Khe Beach · 全球最美海灘之一",
-    body:"<p>美溪海灘被《福布斯雜誌》評爲全球最美海灘之一，全長約20公里，沙質潔白細膩，海水清澈見底，浪況平緩。</p><p>1975年前這裏曾是美軍士兵的度假海灘。如今沿岸佈滿度假村、咖啡館和海鮮餐廳。</p><div class='highlight'>💡 最佳時段：清晨6-7點看日出，或傍晚17:00-18:30看日落</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>免費</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>1.5-2小時</div></div><div class='info-item'><div class='label'>設施</div><div class='val'>躺椅、淋浴、餐廳</div></div><div class='info-item'><div class='label'>交通</div><div class='val'>Grab約30K VND</div></div></div>" },
-  "dragon-bridge": { emoji:"🌉", title:"龍橋", subtitle:"Dragon Bridge · 峴港地標",
-    body:"<p>龍橋全長666米，橫跨漢江，2013年建成，是峴港最具標誌性的建築。</p><p><strong>🔥 噴火表演：</strong>每週六、週日晚上21:00，龍頭會噴出火焰和水柱。</p><div class='highlight'>💡 最佳觀賞位置：龍橋東側河岸（靠近Sun Wheel）</div><div class='info-grid'><div class='info-item'><div class='label'>長度</div><div class='val'>666米</div></div><div class='info-item'><div class='label'>噴火時間</div><div class='val'>週六/日21:00</div></div><div class='info-item'><div class='label'>門票</div><div class='val'>免費</div></div><div class='info-item'><div class='label'>建成</div><div class='val'>2013年</div></div></div>" },
-  "bana-hills": { emoji:"🏔️", title:"巴拿山", subtitle:"Ba Na Hills · 世界最長纜車之一",
-    body:"<p>巴拿山位於峴港以西約40公里的山上，海拔1,487米。法國殖民時期曾是避暑勝地。</p><p><strong>🌟 三大亮點：</strong>1️⃣纜車(全長5,801米) 2️⃣黃金橋(Golden Bridge) 3️⃣法式小鎮</p><div class='highlight'>⚠️ 山上氣溫比市區低5-10°C，建議帶薄外套</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>~HK$250/人</div></div><div class='info-item'><div class='label'>纜車</div><div class='val'>15-20分鐘</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>4-6小時</div></div><div class='info-item'><div class='label'>海拔</div><div class='val'>1,487米</div></div></div>" },
-  "hoi-an": { emoji:"🏛️", title:"會安古鎮", subtitle:"Hoi An · UNESCO世界遺產",
-    body:"<p>會安古鎮是越南保存最完好的傳統貿易港口，1999年被列爲UNESCO世界遺產。15-19世紀曾是中國、日本、歐洲商人的貿易樞紐。</p><p><strong>🌟 必看：</strong>日本廊橋(1593年)、福建會館、Tan Ky古宅(200年歷史)</p><p>🏮 每月農曆14日「滿月之夜」，古鎮只點燈籠，美如仙境。</p><div class='highlight'>💡 建議下午3點後到達，先逛景點，傍晚看日落，晚上賞燈籠</div><div class='info-grid'><div class='info-item'><div class='label'>聯票</div><div class='val'>120K VND</div></div><div class='info-item'><div class='label'>交通</div><div class='val'>距峴港約30km</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>半天至一天</div></div><div class='info-item'><div class='label'>UNESCO</div><div class='val'>1999年</div></div></div>" },
-  "coconut-village": { emoji:"🛶", title:"椰林竹籃船", subtitle:"Cam Thanh Coconut Village",
-    body:"<p>Cam Thanh椰子村位於會安郊區，河邊長滿水椰子林。最出名的是竹籃船(Thung Chai)——圓形竹編小船。</p><p>船夫會帶你穿梭在椰子林河道中，表演旋轉竹船、撒網捕魚等絕技！</p><div class='highlight'>💡 費用約100-150K VND/人，體驗30-40分鐘</div><div class='info-grid'><div class='info-item'><div class='label'>費用</div><div class='val'>~100-150K VND</div></div><div class='info-item'><div class='label'>體驗時間</div><div class='val'>30-40分鐘</div></div><div class='info-item'><div class='label'>適合</div><div class='val'>全家大小</div></div><div class='info-item'><div class='label'>位置</div><div class='val'>會安郊區</div></div></div>" },
-  "marble-mtn": { emoji:"⛰️", title:"五行山", subtitle:"Marble Mountains · 石灰岩山峰群",
-    body:"<p>五行山由五座石灰岩山峰組成，以五行命名。水山(Thu Son)最高(108米)。</p><p>最著名的洞穴是華嚴洞(Huyen Khong)，高30米，內有佛像和天然採光窗。</p><p>⚠️ 可搭電梯(15K VND)到半山腰再走少量階梯。</p><div class='highlight'>💡 建議早上去，穿防滑鞋(洞穴地面濕滑)</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>40K VND</div></div><div class='info-item'><div class='label'>電梯</div><div class='val'>15K VND</div></div><div class='info-item'><div class='label'>最高峰</div><div class='val'>108米</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>1.5-2小時</div></div></div>" },
-  "linh-ung-pagoda": { emoji:"🙏", title:"靈應寺", subtitle:"Linh Ung Pagoda · 山茶半島",
-    body:"<p>靈應寺位於山茶半島山腰，寺內矗立著高達67米的白色觀音像(Lady Buddha)，是越南最高的觀音像。</p><p>從觀音像底座可以360度俯瞰整個峴港海岸線。</p><div class='highlight'>💡 免費入場。寺廟需穿長褲/過膝裙</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>免費</div></div><div class='info-item'><div class='label'>觀音像高</div><div class='val'>67米</div></div><div class='info-item'><div class='label'>位置</div><div class='val'>山茶半島</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>30-45分鐘</div></div></div>" },
-  "cham-museum": { emoji:"🏛️", title:"佔族博物館", subtitle:"Museum of Cham Sculpture",
-    body:"<p>佔族博物館成立於1915年，是全球收藏佔婆(Champa)文明雕塑最完整的博物館。</p><p>館內展出約300件5-15世紀的佔婆石雕，包括濕婆像、林迦、優尼等。</p><div class='highlight'>💡 與漢市場步行距離很近，可安排一起參觀</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>40K VND</div></div><div class='info-item'><div class='label'>成立</div><div class='val'>1915年</div></div><div class='info-item'><div class='label'>展品</div><div class='val'>約300件</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>45-60分鐘</div></div></div>" },
-  "han-market": { emoji:"🛒", title:"漢市場", subtitle:"Han Market · 峴港最大傳統市場",
-    body:"<p>漢市場是峴港歷史最悠久、規模最大的傳統市場。1樓：水果、蔬菜、魚類；2樓：服裝、特產、伴手禮。</p><p>⚠️ 記得砍價！通常從開價的50-60%開始談。</p><div class='highlight'>💡 推薦購買：越南咖啡、腰果、魚露、龍眼乾。現金交易爲主。</div><div class='info-grid'><div class='info-item'><div class='label'>門票</div><div class='val'>免費</div></div><div class='info-item'><div class='label'>營業時間</div><div class='val'>6:00-19:00</div></div><div class='info-item'><div class='label'>位置</div><div class='val'>市中心</div></div><div class='info-item'><div class='label'>建議停留</div><div class='val'>45-60分鐘</div></div></div>" },
-  "spa-massage": { emoji:"💆", title:"越式SPA / 按摩", subtitle:"Vietnamese Massage & Spa",
-    body:"<p>越南的按摩和水療性價比極高。</p><p>• 足底按摩：~HK$50/小時<br>• 全身油壓：~HK$100-170/90分鐘<br>• 越式傳統按摩：~HK$70-120/小時</p><div class='highlight'>💡 建議提前預約。小費自願，一般給10-20%</div><div class='info-grid'><div class='info-item'><div class='label'>足底按摩</div><div class='val'>~HK$50/hr</div></div><div class='info-item'><div class='label'>全身油壓</div><div class='val'>~HK$100-170</div></div><div class='info-item'><div class='label'>預約</div><div class='val'>建議提前</div></div><div class='info-item'><div class='label'>小費</div><div class='val'>自願10-20%</div></div></div>" }
-};
-
-window.openSpotModal = function(id) {
-  var spot = SPOT_DATA[id];
-  if (!spot) return;
-  document.getElementById('modalEmoji').textContent = spot.emoji;
-  document.getElementById('modalTitle').textContent = spot.title;
-  document.getElementById('modalSubtitle').textContent = spot.subtitle;
-  document.getElementById('modalBody').innerHTML = spot.body;
-  document.getElementById('spotModal').classList.add('show');
-  document.body.style.overflow = 'hidden';
-};
-
-window.closeModal = function() {
-  document.getElementById('spotModal').classList.remove('show');
-  document.body.style.overflow = '';
-};
-
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeModal();
-});
-
-// ===== goToDay function =====
+  // ===== goToDay function =====
   window.goToDay = function(id) {
     document.querySelectorAll('details').forEach(function(d) { d.open = false; });
     var anchor = document.getElementById(id);
@@ -1379,17 +1298,15 @@ document.addEventListener('keydown', function(e) {
 
 </script>
 
+<!-- Spot Info Modal -->
 <div class="modal-overlay" id="spotModal" onclick="if(event.target===this)closeModal()">
   <div class="modal-card">
     <button class="modal-close" onclick="closeModal()">✕</button>
     <div class="modal-header">
-      <span class="emoji" id="modalEmoji"></span>
-      <div class="title-area">
-        <h2 id="modalTitle"></h2>
-        <div class="subtitle" id="modalSubtitle"></div>
-      </div>
+      <span class="memoji" id="mEmoji"></span>
+      <div><h2 id="mTitle"></h2><div class="msub" id="mSub"></div></div>
     </div>
-    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-body" id="mBody"></div>
   </div>
 </div>
 
