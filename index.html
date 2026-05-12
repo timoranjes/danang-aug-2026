@@ -166,7 +166,68 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
   cursor: pointer;
 }
 .expand-all-btn:hover { opacity: 0.85; }
+/* ===== Map Section ===== */
+#map-container {
+  margin-bottom: 30px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  background: var(--card);
+}
+#map {
+  height: 450px;
+  width: 100%;
+}
+.map-controls {
+  padding: 10px 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+}
+.map-btn {
+  padding: 6px 14px;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.2s;
+  background: var(--bg);
+  color: var(--text);
+}
+.map-btn:hover { opacity: 0.8; }
+.map-btn.active { color: #fff; }
+.map-btn[data-day="all"]  { border-color: #666; }
+.map-btn[data-day="all"].active  { background: #666; }
+.map-btn[data-day="d1"]  { border-color: #e53e3e; }
+.map-btn[data-day="d1"].active  { background: #e53e3e; }
+.map-btn[data-day="d2"]  { border-color: #3182ce; }
+.map-btn[data-day="d2"].active  { background: #3182ce; }
+.map-btn[data-day="d3"]  { border-color: #38a169; }
+.map-btn[data-day="d3"].active  { background: #38a169; }
+.map-btn[data-day="d4"]  { border-color: #d69e2e; }
+.map-btn[data-day="d4"].active  { background: #d69e2e; }
+.map-btn[data-day="d5"]  { border-color: #805ad5; }
+.map-btn[data-day="d5"].active  { background: #805ad5; }
+.map-legend {
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+}
+.legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  display: inline-block; margin-right: 4px; vertical-align: middle;
+}
+
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -195,6 +256,27 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
   </div>
 </div>
 
+
+<!-- ========== MAP ========== -->
+<div id="map-container">
+  <div id="map"></div>
+  <div class="map-controls">
+    <button class="map-btn active" data-day="all" onclick="toggleDay('all')">全部</button>
+    <button class="map-btn active" data-day="d1" onclick="toggleDay('d1')">Day 1 抵達</button>
+    <button class="map-btn active" data-day="d2" onclick="toggleDay('d2')">Day 2 巴拿山</button>
+    <button class="map-btn active" data-day="d3" onclick="toggleDay('d3')">Day 3 會安</button>
+    <button class="map-btn active" data-day="d4" onclick="toggleDay('d4')">Day 4 五行山</button>
+    <button class="map-btn active" data-day="d5" onclick="toggleDay('d5')">Day 5 市區</button>
+  </div>
+  <div class="map-legend">
+    <span><span class="legend-dot" style="background:#e53e3e"></span>Day 1</span>
+    <span><span class="legend-dot" style="background:#3182ce"></span>Day 2</span>
+    <span><span class="legend-dot" style="background:#38a169"></span>Day 3</span>
+    <span><span class="legend-dot" style="background:#d69e2e"></span>Day 4</span>
+    <span><span class="legend-dot" style="background:#805ad5"></span>Day 5</span>
+    <span>✈️ 機場 · 🏨 住宿 · ⭐ 景點 · 🍜 美食 · 💆 SPA</span>
+  </div>
+</div>
 <button class="expand-all-btn" onclick="document.querySelectorAll('details').forEach(d=>d.open=!d.open)">📖 全部展開 / 摺疊</button>
 
 <!-- ========== AIRBNB COMPARISON ========== -->
@@ -866,5 +948,141 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
   </div>
 </details>
 
+
+<script>
+(function() {
+  var dayColors = {
+    d1: '#e53e3e', d2: '#3182ce', d3: '#38a169',
+    d4: '#d69e2e', d5: '#805ad5', all: '#555'
+  };
+
+  var map = L.map('map', {
+    center: [16.0544, 108.2022],
+    zoom: 12,
+    zoomControl: true
+  });
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors',
+    maxZoom: 18
+  }).addTo(map);
+
+  function makeIcon(color, icon) {
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="40" viewBox="0 0 30 40">' +
+      '<circle cx="15" cy="15" r="13" fill="' + color + '" stroke="#fff" stroke-width="2"/>' +
+      '<text x="15" y="20" text-anchor="middle" fill="#fff" font-size="14">' + icon + '</text>' +
+      '<polygon points="15,28 11,38 19,38" fill="' + color + '"/>' +
+      '</svg>';
+    return L.divIcon({
+      html: svg,
+      className: 'custom-marker',
+      iconSize: [30, 40],
+      iconAnchor: [15, 40],
+      popupAnchor: [0, -40]
+    });
+  }
+
+  var markers = {};
+  var lines = {};
+
+  function addMarker(id, lat, lng, title, desc, day, icon) {
+    var m = L.marker([lat, lng], {
+      icon: makeIcon(dayColors[day], icon)
+    }).bindPopup('<b>' + title + '</b><br><span style="font-size:12px">' + desc + '</span>');
+    m._day = day;
+    markers[id] = m;
+    return m;
+  }
+
+  function addLine(id, coords, day) {
+    var l = L.polyline(coords, {
+      color: dayColors[day],
+      weight: 3,
+      opacity: 0.7,
+      dashArray: '8, 6'
+    });
+    l._day = day;
+    lines[id] = l;
+    return l;
+  }
+
+  // Day 1 — Arrival (Red)
+  addMarker('airport', 16.0437, 108.1995, '✈️ 峴港機場 (DAD)', '09:20 抵達 · 過關取行李', 'd1', '✈');
+  addMarker('beach_d1', 16.0518, 108.2445, '🏖️ 美溪海灘', '福布斯全球最美海灘之一', 'd1', '⭐');
+  addMarker('dragon_bridge', 16.0678, 108.2308, '🌉 龍橋 (Dragon Bridge)', '666米金色龍橋 · 週六21:00噴火', 'd1', '⭐');
+
+  // Day 2 — Ba Na Hills (Blue)
+  addMarker('bana_hills', 16.0635, 107.9765, '🏔️ 巴拿山 (Ba Na Hills)', '世界最長纜車 · 黃金橋 · 法式小鎮<br>門票 ~HK$250/人 · 車程45分鐘', 'd2', '⭐');
+
+  // Day 3 — Hoi An (Green)
+  addMarker('hoi_an', 15.8801, 108.3380, '🏛️ 會安古鎮', 'UNESCO 世界遺產 · 日本廊橋 · 燈籠<br>聯票 120,000 VND/人', 'd3', '⭐');
+  addMarker('coconut_village', 15.8715, 108.3605, '🛶 椰林竹籃船', 'Cam Thanh 椰子村 · 適合全家', 'd3', '⭐');
+  addMarker('an_bang_beach', 15.8940, 108.3630, '🏖️ 安邦海灘', '會安最美海灘 · 安靜適合日落', 'd3', '⭐');
+
+  // Day 4 — Marble Mountains + Son Tra (Yellow)
+  addMarker('marble_mtn', 16.0050, 108.2590, '⛰️ 五行山', '石灰岩山峰 · 洞穴 · 佛寺<br>門票 40,000 VND · 可搭電梯', 'd4', '⭐');
+  addMarker('linh_unpagoda', 16.1100, 108.2480, '🙏 靈應寺 (山茶半島)', '67米觀音像 · 俯瞰峴港海岸線', 'd4', '⭐');
+  addMarker('ban_co', 16.1250, 108.2650, '🗻 班哥峰觀景臺', '海拔700米 · 360度全景<br>⚠️ 山路彎多', 'd4', '⭐');
+
+  // Day 5 — City (Purple)
+  addMarker('cham_museum', 16.0545, 108.2225, '🏛️ 佔族博物館', '全球最完整佔婆雕塑收藏<br>門票 40,000 VND', 'd5', '⭐');
+  addMarker('han_market', 16.0665, 108.2210, '🛒 漢市場 (Han Market)', '峴港最大傳統市場 · 特產伴手禮', 'd5', '⭐');
+  addMarker('spa', 16.0590, 108.2290, '💆 SPA / 按摩', '足底按摩 ~HK$50/小時<br>全身按摩 ~HK$100-170', 'd5', '💆');
+
+  // Airbnb area (generic - Son Tra / My Khe)
+  addMarker('airbnb_area', 16.0580, 108.2400, '🏨 住宿區域（待定）', '84 Duong Tu Minh / 美溪海灘附近<br>7個 Airbnb 候選待投票', 'all', '🏨');
+
+  // Day lines
+  addLine('d1_route', [
+    [16.0437, 108.1995], [16.0580, 108.2400],
+    [16.0518, 108.2445], [16.0678, 108.2308]
+  ], 'd1');
+  addLine('d3_route', [
+    [15.8801, 108.3380], [15.8715, 108.3605], [15.8940, 108.3630]
+  ], 'd3');
+  addLine('d4_route', [
+    [16.0050, 108.2590], [16.1100, 108.2480], [16.1250, 108.2650]
+  ], 'd4');
+  addLine('d5_route', [
+    [16.0545, 108.2225], [16.0665, 108.2210],
+    [16.0590, 108.2290]
+  ], 'd5');
+
+  // Add all markers and lines to map
+  var allMarkers = Object.values(markers);
+  var allLines = Object.values(lines);
+  allMarkers.forEach(function(m) { m.addTo(map); });
+  allLines.forEach(function(l) { l.addTo(map); });
+
+  // Toggle function
+  window.toggleDay = function(day) {
+    var btn = document.querySelector('.map-btn[data-day="' + day + '"]');
+    btn.classList.toggle('active');
+
+    if (day === 'all') {
+      var isActive = btn.classList.contains('active');
+      document.querySelectorAll('.map-btn').forEach(function(b) {
+        isActive ? b.classList.add('active') : b.classList.remove('active');
+      });
+      allMarkers.forEach(function(m) { isActive ? map.addLayer(m) : map.removeLayer(m); });
+      allLines.forEach(function(l) { isActive ? map.addLayer(l) : map.removeLayer(l); });
+      if (isActive) { map.setView([16.0544, 108.2022], 12); }
+      return;
+    }
+
+    var show = btn.classList.contains('active');
+    Object.keys(markers).forEach(function(k) {
+      if (markers[k]._day === day) { show ? map.addLayer(markers[k]) : map.removeLayer(markers[k]); }
+    });
+    Object.keys(lines).forEach(function(k) {
+      if (lines[k]._day === day) { show ? map.addLayer(lines[k]) : map.removeLayer(lines[k]); }
+    });
+  };
+
+  // Fit bounds to all markers
+  var group = L.featureGroup(allMarkers);
+  map.fitBounds(group.getBounds().pad(0.1));
+})();
+</script>
 </body>
 </html>
