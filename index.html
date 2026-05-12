@@ -166,6 +166,59 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
   cursor: pointer;
 }
 .expand-all-btn:hover { opacity: 0.85; }
+
+/* ===== Sticky Day Navigation ===== */
+.day-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.day-nav::-webkit-scrollbar { display: none; }
+.day-nav-btn {
+  flex-shrink: 0;
+  padding: 8px 16px;
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--bg);
+  color: var(--text);
+  text-decoration: none;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.day-nav-btn:hover { opacity: 0.75; transform: translateY(-1px); }
+.day-nav-btn.c1 { border-color: #e53e3e; color: #e53e3e; }
+.day-nav-btn.c1:hover, .day-nav-btn.c1.active { background: #e53e3e; color: #fff; }
+.day-nav-btn.c2 { border-color: #3182ce; color: #3182ce; }
+.day-nav-btn.c2:hover, .day-nav-btn.c2.active { background: #3182ce; color: #fff; }
+.day-nav-btn.c3 { border-color: #38a169; color: #38a169; }
+.day-nav-btn.c3:hover, .day-nav-btn.c3.active { background: #38a169; color: #fff; }
+.day-nav-btn.c4 { border-color: #d69e2e; color: #d69e2e; }
+.day-nav-btn.c4:hover, .day-nav-btn.c4.active { background: #d69e2e; color: #fff; }
+.day-nav-btn.c5 { border-color: #805ad5; color: #805ad5; }
+.day-nav-btn.c5:hover, .day-nav-btn.c5.active { background: #805ad5; color: #fff; }
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Day anchor offset for sticky nav */
+.day-anchor {
+  position: relative;
+  top: -70px;
+  visibility: hidden;
+}
 /* ===== Map Section ===== */
 #map-container {
   margin-bottom: 30px;
@@ -225,9 +278,78 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
   display: inline-block; margin-right: 4px; vertical-align: middle;
 }
 
+
+/* ===== Mobile Optimization ===== */
+@media (max-width: 640px) {
+  body { padding: 12px 8px; font-size: 15px; max-width: 100%; }
+  h1 { font-size: 22px; padding: 20px 0 8px; }
+  .subtitle { font-size: 13px; }
+  .info-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .info-card { padding: 10px 12px; }
+  .info-card .value { font-size: 14px; }
+  summary { padding: 12px 14px; font-size: 15px; }
+  .day-content { padding: 14px; }
+  .event-time { min-width: 50px; font-size: 13px; }
+  .event-body .title { font-size: 14px; }
+  .event-body .desc { font-size: 13px; }
+  .map-controls { flex-wrap: wrap; gap: 5px; }
+  .map-btn { padding: 5px 10px; font-size: 11px; }
+  .map-legend { flex-direction: column; gap: 4px; }
+  .budget-table { font-size: 12px; }
+  .budget-table th, .budget-table td { padding: 6px 8px; }
+  .day-nav { padding: 6px 8px; gap: 4px; border-radius: 8px; }
+  .day-nav-btn { padding: 6px 12px; font-size: 12px; border-radius: 16px; }
+  .expand-all-btn { padding: 8px 18px; font-size: 13px; }
+  .tip-box { padding: 10px 12px; font-size: 13px; }
+  #map { height: 320px; }
+}
+@media (max-width: 400px) {
+  .info-grid { grid-template-columns: 1fr; }
+  .day-nav-btn { padding: 5px 8px; font-size: 11px; }
+  #map { height: 260px; }
+}
 </style>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+  // ===== goToDay function =====
+  window.goToDay = function(id) {
+    document.querySelectorAll('details').forEach(function(d) { d.open = false; });
+    var anchor = document.getElementById(id);
+    if (anchor) {
+      var details = anchor.nextElementSibling;
+      if (details && details.tagName === 'DETAILS') { details.open = true; }
+    }
+    setTimeout(function() {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+    // Highlight active button
+    document.querySelectorAll('.day-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+    var btn = document.querySelector('.day-nav-btn[href="#' + id + '"]');
+    if (btn) btn.classList.add('active');
+  };
+
+  // ===== Scroll Spy =====
+  var dayIds = ['day1', 'day2', 'day3', 'day4', 'day5'];
+  var dayBtns = {};
+  dayIds.forEach(function(id) {
+    dayBtns[id] = document.querySelector('.day-nav-btn[href="#' + id + '"]');
+  });
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY || window.pageYOffset;
+    var found = null;
+    for (var i = dayIds.length - 1; i >= 0; i--) {
+      var el = document.getElementById(dayIds[i]);
+      if (el && el.getBoundingClientRect().top <= 120) { found = dayIds[i]; break; }
+    }
+    dayIds.forEach(function(id) {
+      if (dayBtns[id]) {
+        if (id === found) { dayBtns[id].classList.add('active'); }
+        else { dayBtns[id].classList.remove('active'); }
+      }
+    });
+  }, { passive: true });
+
+</script>
 </head>
 <body>
 
@@ -256,6 +378,14 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
   </div>
 </div>
 
+<!-- ===== Sticky Day Navigation ===== -->
+<nav class="day-nav" id="dayNav">
+  <a href="#day1" class="day-nav-btn c1" onclick="goToDay('day1')">Day 1 抵達</a>
+  <a href="#day2" class="day-nav-btn c2" onclick="goToDay('day2')">Day 2 巴拿山</a>
+  <a href="#day3" class="day-nav-btn c3" onclick="goToDay('day3')">Day 3 會安</a>
+  <a href="#day4" class="day-nav-btn c4" onclick="goToDay('day4')">Day 4 五行山</a>
+  <a href="#day5" class="day-nav-btn c5" onclick="goToDay('day5')">Day 5 市區</a>
+</nav>
 
 <!-- ========== MAP ========== -->
 <div id="map-container">
@@ -280,6 +410,7 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
 <button class="expand-all-btn" onclick="document.querySelectorAll('details').forEach(d=>d.open=!d.open)">📖 全部展開 / 摺疊</button>
 
 <!-- ========== DAY 1 ========== -->
+<span class="day-anchor" id="day1"></span>
 <details open>
   <summary>Day 1 · 8月11日（週二）— 抵達峴港 · 輕鬆適應</summary>
   <div class="day-content">
@@ -354,6 +485,7 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
 </details>
 
 <!-- ========== DAY 2 ========== -->
+<span class="day-anchor" id="day2"></span>
 <details>
   <summary>Day 2 · 8月12日（週三）— 巴拿山 · 黃金橋 · 法式小鎮</summary>
   <div class="day-content">
@@ -450,6 +582,7 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
 </details>
 
 <!-- ========== DAY 3 ========== -->
+<span class="day-anchor" id="day3"></span>
 <details>
   <summary>Day 3 · 8月13日（週四）— 會安古鎮 · 椰子船 · 燈籠之夜</summary>
   <div class="day-content">
@@ -548,6 +681,7 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
 </details>
 
 <!-- ========== DAY 4 ========== -->
+<span class="day-anchor" id="day4"></span>
 <details>
   <summary>Day 4 · 8月14日（週五）— 五行山 · 山茶半島 · 美溪海灘</summary>
   <div class="day-content">
@@ -640,6 +774,7 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
 </details>
 
 <!-- ========== DAY 5 ========== -->
+<span class="day-anchor" id="day5"></span>
 <details>
   <summary>Day 5 · 8月15日（週六）— 自由探索 · 佔族博物館 · 龍橋噴火秀</summary>
   <div class="day-content">
@@ -1082,6 +1217,45 @@ details[open] summary { border-bottom: 1px solid var(--border); background: rgba
   var group = L.featureGroup(allMarkers);
   map.fitBounds(group.getBounds().pad(0.1));
 })();
+
+  // ===== goToDay function =====
+  window.goToDay = function(id) {
+    document.querySelectorAll('details').forEach(function(d) { d.open = false; });
+    var anchor = document.getElementById(id);
+    if (anchor) {
+      var details = anchor.nextElementSibling;
+      if (details && details.tagName === 'DETAILS') { details.open = true; }
+    }
+    setTimeout(function() {
+      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+    // Highlight active button
+    document.querySelectorAll('.day-nav-btn').forEach(function(b) { b.classList.remove('active'); });
+    var btn = document.querySelector('.day-nav-btn[href="#' + id + '"]');
+    if (btn) btn.classList.add('active');
+  };
+
+  // ===== Scroll Spy =====
+  var dayIds = ['day1', 'day2', 'day3', 'day4', 'day5'];
+  var dayBtns = {};
+  dayIds.forEach(function(id) {
+    dayBtns[id] = document.querySelector('.day-nav-btn[href="#' + id + '"]');
+  });
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY || window.pageYOffset;
+    var found = null;
+    for (var i = dayIds.length - 1; i >= 0; i--) {
+      var el = document.getElementById(dayIds[i]);
+      if (el && el.getBoundingClientRect().top <= 120) { found = dayIds[i]; break; }
+    }
+    dayIds.forEach(function(id) {
+      if (dayBtns[id]) {
+        if (id === found) { dayBtns[id].classList.add('active'); }
+        else { dayBtns[id].classList.remove('active'); }
+      }
+    });
+  }, { passive: true });
+
 </script>
 </body>
 </html>
