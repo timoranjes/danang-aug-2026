@@ -83,7 +83,6 @@ a:hover { text-decoration: underline; }
   display: flex; align-items: center; gap: 10px;
   flex-shrink: 0;
 }
-/* Dark mode toggle */
 .dark-toggle {
   cursor: pointer;
   background: none; border: 1px solid var(--border);
@@ -226,7 +225,6 @@ a:hover { text-decoration: underline; }
   margin-left: 8px;
   opacity: 0.6;
 }
-/* Daily summary bar */
 .day-summary {
   display: flex; gap: 16px; flex-wrap: wrap;
   font-family: var(--mono);
@@ -240,8 +238,7 @@ a:hover { text-decoration: underline; }
 .day-summary span { white-space: nowrap; }
 .day-summary .sep { opacity: 0.3; }
 
-/* ═══ Timeline — editorial ═══ */
-.timeline { }
+/* ═══ Timeline ═══ */
 .t-item {
   display: grid;
   grid-template-columns: 44px 1fr;
@@ -296,7 +293,6 @@ a:hover { text-decoration: underline; }
   padding: 3px 6px;
 }
 
-/* Clickable location link */
 .loc-link {
   display: inline;
   color: var(--accent);
@@ -325,21 +321,41 @@ a:hover { text-decoration: underline; }
   filter: var(--map-filter);
 }
 .map-legend {
-  display: flex; flex-wrap: wrap; gap: 10px;
   margin-top: 8px;
   font-family: var(--mono);
   font-size: 10px; color: var(--muted);
 }
-.leg-group { display: flex; flex-wrap: wrap; gap: 8px; }
-.leg-label {
+.leg-section {
+  margin-bottom: 10px;
+}
+.leg-section-title {
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   color: var(--rule);
-  margin-right: 2px;
+  margin-bottom: 6px;
+  font-size: 9px;
 }
-.leg-dot { display: inline-block; width: 6px; height: 6px; margin-right: 3px; }
+.leg-dots {
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+.leg-dot-row {
+  display: flex; align-items: center; gap: 4px;
+}
+.leg-dot { display: inline-block; width: 6px; height: 6px; }
 .leg-dot.dim { opacity: 0.2; }
+.leg-icons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+}
+.leg-icon-row {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px;
+}
+.leg-icon-row svg {
+  flex-shrink: 0;
+}
 
 /* Quick reference card */
 .quick-ref {
@@ -460,7 +476,6 @@ a:hover { text-decoration: underline; }
   margin-top: 4px;
 }
 
-/* Visa */
 .visa-alert {
   font-size: 13px;
   padding: 12px 16px;
@@ -480,7 +495,6 @@ a:hover { text-decoration: underline; }
 .visa-row span:first-child { padding: 10px 0; font-weight: 600; }
 .visa-row span:last-child { padding: 10px 0; color: var(--muted); }
 
-/* Budget */
 .budget-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .budget-table thead { border-bottom: 2px solid var(--text); }
 .budget-table th {
@@ -495,7 +509,6 @@ a:hover { text-decoration: underline; }
 .budget-table tfoot { border-top: 2px solid var(--text); font-weight: 700; }
 .budget-table tfoot td { padding-top: 12px; font-size: 14px; }
 
-/* Tips */
 .tips-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -511,7 +524,6 @@ a:hover { text-decoration: underline; }
 .tip-item h4 { font-family: var(--serif); font-size: 14px; font-weight: 700; margin-bottom: 6px; }
 .tip-item p { font-size: 13px; color: var(--muted); line-height: 1.5; }
 
-/* Pull quote */
 .pull-quote {
   font-family: var(--serif);
   font-size: 18px;
@@ -576,6 +588,165 @@ a:hover { text-decoration: underline; }
 }
 .gm-actions a:hover { background: var(--bg-alt); }
 
+/* ═══ Place Info Modal (NEW) ═══ */
+.pi-modal {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 250;
+  background: rgba(0,0,0,0.75);
+  align-items: flex-end; justify-content: center;
+}
+.pi-modal.show { display: flex; }
+.pi-box {
+  background: var(--bg-card);
+  max-width: 600px; width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  animation: piSlideUp 0.3s ease-out;
+}
+@keyframes piSlideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@media (min-width: 769px) {
+  .pi-modal { align-items: center; }
+  .pi-box {
+    border-radius: 12px;
+    max-height: 80vh;
+  }
+  @keyframes piSlideUp {
+    from { transform: translateY(40px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+}
+.pi-hero {
+  position: relative;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+.pi-hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(transparent 40%, rgba(0,0,0,0.7));
+}
+.pi-hero-title {
+  position: absolute;
+  bottom: 12px; left: 16px; right: 16px;
+  z-index: 1;
+  color: #fff;
+}
+.pi-hero-title h2 {
+  font-family: var(--serif);
+  font-size: 22px; font-weight: 700;
+  margin-bottom: 2px;
+}
+.pi-hero-title .en {
+  font-size: 13px;
+  opacity: 0.8;
+}
+.pi-close-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  z-index: 2;
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.pi-close-btn:hover { background: rgba(0,0,0,0.7); }
+.pi-body { padding: 20px 16px; }
+.pi-type-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+.pi-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.pi-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.pi-meta-item {
+  padding: 10px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.pi-meta-item .label {
+  font-family: var(--mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+.pi-meta-item .value {
+  font-size: 13px;
+  font-weight: 500;
+}
+.pi-gallery {
+  margin: 16px -16px 0;
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding: 0 16px 16px;
+  scroll-snap-type: x mandatory;
+}
+.pi-gallery::-webkit-scrollbar { display: none; }
+.pi-gallery img {
+  flex-shrink: 0;
+  width: 200px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  scroll-snap-align: start;
+}
+.pi-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+.pi-actions a {
+  flex: 1;
+  text-align: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: var(--mono);
+  color: var(--text);
+  transition: background 0.15s;
+}
+.pi-actions a.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+.pi-actions a:hover { opacity: 0.85; }
+
 /* ═══ Footer ═══ */
 .footer {
   max-width: 1200px;
@@ -601,7 +772,7 @@ a:hover { text-decoration: underline; }
 
 /* ═══ Print stylesheet ═══ */
 @media print {
-  .topbar, .day-bar, .map-col, .dark-toggle, .gm-modal, .footer { display: none !important; }
+  .topbar, .day-bar, .map-col, .dark-toggle, .gm-modal, .pi-modal, .footer { display: none !important; }
   .main { grid-template-columns: 1fr !important; }
   .panel { display: block !important; page-break-inside: avoid; }
   .panel:not(:first-child) { page-break-before: always; }
@@ -679,11 +850,11 @@ a:hover { text-decoration: underline; }
         <div class="t-item"><div class="t-time">10:00</div><div class="t-body"><div class="t-title">前往 Airbnb 辦理入住 / 寄存行李</div></div></div>
         <div class="t-item"><div class="t-time">11:00</div><div class="t-body"><div class="t-title">午餐 — Bun Cha Ca 109</div><div class="t-desc">魚餅檬粉，峴港名店</div></div></div>
         <div class="t-item"><div class="t-time">12:30</div><div class="t-body"><div class="t-title">回 Airbnb 午休</div></div></div>
-        <div class="t-item" data-loc="16.0470,108.2430"><div class="t-time">15:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0470,108.2430,'美溪海灘')">美溪海灘</span>漫步</div><div class="t-desc">福布斯全球最美海灘之一</div>
+        <div class="t-item" data-loc="16.0700,108.2461"><div class="t-time">15:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0700,108.2461,'美溪海灘')">美溪海灘</span>漫步</div><div class="t-desc">福布斯全球最美海灘之一</div>
           <div class="t-img" style="background-image:url('https://images.unsplash.com/photo-1775452455303-fff72b03512d?w=600&q=70')"><span class="caption">My Khe Beach</span></div>
         </div></div>
         <div class="t-item"><div class="t-time">18:00</div><div class="t-body"><div class="t-title">海鮮晚餐 — Be Man Seafood</div></div></div>
-        <div class="t-item" data-loc="16.0678,108.2308"><div class="t-time">19:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0678,108.2308,'漢江龍橋')">漢江河畔散步 · 龍橋</span></div></div></div>
+        <div class="t-item" data-loc="16.0611,108.2272"><div class="t-time">19:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0611,108.2272,'漢江龍橋')">漢江河畔散步 · 龍橋</span></div></div></div>
       </div>
     </div>
 
@@ -702,7 +873,7 @@ a:hover { text-decoration: underline; }
       <div class="timeline">
         <div class="t-item"><div class="t-time">08:00</div><div class="t-body"><div class="t-title">出發前往巴拿山</div><div class="t-desc">車程約45分鐘，建議包7人車</div></div></div>
         <div class="t-item"><div class="t-time">09:00</div><div class="t-body"><div class="t-title">纜車上山</div><div class="t-desc">世界最長纜車之一，全長近6公里</div></div></div>
-        <div class="t-item" data-loc="16.0635,107.9765"><div class="t-time">09:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0635,107.9765,'巴拿山黃金橋')">黃金橋</span></div><div class="t-desc">巨型佛手步道，海拔1,400米</div>
+        <div class="t-item" data-loc="15.9949,107.9963"><div class="t-time">09:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(15.9949,107.9963,'巴拿山黃金橋')">黃金橋</span></div><div class="t-desc">巨型佛手步道，海拔1,400米</div>
           <div class="t-img" style="background-image:url('https://images.unsplash.com/photo-1741138327956-dfa75763b50d?w=600&q=70')"><span class="caption">Golden Bridge, Ba Na Hills</span></div>
         </div></div>
         <div class="t-item"><div class="t-time">10:30</div><div class="t-body"><div class="t-title">法式小鎮 · 教堂 · 鐘樓</div></div></div>
@@ -727,11 +898,11 @@ a:hover { text-decoration: underline; }
       </div>
       <div class="timeline">
         <div class="t-item"><div class="t-time">09:00</div><div class="t-body"><div class="t-title">出發前往會安</div><div class="t-desc">車程約30-40分鐘</div></div></div>
-        <div class="t-item" data-loc="15.8801,108.3380"><div class="t-time">10:00</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(15.8801,108.3380,'會安古鎮')">會安古鎮</span>（UNESCO）</div><div class="t-desc">日本廊橋、譚家老宅、福建會館</div></div></div>
+        <div class="t-item" data-loc="15.8833,108.3333"><div class="t-time">10:00</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(15.8833,108.3333,'會安古鎮')">會安古鎮</span>（UNESCO）</div><div class="t-desc">日本廊橋、譚家老宅、福建會館</div></div></div>
         <div class="t-item"><div class="t-time">12:00</div><div class="t-body"><div class="t-title">午餐 — Cao Lau、Com Ga</div><div class="t-desc">會安地道美食</div></div></div>
-        <div class="t-item" data-loc="15.8715,108.3605"><div class="t-time">15:00</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(15.8715,108.3605,'椰林竹籃船')">椰林竹籃船</span></div><div class="t-desc">Cam Thanh 椰子村，水上體驗</div></div></div>
+        <div class="t-item" data-loc="15.8731,108.3749"><div class="t-time">15:00</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(15.8731,108.3749,'椰林竹籃船')">椰林竹籃船</span></div><div class="t-desc">Cam Thanh 椰子村，水上體驗</div></div></div>
         <div class="t-item"><div class="t-time">16:30</div><div class="t-body"><div class="t-title">安邦海灘放鬆</div></div></div>
-        <div class="t-item" data-loc="15.8801,108.3380"><div class="t-time">19:00</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(15.8801,108.3380,'會安夜景')">會安夜景 · 放河燈</span></div><div class="t-desc">燈籠映照秋蓬河</div>
+        <div class="t-item" data-loc="15.8833,108.3333"><div class="t-time">19:00</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(15.8833,108.3333,'會安夜景')">會安夜景 · 放河燈</span></div><div class="t-desc">燈籠映照秋蓬河</div>
           <div class="t-img" style="background-image:url('https://images.unsplash.com/photo-1755709986407-f72e45084ff2?w=600&q=70')"><span class="caption">Hoi An Lanterns</span></div>
         </div></div>
       </div>
@@ -750,7 +921,7 @@ a:hover { text-decoration: underline; }
         <span>節奏：中等</span>
       </div>
       <div class="timeline">
-        <div class="t-item" data-loc="16.0050,108.2590"><div class="t-time">08:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0050,108.2590,'五行山')">五行山</span></div><div class="t-desc">石灰岩山峰、天然洞穴、靈應寺</div><div class="t-note">輕度登山，建議穿著舒適鞋</div>
+        <div class="t-item" data-loc="16.0035,108.2646"><div class="t-time">08:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0035,108.2646,'五行山')">五行山</span></div><div class="t-desc">石灰岩山峰、天然洞穴、靈應寺</div><div class="t-note">輕度登山，建議穿著舒適鞋</div>
           <div class="t-img" style="background-image:url('https://images.unsplash.com/photo-1707807562742-bf69e7feaf4e?w=600&q=70')"><span class="caption">Marble Mountains</span></div>
         </div></div>
         <div class="t-item"><div class="t-time">13:30</div><div class="t-body"><div class="t-title">靈應寺（山茶半島）</div><div class="t-desc">67米觀音像，越南最高</div></div></div>
@@ -771,11 +942,11 @@ a:hover { text-decoration: underline; }
         <span>節奏：輕鬆</span>
       </div>
       <div class="timeline">
-        <div class="t-item" data-loc="16.0545,108.2225"><div class="t-time">09:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0545,108.2225,'佔族雕塑博物館')">佔族雕塑博物館</span></div><div class="t-desc">全球最大的佔族藝術收藏</div></div></div>
-        <div class="t-item" data-loc="16.0665,108.2210"><div class="t-time">11:00</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0665,108.2210,'漢市場')">漢市場</span></div><div class="t-desc">咖啡、特產、紀念品</div></div></div>
+        <div class="t-item" data-loc="16.0599,108.2226"><div class="t-time">09:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0599,108.2226,'佔族雕塑博物館')">佔族雕塑博物館</span></div><div class="t-desc">全球最大的佔族藝術收藏</div></div></div>
+        <div class="t-item" data-loc="16.0677,108.2225"><div class="t-time">11:00</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0677,108.2225,'漢市場')">漢市場</span></div><div class="t-desc">咖啡、特產、紀念品</div></div></div>
         <div class="t-item"><div class="t-time">14:00</div><div class="t-body"><div class="t-title">按摩 / SPA</div><div class="t-desc">越南 SPA 性價比極高</div></div></div>
         <div class="t-item"><div class="t-time">18:00</div><div class="t-body"><div class="t-title">告別晚餐 — 海鮮大餐</div></div></div>
-        <div class="t-item" data-loc="16.0678,108.2308"><div class="t-time">20:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0678,108.2308,'龍橋噴火')">龍橋噴火表演</span></div><div class="t-desc">每週六日 21:00，不可錯過</div>
+        <div class="t-item" data-loc="16.0611,108.2272"><div class="t-time">20:30</div><div class="t-body"><div class="t-title"><span class="loc-link" onclick="openMap(16.0611,108.2272,'龍橋噴火')">龍橋噴火表演</span></div><div class="t-desc">每週六日 21:00，不可錯過</div>
           <div class="t-img" style="background-image:url('https://images.unsplash.com/photo-1571713343936-b27b7bedddab?w=600&q=70')"><span class="caption">Dragon Bridge Fire Show</span></div>
         </div></div>
       </div>
@@ -888,26 +1059,21 @@ a:hover { text-decoration: underline; }
       <div class="map-header">行程地圖</div>
       <div id="map"></div>
       <div class="map-legend">
-        <div class="leg-group">
-          <div class="leg-label">日程</div>
-          <span><span class="leg-dot" style="background:#1c1917" data-legend="1"></span>01 抵達</span>
-          <span><span class="leg-dot" style="background:#0369a1" data-legend="2"></span>02 巴拿山</span>
-          <span><span class="leg-dot" style="background:#d97706" data-legend="3"></span>03 會安</span>
-          <span><span class="leg-dot" style="background:#dc2626" data-legend="4"></span>04 五行山</span>
-          <span><span class="leg-dot" style="background:#7c3aed" data-legend="5"></span>05 市區</span>
+        <!-- Day legend -->
+        <div class="leg-section">
+          <div class="leg-section-title">日程</div>
+          <div class="leg-dots">
+            <span class="leg-dot-row"><span class="leg-dot" style="background:#1c1917" data-legend="1"></span>01 抵達</span>
+            <span class="leg-dot-row"><span class="leg-dot" style="background:#0369a1" data-legend="2"></span>02 巴拿山</span>
+            <span class="leg-dot-row"><span class="leg-dot" style="background:#d97706" data-legend="3"></span>03 會安</span>
+            <span class="leg-dot-row"><span class="leg-dot" style="background:#dc2626" data-legend="4"></span>04 五行山</span>
+            <span class="leg-dot-row"><span class="leg-dot" style="background:#7c3aed" data-legend="5"></span>05 市區</span>
+          </div>
         </div>
-        <div class="leg-group" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">
-          <div class="leg-label">地標類型</div>
-          <span>✈ 機場</span>
-          <span>⛱ 海灘</span>
-          <span>⌒ 橋樑</span>
-          <span>⛰ 山峰</span>
-          <span>鎮 古鎮</span>
-          <span>⛵ 水上</span>
-          <span>⛩ 寺廟</span>
-          <span>博 博物館</span>
-          <span>市 市場</span>
-          <span>宿 住宿</span>
+        <!-- Type icons legend -->
+        <div class="leg-section">
+          <div class="leg-section-title">地標類型</div>
+          <div class="leg-icons" id="legendIcons"></div>
         </div>
       </div>
     </div>
@@ -921,7 +1087,6 @@ a:hover { text-decoration: underline; }
       <div class="qr-item"><span>7人車</span><span>約 200K-350K VND</span></div>
     </div>
 
-    <!-- Packing (mobile: below map) -->
     <div class="quick-ref" id="map-packing-mobile">
       <h4>行前必讀</h4>
       <div class="qr-item"><span>入境單</span><span>飛機上填寫</span></div>
@@ -1000,6 +1165,31 @@ a:hover { text-decoration: underline; }
   </div>
 </div>
 
+<!-- ═══ Place Info Modal (NEW) ═══ -->
+<div class="pi-modal" id="piModal" onclick="if(event.target===this)closePlaceInfo()">
+  <div class="pi-box">
+    <div class="pi-hero" id="piHero">
+      <button class="pi-close-btn" onclick="closePlaceInfo()">×</button>
+      <div class="pi-hero-title">
+        <h2 id="piTitle"></h2>
+        <div class="en" id="piTitleEn"></div>
+      </div>
+    </div>
+    <div class="pi-body">
+      <div class="pi-type-badge" id="piTypeBadge"></div>
+      <div class="pi-desc" id="piDesc"></div>
+      <div class="pi-meta-grid" id="piMetaGrid"></div>
+    </div>
+    <div class="pi-gallery" id="piGallery"></div>
+    <div class="pi-body">
+      <div class="pi-actions">
+        <a id="piGmapsLink" href="" target="_blank" class="primary">Google Maps 查看</a>
+        <a id="piDirLink" href="" target="_blank">導航前往</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ═══ Day switch with map filter ═══ */
 var currentDay = 1;
@@ -1034,6 +1224,257 @@ window.closeMap = function(){
   document.getElementById('gmFrame').src = '';
 };
 
+/* ═══ Place Info Modal ═══ */
+window.openPlaceInfo = function(idx){
+  var p = spots[idx];
+  if(!p) return;
+  document.getElementById('piHero').style.backgroundImage = "url('"+p.photos[0]+"')";
+  document.getElementById('piTitle').textContent = p.title;
+  document.getElementById('piTitleEn').textContent = p.titleEn;
+  document.getElementById('piTypeBadge').textContent = p.typeLabel;
+  document.getElementById('piDesc').textContent = p.desc;
+  // Meta grid
+  var meta = document.getElementById('piMetaGrid');
+  meta.innerHTML = '';
+  if(p.tips){meta.innerHTML+='<div class="pi-meta-item"><div class="label">遊覽建議</div><div class="value">'+p.tips+'</div></div>';}
+  if(p.duration){meta.innerHTML+='<div class="pi-meta-item"><div class="label">建議時間</div><div class="value">'+p.duration+'</div></div>';}
+  if(p.ticket){meta.innerHTML+='<div class="pi-meta-item"><div class="label">門票</div><div class="value">'+p.ticket+'</div></div>';}
+  if(p.bestTime){meta.innerHTML+='<div class="pi-meta-item"><div class="label">最佳時段</div><div class="value">'+p.bestTime+'</div></div>';}
+  // Gallery
+  var gal = document.getElementById('piGallery');
+  gal.innerHTML = '';
+  p.photos.forEach(function(url){
+    gal.innerHTML += '<img src="'+url+'" loading="lazy" alt="'+p.titleEn+'">';
+  });
+  // Links
+  document.getElementById('piGmapsLink').href = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery)+'&query_place_id=';
+  document.getElementById('piDirLink').href = 'https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'&travelmode=driving';
+  document.getElementById('piModal').classList.add('show');
+};
+window.closePlaceInfo = function(){
+  document.getElementById('piModal').classList.remove('show');
+};
+
+/* ═══ SVG Icon Paths ═══ */
+var iconPaths = {
+  airport: '<path d="M10 2L6 8H3v1.5h3L5 13l-2.5 1.5L3 15.5l2-1 2 1 1-3h5l1 3 2-1-1-1L15.5 13l-1-3.5h3V8h-3z"/>',
+  beach: '<path d="M3 13.5c2-1 4-1 6 0s4 1 6 0M14 3c0-1.7-1.3-3-3-3S8 1.3 8 3c0 1 .5 1.9 1.3 2.4L12 13h1l2.7-7.6C16.5 4.9 17 4 17 3h-3z"/>',
+  bridge: '<path d="M2 14h16v1.5H2zM4 14V10c0-3.3 2.7-6 6-6s6 2.7 6 6v4h-1.5v-4c0-2.5-2-4.5-4.5-4.5S5.5 7.5 5.5 10v4H4zm5-2h2v2H9z"/>',
+  mountain: '<path d="M2 15L8 5l3 5 3-5 6 10H2zm7-4.5L8 12h5L10 10.5z"/>',
+  oldtown: '<path d="M5 15h10v-5H5v5zm1-4h3v3H6V11zm5 0h3v3h-3V11zM7 4l5-2 5 2v3H7V4zm1 1h8v1H8V5z"/>',
+  boat: '<path d="M2 12c2-1 4-2 6-2s4 1 6 2l1 3H1l1-3zm10-5c1-2 2-4 2-4s-1 2-3 3H8C6 5 5 3 5 3s1 2 2 4H7c-2 1-3 3-3 3h8c0 0-1-2-3-3z"/>',
+  temple: '<path d="M13 2l-1 2H12l-1-2H8L7 4H6L5 2H3l1 2v1h10v-1l1-2h-2zM4 6v1h10V6H4zm1 2v7h2V8H5zm4 0v7h2V8H9zm4 0v7h2V8h-2zM3 15h12v1H3v-1z"/>',
+  museum: '<path d="M8 2l-5 3v2h12V5L8 2zM4 6h10v1H4V6zm1 2v7h1V8H5zm3 0v7h1V8H8zm3 0v7h1V8h-1zm3 0v7h1V8h-1zM3 15h12v1H3v-1z"/>',
+  market: '<path d="M3 5h12v1.5H3V5zm1 2h10V15H4V7zm1 1v1.5h8V8H5zm0 3V12h8v-1H5zm-2 4h12v1.5H3V15z"/>',
+  hotel: '<path d="M4 15h10V6H4v9zm1-8h2v2H5V7zm4 0h2v2H9V7zm4 0h1v2h-1V7zM5 10h2v2H5v-2zm4 0h2v2H9v-2zm3 0h1v2h-1v-2zM3 16h12v1H3v-1zm2-14h8V3H5v-1z"/>'
+};
+
+var typeLabels = {
+  airport: '機場 · Airport',
+  beach: '海灘 · Beach',
+  bridge: '橋樑 · Bridge',
+  mountain: '山峰 · Mountain',
+  oldtown: '古鎮 · Old Town',
+  boat: '水上體驗 · Boat',
+  temple: '寺廟 · Temple',
+  museum: '博物館 · Museum',
+  market: '市場 · Market',
+  hotel: '住宿 · Hotel'
+};
+
+function mkIcon(color, type){
+  var iconSvg = iconPaths[type] || iconPaths.mountain;
+  var s = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="36" viewBox="0 0 26 36">'+
+    '<circle cx="13" cy="13" r="11" fill="'+color+'" stroke="#fff" stroke-width="2"/>'+
+    '<g fill="#fff" transform="translate(4.5,4.5) scale(0.75)">'+iconSvg+'</g>'+
+    '<polygon points="13,24 8,34 18,34" fill="'+color+'"/>'+
+    '</svg>';
+  return L.divIcon({html:s, className:'', iconSize:[26,36], iconAnchor:[13,36]});
+}
+
+/* ═══ Spot data (enriched with descriptions, tips, photos, corrected coords) ═══ */
+var spots = [
+  {
+    lat:16.0439, lng:108.2002,
+    title:'峴港機場', titleEn:'Da Nang International Airport',
+    day:1, type:'airport',
+    typeLabel:'機場 · Airport',
+    desc:'峴港國際機場（DAD）是越南第三大國際機場，距離市區僅3公里。機場設施現代，入境大廳有貨幣兌換、SIM卡櫃檯和咖啡店。過關通常需20-30分鐘。',
+    tips:'機場出口有Grab候車區，也可預先安排接機',
+    duration:'過關約30分鐘',
+    ticket:'免費',
+    bestTime:'早上航班較少',
+    photos:[
+      'https://images.unsplash.com/photo-1556388158-158ea5ccac32?w=600&q=70',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Da_Nang_International_Airport.jpg/640px-Da_Nang_International_Airport.jpg'
+    ],
+    gmapsQuery:'Da Nang International Airport'
+  },
+  {
+    lat:16.0700, lng:108.2461,
+    title:'美溪海灘', titleEn:'My Khe Beach',
+    day:1, type:'beach',
+    typeLabel:'海灘 · Beach',
+    desc:'被福布斯評為全球最美海灘之一，沙質細膩，海水清澈。全長約10公里，沿線有众多海鮮餐廳和咖啡館。清晨和傍晚是最佳時段，陽光柔和、適合拍照。',
+    tips:'清晨散步或傍晚看日落最佳，夏季水溫舒適可游泳',
+    duration:'1-2小時',
+    ticket:'免費',
+    bestTime:'清晨或傍晚',
+    photos:[
+      'https://images.unsplash.com/photo-1775452455303-fff72b03512d?w=600&q=70',
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=70',
+      'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=70'
+    ],
+    gmapsQuery:'My Khe Beach Da Nang'
+  },
+  {
+    lat:16.0611, lng:108.2272,
+    title:'龍橋', titleEn:'Dragon Bridge (Cầu Rồng)',
+    day:1, type:'bridge',
+    typeLabel:'橋樑 · Bridge',
+    desc:'峴港地標，全長666米，橋身呈金色巨龍造型，橫跨漢江。每週六、日晚9點噴火表演，龍口噴出火焰和煙霧，持續約5分鐘。是峴港最具代表性的現代建築之一。',
+    tips:'噴火表演週六日 21:00，建議提前15分鐘到達占位',
+    duration:'30分鐘（噴火表演5分鐘）',
+    ticket:'免費',
+    bestTime:'週六日 20:45 開始等候',
+    photos:[
+      'https://images.unsplash.com/photo-1571713343936-b27b7bedddab?w=600&q=70',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Dragon_Bridge%2C_Da_Nang.jpg/640px-Dragon_Bridge%2C_Da_Nang.jpg'
+    ],
+    gmapsQuery:'Dragon Bridge Da Nang'
+  },
+  {
+    lat:16.0580, lng:108.2400,
+    title:'住宿區域', titleEn:'Hotel / Airbnb Area',
+    day:1, type:'hotel',
+    typeLabel:'住宿 · Hotel',
+    desc:'Airbnb 住宿區域，位於美溪海灘附近。周邊有便利店、餐廳和咖啡館，步行可到海灘。',
+    tips:'入住後熟悉周邊環境，確認便利店和藥局位置',
+    duration:'全日休息點',
+    ticket:'已預訂',
+    bestTime:'下午抵達辦理入住',
+    photos:[
+      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=70',
+      'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&q=70'
+    ],
+    gmapsQuery:'My Khe Beach Da Nang hotel'
+  },
+  {
+    lat:15.9949, lng:107.9963,
+    title:'巴拿山黃金橋', titleEn:'Golden Bridge, Ba Na Hills',
+    day:2, type:'mountain',
+    typeLabel:'山峰 · Mountain',
+    desc:'海拔1,400米的法式山頂度假勝地，世界最長纜車之一（全長近6公里，單程約20分鐘）。黃金橋（Cầu Vàng）由巨型佛手托起，全長150米，2018年開放後迅速成為越南最具代表性的打卡景點。山上還有法式小鎮、花園、遊樂園和靈應寺。',
+    tips:'早到避開人潮，山上氣溫比市區低5-10°C，帶薄外套',
+    duration:'全日（6-7小時）',
+    ticket:'纜車+門票約 750K VND/人',
+    bestTime:'早上8點前到達纜車站',
+    photos:[
+      'https://images.unsplash.com/photo-1741138327956-dfa75763b50d?w=600&q=70',
+      'https://images.unsplash.com/photo-1775440086721-b15045e03c10?w=600&q=70',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Golden_Bridge%2C_Ba_Na_Hills.jpg/640px-Golden_Bridge%2C_Ba_Na_Hills.jpg'
+    ],
+    gmapsQuery:'Golden Bridge Ba Na Hills Da Nang'
+  },
+  {
+    lat:15.8833, lng:108.3333,
+    title:'會安古鎮', titleEn:'Hoi An Ancient Town',
+    day:3, type:'oldtown',
+    typeLabel:'古鎮 · Old Town',
+    desc:'UNESCO世界文化遺產，保存完好的15-19世紀東南亞貿易港古鎮。日本廊橋（來遠橋）、譚家老宅、福建會館等歷史建築錯落有致。夜晚的秋蓬河畔燈籠點點，是越南最具浪漫氣息的場景之一。',
+    tips:'買套票（150K VND）可參觀5個古蹟，傍晚回到古鎮看燈籠夜景',
+    duration:'3-4小時（下午）+ 晚上2小時',
+    ticket:'古鎮套票 150K VND',
+    bestTime:'下午4點後，燈光最美',
+    photos:[
+      'https://images.unsplash.com/photo-1755709986407-f72e45084ff2?w=600&q=70',
+      'https://images.unsplash.com/photo-1557750255-c76072572ce4?w=600&q=70',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Hoi_An_Japanese_Bridge.jpg/640px-Hoi_An_Japanese_Bridge.jpg'
+    ],
+    gmapsQuery:'Hoi An Ancient Town UNESCO'
+  },
+  {
+    lat:15.8731, lng:108.3749,
+    title:'椰林竹籃船', titleEn:'Cam Thanh Coconut Basket Boat',
+    day:3, type:'boat',
+    typeLabel:'水上體驗 · Boat',
+    desc:'Cam Thanh椰子村的水上體驗，搭乘圓形竹籃船穿梭在茂密的椰子林中。船夫會表演旋轉竹籃船的技巧，遊客也可嘗試划船。沿途可見漁村生活和紅樹林生態。',
+    tips:'會暈船的長者量力而為，船夫旋轉表演時抓紧船邊',
+    duration:'約1小時',
+    ticket:'約 150K-200K VND/人',
+    bestTime:'下午3-5點，陽光不烈',
+    photos:[
+      'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=70',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Basket_boat_Hoi_An.jpg/640px-Basket_boat_Hoi_An.jpg'
+    ],
+    gmapsQuery:'Cam Thanh coconut basket boat Hoi An'
+  },
+  {
+    lat:16.0035, lng:108.2646,
+    title:'五行山', titleEn:'Marble Mountains (Ngu Hanh Son)',
+    day:4, type:'mountain',
+    typeLabel:'山峰 · Mountain',
+    desc:'五座石灰岩山峰（金、木、水、火、土），以水山最為著名。山上有天然洞穴、佛教寺廟和觀景台。從山頂可以俯瞰美溪海灘和峴港全景。入口處的華嚴洞和非龍洞是最大的兩個洞穴。',
+    tips:'穿著舒適防滑鞋，洞穴內光線暗需小心，可乘電梯上山（15K VND）',
+    duration:'2-3小時',
+    ticket:'門票 40K VND + 電梯 15K VND',
+    bestTime:'早上8點，涼爽人少',
+    photos:[
+      'https://images.unsplash.com/photo-1707807562742-bf69e7feaf4e?w=600&q=70',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Marble_Mountains_Da_Nang.jpg/640px-Marble_Mountains_Da_Nang.jpg'
+    ],
+    gmapsQuery:'Marble Mountains Da Nang'
+  },
+  {
+    lat:16.1008, lng:108.2711,
+    title:'靈應寺（山茶半島）', titleEn:'Linh Ung Pagoda, Son Tra Peninsula',
+    day:4, type:'temple',
+    typeLabel:'寺廟 · Temple',
+    desc:'山茶半島上的靈應寺，擁有67米高的觀音菩薩像（越南最高），面向南海，背靠山林。寺廟占地20公頃，建築宏偉，融合了現代與傳統越南寺廟風格。觀音像內有17層，每層供奉21尊不同形態的佛像。',
+    tips:'穿著端莊（長褲/長裙），寺廟免費參觀',
+    duration:'1-1.5小時',
+    ticket:'免費',
+    bestTime:'上午或下午',
+    photos:[
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Lady_Buddha_Linh_Ung_Pagoda.jpg/480px-Lady_Buddha_Linh_Ung_Pagoda.jpg',
+      'https://images.unsplash.com/photo-1609947017136-9daf360188b4?w=600&q=70'
+    ],
+    gmapsQuery:'Linh Ung Pagoda Son Tra Da Nang Lady Buddha'
+  },
+  {
+    lat:16.0599, lng:108.2226,
+    title:'佔族雕塑博物館', titleEn:'Museum of Cham Sculpture',
+    day:5, type:'museum',
+    typeLabel:'博物館 · Museum',
+    desc:'全球最大的佔族藝術收藏館，位於漢河畔。館內收藏了3-15世紀佔婆王國的精美石雕，包括神像、祭壇和裝飾浮雕。建築本身是法式殖民風格，建於1915年。',
+    tips:'館內有英文說明牌，建議停留1-1.5小時',
+    duration:'1-1.5小時',
+    ticket:'門票約 40K VND',
+    bestTime:'上午9:30開館後',
+    photos:[
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Cham_Sculpture_Museum.jpg/640px-Cham_Sculpture_Museum.jpg',
+      'https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?w=600&q=70'
+    ],
+    gmapsQuery:'Museum of Cham Sculpture Da Nang'
+  },
+  {
+    lat:16.0677, lng:108.2225,
+    title:'漢市場', titleEn:'Han Market (Cho Han)',
+    day:5, type:'market',
+    typeLabel:'市場 · Market',
+    desc:'峴港歷史最悠久的傳統市場，位於市中心漢河西岸。四面臨街（Hung Vuong、Tran Phu、Tran Hung Dao、Bach Dang），分為上下兩層。上層賣服裝、紀念品和手工藝品，下層是生鮮食品。是購買越南咖啡、特產和紀念品的好去處。',
+    tips:'記得議價，現金付款為主，注意隨身物品',
+    duration:'1-2小時',
+    ticket:'免費入場',
+    bestTime:'上午，貨品較齊全',
+    photos:[
+      'https://images.unsplash.com/photo-1555529733-0e670556d004?w=600&q=70',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Han_Market_Da_Nang.jpg/640px-Han_Market_Da_Nang.jpg'
+    ],
+    gmapsQuery:'Han Market Cho Han Da Nang'
+  }
+];
+
 /* ═══ Leaflet Map ═══ */
 var allMarkers = [];
 var map;
@@ -1043,35 +1484,48 @@ var map;
     map = L.map('map',{center:[16.0544,108.2022],zoom:11});
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
     var c={1:'#1c1917',2:'#0369a1',3:'#d97706',4:'#dc2626',5:'#7c3aed'};
-    // Per-point icon by place type
-    var types={
-      airport:'✈', beach:'⛱', bridge:'⌒', mountain:'⛰', oldtown:'鎮',
-      boat:'⛵', temple:'⛩', museum:'博', market:'市', hotel:'宿'
-    };
-    function mk(color,icon){
-      var s='<svg xmlns="http://www.w3.org/2000/svg" width="26" height="36"><circle cx="13" cy="13" r="11" fill="'+color+'" stroke="#fff" stroke-width="2"/><text x="13" y="17.5" text-anchor="middle" fill="#fff" font-size="12">'+icon+'</text><polygon points="13,24 8,34 18,34" fill="'+color+'"/></svg>';
-      return L.divIcon({html:s,className:'',iconSize:[26,36],iconAnchor:[13,36]});
-    }
-    var pts=[
-      {lat:16.0437,lng:108.1995,title:'峴港機場',day:1,type:'airport'},
-      {lat:16.0518,lng:108.2445,title:'美溪海灘',day:1,type:'beach'},
-      {lat:16.0678,lng:108.2308,title:'龍橋',day:1,type:'bridge'},
-      {lat:16.0580,lng:108.2400,title:'住宿區域',day:1,type:'hotel'},
-      {lat:16.0635,lng:107.9765,title:'巴拿山',day:2,type:'mountain'},
-      {lat:15.8801,lng:108.3380,title:'會安古鎮',day:3,type:'oldtown'},
-      {lat:15.8715,lng:108.3605,title:'椰林竹籃船',day:3,type:'boat'},
-      {lat:16.0050,lng:108.2590,title:'五行山',day:4,type:'mountain'},
-      {lat:16.1100,lng:108.2480,title:'靈應寺',day:4,type:'temple'},
-      {lat:16.0545,lng:108.2225,title:'佔族博物館',day:5,type:'museum'},
-      {lat:16.0665,lng:108.2210,title:'漢市場',day:5,type:'market'},
-    ];
-    pts.forEach(function(p){
-      var m=L.marker([p.lat,p.lng],{icon:mk(c[p.day],types[p.type])}).bindPopup('<b>'+p.title+'</b>').addTo(map);
-      m._day=p.day;
+
+    spots.forEach(function(p, idx){
+      var icon = mkIcon(c[p.day], p.type);
+      var popupContent = '<div style="text-align:center;font-family:sans-serif;padding:4px;">'+
+        '<b style="font-size:14px;">'+p.title+'</b><br>'+
+        '<span style="font-size:11px;color:#666;">'+p.titleEn+'</span><br>'+
+        '<button onclick="openPlaceInfo('+idx+')" style="margin-top:6px;padding:4px 10px;font-size:11px;background:#0369a1;color:#fff;border:none;border-radius:3px;cursor:pointer;">詳細資訊</button>'+
+        '</div>';
+      var m = L.marker([p.lat,p.lng],{icon:icon}).bindPopup(popupContent).addTo(map);
+      m._day = p.day;
+      m._idx = idx;
       allMarkers.push(m);
     });
+
+    // Build legend icons
+    buildLegend();
     filterMarkers(1);
   }
+
+  function buildLegend(){
+    var el = document.getElementById('legendIcons');
+    var items = [
+      {type:'airport',label:'機場'},
+      {type:'beach',label:'海灘'},
+      {type:'bridge',label:'橋樑'},
+      {type:'mountain',label:'山峰'},
+      {type:'oldtown',label:'古鎮'},
+      {type:'boat',label:'水上'},
+      {type:'temple',label:'寺廟'},
+      {type:'museum',label:'博物館'},
+      {type:'market',label:'市場'},
+      {type:'hotel',label:'住宿'}
+    ];
+    items.forEach(function(item){
+      var miniSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">'+
+        '<circle cx="7" cy="7" r="6" fill="#57534e"/>'+
+        '<g fill="#fff" transform="translate(3,3) scale(0.6)">'+iconPaths[item.type]+'</g>'+
+        '</svg>';
+      el.innerHTML += '<div class="leg-icon-row">'+miniSvg+item.label+'</div>';
+    });
+  }
+
   if(document.readyState==='complete')init(); else window.addEventListener('load',init);
 })();
 
@@ -1085,20 +1539,18 @@ function filterMarkers(day){
       m.setOpacity(0.15);
     }
   });
-  // Update legend
   document.querySelectorAll('.leg-dot').forEach(function(dot){
     var d = parseInt(dot.getAttribute('data-legend'));
     dot.classList.toggle('dim', d!==day);
   });
-  // Zoom to active day
   if(map && fitBounds.length > 0){
     map.fitBounds(L.latLngBounds(fitBounds).pad(0.3), {maxZoom: 14, animate: true});
   }
 }
 
-/* ═══ Keyboard: Escape to close modal ═══ */
+/* ═══ Keyboard: Escape to close modals ═══ */
 document.addEventListener('keydown', function(e){
-  if(e.key==='Escape') closeMap();
+  if(e.key==='Escape'){ closeMap(); closePlaceInfo(); }
 });
 </script>
 
