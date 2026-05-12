@@ -220,7 +220,7 @@ html { scroll-behavior: smooth; }
   visibility: hidden;
 }
 /* ===== Map Section ===== */
-#map-container {
+#map-container{padding:0 16px;margin:20px 0}
   margin-bottom: 30px;
   border-radius: 12px;
   overflow: hidden;
@@ -310,7 +310,7 @@ html { scroll-behavior: smooth; }
 }
 
 /* ===== Spot Info Modal ===== */
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.55);z-index:2000;align-items:center;justify-content:center;padding:20px}
+.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:10000;align-items:center;justify-content:center;padding:20px}
 .modal-overlay.show{display:flex}
 @keyframes mfadeIn{from{opacity:0}to{opacity:1}}
 @keyframes mslideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -329,7 +329,9 @@ html { scroll-behavior: smooth; }
 .modal-body .iitem{background:#f7f5f2;padding:8px 12px;border-radius:8px}
 .modal-body .iitem .ilbl{font-size:11px;color:#888}
 .modal-body .iitem .ival{font-weight:bold;color:#333;font-size:13px;margin-top:2px}
-.spot-info-btn{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;margin:0 4px;border:1px solid #c5960c;background:transparent;color:#c5960c;border-radius:50%;font-size:11px;cursor:pointer;vertical-align:middle;transition:all .2s;padding:0}
+.spot-info-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin:0 4px;border:2px solid #c5960c;background:rgba(197,150,12,0.1);color:#c5960c;border-radius:50%;font-size:14px;cursor:pointer;vertical-align:middle;transition:all .2s;padding:0;line-height:1;font-weight:bold}
+.spot-info-btn:hover,.spot-info-btn:active{background:#c5960c;color:#fff;transform:scale(1.15)}
+.spot-info-btn:active{transform:scale(0.95)}
 .spot-info-btn:hover{background:#c5960c;color:#fff}
 @media(max-width:640px){.modal-overlay{padding:10px;align-items:flex-end}.modal-card{max-height:65vh;border-radius:16px 16px 0 0}.modal-body .igrid{grid-template-columns:1fr}}
 
@@ -415,7 +417,7 @@ html { scroll-behavior: smooth; }
 
 <!-- ========== MAP ========== -->
 <div id="map-container">
-  <div id="map"></div>
+  <div id="map" style="min-height:350px;border-radius:12px;overflow:hidden;"></div>
   <div class="map-controls">
     <button class="map-btn active" data-day="all" onclick="toggleDay('all')">全部</button>
     <button class="map-btn active" data-day="d1" onclick="toggleDay('d1')">Day 1 抵達</button>
@@ -979,7 +981,7 @@ html { scroll-behavior: smooth; }
 
 <!-- ========== BUDGET ========== -->
 <details>
-  <summary>💰 預算估算（3人總計）</summary>
+  <summary>💰 預算估算（5人總計）</summary>
   <div class="day-content">
     <table class="budget-table">
       <tr><th>項目</th><th>預算 (HKD)</th><th>備註</th></tr>
@@ -988,7 +990,7 @@ html { scroll-behavior: smooth; }
       <tr><td>🍜 餐飲（5天×5人）</td><td>~HK$2,500-3,500</td><td>日均 HK$100-140/人</td></tr>
       <tr><td>🚗 交通（Grab/包車）</td><td>~HK$800-1,200</td><td>5人需叫2台Grab或包7人車</td></tr>
       <tr><td>🎫 景點門票</td><td>~HK$1,500-2,000</td><td>巴拿山門票佔大頭（約HK$250/人）</td></tr>
-      <tr><td>💆 SPA/按摩</td><td>~HK$500-800</td><td>1-2次/人</td></tr>
+      <tr><td>💆 SPA/按摩</td><td>~HK$800-1,300</td><td>1-2次/人</td></tr>
       <tr><td>🛒 購物/紀念品</td><td>~HK$800-1,500</td><td>彈性</td></tr>
       <tr><td><strong>總計（除機票）</strong></td><td class="cost"><strong>~HK$9,600-14,500</strong></td><td>5人合計</td></tr>
       <tr><td><strong>總計（含機票）</strong></td><td class="cost"><strong>~HK$17,000-22,000</strong></td><td>5人全程（機票以5人合計）</td></tr>
@@ -999,6 +1001,32 @@ html { scroll-behavior: smooth; }
     </div>
   </div>
 </details>
+
+
+<!-- ========== E-VISA ========== -->
+<div class="day-content" id="evisa">
+  <div class="section-title">🛂 越南電子簽證（E-Visa）指南</div>
+  <div class="tip-box">
+    ⚠️ <strong>香港特區護照前往越南需要申請電子簽證（E-Visa），不是免簽！</strong><br>
+    建議出發前至少 <strong>7-10 個工作日</strong> 申請（官方需 3-5 工作日，但可能延遲）
+  </div>
+  <table class="budget-table">
+    <tr><td>🔗 申請網址</td><td><a href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank" rel="noopener">evisa.xuatnhapcanh.gov.vn</a></td></tr>
+    <tr><td>💰 費用</td><td>USD $25（單次入境，25 天有效期）</td></tr>
+    <tr><td>⏱️ 處理時間</td><td>官方 3-5 工作日（建議提早申請）</td></tr>
+    <tr><td>📄 所需文件</td><td>護照掃描件（個人資訊頁）<br>證件相（白底、正面、無眼鏡）<br>入住地址（Airbnb 地址）</td></tr>
+    <tr><td>👥 申請方式</td><td>每人獨立申請（5 人需提交 5 份）<br>建議由一人統一操作，逐一填寫</td></tr>
+    <tr><td>✅ 簽證到手後</td><td>列印紙本 E-Visa（A4）<br>入境時出示給海關</td></tr>
+  </table>
+  <div class="tip-box" style="margin-top:12px;">
+    💡 <strong>小提示</strong>：<br>
+    • 上傳照片時確保光線均勻、背景純白<br>
+    • 護照有效期需在回程日期後至少 6 個月<br>
+    • 入境口岸選擇「峴港國際機場 (Da Nang International Airport)」<br>
+    • 如遇申請問題，可找代理代辦（約 HK$100-150/人，加急 1-2 天）
+  </div>
+</div>
+
 
 <!-- ========== TIPS ========== -->
 <details>
