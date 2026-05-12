@@ -1071,8 +1071,7 @@ html { scroll-behavior: smooth; }
 </details>
 
 
-<script>
-// ===== Spot Info Data =====
+<script>// ===== Spot Info Data =====
 var SPOT_DATA = {
   "my-khe": { emoji:"🏖️", title:"美溪海灘", subtitle:"My Khe Beach",
     tags:["海灘","免費","長者友好"],
@@ -1150,8 +1149,14 @@ window.closeModal = function() {
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeModal();
 });
-
+</script>
+<script>
 (function() {
+  function initMap() {
+    if (typeof L === 'undefined') {
+      setTimeout(initMap, 100);
+      return;
+    }
   var dayColors = {
     d1: '#e53e3e', d2: '#3182ce', d3: '#38a169',
     d4: '#d69e2e', d5: '#805ad5', all: '#555'
@@ -1285,46 +1290,15 @@ document.addEventListener('keydown', function(e) {
   // Fit bounds to all markers
   var group = L.featureGroup(allMarkers);
   map.fitBounds(group.getBounds().pad(0.1));
+  }
+  
+  // Start initialization
+  if (document.readyState === 'complete') {
+    initMap();
+  } else {
+    window.addEventListener('load', initMap);
+  }
 })();
-
-  // ===== goToDay function =====
-  window.goToDay = function(id) {
-    document.querySelectorAll('details').forEach(function(d) { d.open = false; });
-    var anchor = document.getElementById(id);
-    if (anchor) {
-      var details = anchor.nextElementSibling;
-      if (details && details.tagName === 'DETAILS') { details.open = true; }
-    }
-    setTimeout(function() {
-      anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 50);
-    // Highlight active button
-    document.querySelectorAll('.day-nav-btn').forEach(function(b) { b.classList.remove('active'); });
-    var btn = document.querySelector('.day-nav-btn[href="#' + id + '"]');
-    if (btn) btn.classList.add('active');
-  };
-
-  // ===== Scroll Spy =====
-  var dayIds = ['day1', 'day2', 'day3', 'day4', 'day5'];
-  var dayBtns = {};
-  dayIds.forEach(function(id) {
-    dayBtns[id] = document.querySelector('.day-nav-btn[href="#' + id + '"]');
-  });
-  window.addEventListener('scroll', function() {
-    var scrollY = window.scrollY || window.pageYOffset;
-    var found = null;
-    for (var i = dayIds.length - 1; i >= 0; i--) {
-      var el = document.getElementById(dayIds[i]);
-      if (el && el.getBoundingClientRect().top <= 120) { found = dayIds[i]; break; }
-    }
-    dayIds.forEach(function(id) {
-      if (dayBtns[id]) {
-        if (id === found) { dayBtns[id].classList.add('active'); }
-        else { dayBtns[id].classList.remove('active'); }
-      }
-    });
-  }, { passive: true });
-
 </script>
 
 <!-- Spot Info Modal -->
