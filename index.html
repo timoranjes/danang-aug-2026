@@ -1255,18 +1255,18 @@ window.closePlaceInfo = function(){
   document.getElementById('piModal').classList.remove('show');
 };
 
-/* ═══ SVG Icon Paths ═══ */
-var iconPaths = {
-  airport: '<path d="M10 2L6 8H3v1.5h3L5 13l-2.5 1.5L3 15.5l2-1 2 1 1-3h5l1 3 2-1-1-1L15.5 13l-1-3.5h3V8h-3z"/>',
-  beach: '<path d="M3 13.5c2-1 4-1 6 0s4 1 6 0M14 3c0-1.7-1.3-3-3-3S8 1.3 8 3c0 1 .5 1.9 1.3 2.4L12 13h1l2.7-7.6C16.5 4.9 17 4 17 3h-3z"/>',
-  bridge: '<path d="M2 14h16v1.5H2zM4 14V10c0-3.3 2.7-6 6-6s6 2.7 6 6v4h-1.5v-4c0-2.5-2-4.5-4.5-4.5S5.5 7.5 5.5 10v4H4zm5-2h2v2H9z"/>',
-  mountain: '<path d="M2 15L8 5l3 5 3-5 6 10H2zm7-4.5L8 12h5L10 10.5z"/>',
-  oldtown: '<path d="M5 15h10v-5H5v5zm1-4h3v3H6V11zm5 0h3v3h-3V11zM7 4l5-2 5 2v3H7V4zm1 1h8v1H8V5z"/>',
-  boat: '<path d="M2 12c2-1 4-2 6-2s4 1 6 2l1 3H1l1-3zm10-5c1-2 2-4 2-4s-1 2-3 3H8C6 5 5 3 5 3s1 2 2 4H7c-2 1-3 3-3 3h8c0 0-1-2-3-3z"/>',
-  temple: '<path d="M13 2l-1 2H12l-1-2H8L7 4H6L5 2H3l1 2v1h10v-1l1-2h-2zM4 6v1h10V6H4zm1 2v7h2V8H5zm4 0v7h2V8H9zm4 0v7h2V8h-2zM3 15h12v1H3v-1z"/>',
-  museum: '<path d="M8 2l-5 3v2h12V5L8 2zM4 6h10v1H4V6zm1 2v7h1V8H5zm3 0v7h1V8H8zm3 0v7h1V8h-1zm3 0v7h1V8h-1zM3 15h12v1H3v-1z"/>',
-  market: '<path d="M3 5h12v1.5H3V5zm1 2h10V15H4V7zm1 1v1.5h8V8H5zm0 3V12h8v-1H5zm-2 4h12v1.5H3V15z"/>',
-  hotel: '<path d="M4 15h10V6H4v9zm1-8h2v2H5V7zm4 0h2v2H9V7zm4 0h1v2h-1V7zM5 10h2v2H5v-2zm4 0h2v2H9v-2zm3 0h1v2h-1v-2zM3 16h12v1H3v-1zm2-14h8V3H5v-1z"/>'
+/* ═══ Emoji Icons ═══ */
+var emojiIcons = {
+  airport: '✈️',
+  beach: '🏖️',
+  bridge: '🌉',
+  mountain: '⛰️',
+  oldtown: '🏘️',
+  boat: '🚣',
+  temple: '🏯',
+  museum: '🏛️',
+  market: '🛒',
+  hotel: '🏨'
 };
 
 var typeLabels = {
@@ -1283,13 +1283,13 @@ var typeLabels = {
 };
 
 function mkIcon(color, type){
-  var iconSvg = iconPaths[type] || iconPaths.mountain;
-  var s = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="36" viewBox="0 0 26 36">'+
-    '<circle cx="13" cy="13" r="11" fill="'+color+'" stroke="#fff" stroke-width="2"/>'+
-    '<g fill="#fff" transform="translate(4.5,4.5) scale(0.75)">'+iconSvg+'</g>'+
-    '<polygon points="13,24 8,34 18,34" fill="'+color+'"/>'+
-    '</svg>';
-  return L.divIcon({html:s, className:'', iconSize:[26,36], iconAnchor:[13,36]});
+  var emoji = emojiIcons[type] || '📍';
+  var s = '<div style="width:36px;height:42px;text-align:center;line-height:1;position:relative;">'+
+    '<div style="width:32px;height:38px;background:'+color+';border-radius:50% 50% 50% 4px;transform:rotate(-45deg);border:2px solid #fff;position:relative;">'+
+    '<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(45deg);font-size:16px;">'+emoji+'</span>'+
+    '</div>'+
+    '</div>';
+  return L.divIcon({html:s, className:'', iconSize:[36,42], iconAnchor:[18,42]});
 }
 
 /* ═══ Spot data (enriched with descriptions, tips, photos, corrected coords) ═══ */
@@ -1518,11 +1518,8 @@ var map;
       {type:'hotel',label:'住宿'}
     ];
     items.forEach(function(item){
-      var miniSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">'+
-        '<circle cx="7" cy="7" r="6" fill="#57534e"/>'+
-        '<g fill="#fff" transform="translate(3,3) scale(0.6)">'+iconPaths[item.type]+'</g>'+
-        '</svg>';
-      el.innerHTML += '<div class="leg-icon-row">'+miniSvg+item.label+'</div>';
+      var emoji = emojiIcons[item.type] || '📍';
+      el.innerHTML += '<div class="leg-icon-row">'+emoji+item.label+'</div>';
     });
   }
 
