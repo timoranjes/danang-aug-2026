@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
-<script>window.L||document.write('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>')</script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1246,7 +1245,7 @@ window.openPlaceInfo = function(idx){
   var gal = document.getElementById('piGallery');
   gal.innerHTML = '';
   p.photos.forEach(function(url){
-    gal.innerHTML += '<img src="'+url+'" loading="lazy" alt="'+p.titleEn+'" onerror="this.style.display='none'">';
+    gal.innerHTML += '<img src="'+url+'" loading="lazy" alt="'+p.titleEn+'" onerror="this.style.display=\\x27none\\x27">';
   });
   // Links
   document.getElementById('piGmapsLink').href = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery);
@@ -1308,7 +1307,7 @@ var spots = [
     bestTime:'早上航班較少',
     photos:[
       'https://images.unsplash.com/photo-1556388158-158ea5ccac32?w=600&q=70',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Da_Nang_International_Airport.jpg/640px-Da_Nang_International_Airport.jpg'
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Da_Nang_International_Airport.jpg/640px-Da_Nang_International_Airport.jpg',
       'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=70',    ],
     gmapsQuery:'Da Nang International Airport'
   },
@@ -1341,7 +1340,7 @@ var spots = [
     bestTime:'週六日 20:45 開始等候',
     photos:[
       'https://images.unsplash.com/photo-1571713343936-b27b7bedddab?w=600&q=70',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Dragon_Bridge%2C_Da_Nang.jpg/640px-Dragon_Bridge%2C_Da_Nang.jpg'
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Dragon_Bridge%2C_Da_Nang.jpg/640px-Dragon_Bridge%2C_Da_Nang.jpg',
       'https://images.unsplash.com/photo-1583267746897-2cf415867147?w=600&q=70',    ],
     gmapsQuery:'Dragon Bridge Da Nang'
   },
@@ -1407,7 +1406,7 @@ var spots = [
     bestTime:'下午3-5點，陽光不烈',
     photos:[
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=70',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Basket_boat_Hoi_An.jpg/640px-Basket_boat_Hoi_An.jpg'
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Basket_boat_Hoi_An.jpg/640px-Basket_boat_Hoi_An.jpg',
       'https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=600&q=70',    ],
     gmapsQuery:'Cam Thanh coconut basket boat Hoi An'
   },
@@ -1423,7 +1422,7 @@ var spots = [
     bestTime:'早上8點，涼爽人少',
     photos:[
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=70',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Marble_Mountains_Da_Nang.jpg/640px-Marble_Mountains_Da_Nang.jpg'
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Marble_Mountains_Da_Nang.jpg/640px-Marble_Mountains_Da_Nang.jpg',
       'https://images.unsplash.com/photo-1596422846543-75c6fc187be9?w=600&q=70',    ],
     gmapsQuery:'Marble Mountains Da Nang'
   },
@@ -1471,7 +1470,7 @@ var spots = [
     bestTime:'上午，貨品較齊全',
     photos:[
       'https://images.unsplash.com/photo-1555529733-0e670556d004?w=600&q=70',
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Han_Market_Da_Nang.jpg/640px-Han_Market_Da_Nang.jpg'
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Han_Market_Da_Nang.jpg/640px-Han_Market_Da_Nang.jpg',
       'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&q=70',    ],
     gmapsQuery:'Han Market Cho Han Da Nang'
   }
