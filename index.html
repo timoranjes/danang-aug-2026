@@ -84,19 +84,27 @@ a:hover { text-decoration: underline; }
   flex-shrink: 0;
 }
 
-/* ═══ Flight cards in topbar ═══ */
-.topbar-flights {
-  display: flex; align-items: center; gap: 8px;
-  flex-shrink: 0;
+/* ═══ Flight strip (below topbar) ═══ */
+.flight-strip {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
 }
 .flight-card {
-  display: flex; align-items: center; gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 4px 10px;
   border: 1px solid var(--border);
   border-radius: 4px;
   font-family: var(--mono);
   font-size: 11px;
-  background: var(--bg-alt);
+  background: var(--bg-card);
 }
 .flight-card.return {
   border-left: 2px solid var(--accent);
@@ -143,29 +151,11 @@ a:hover { text-decoration: underline; }
 }
 @media (max-width: 768px) {
   .hero-inner { grid-template-columns: 1fr; gap: 24px; min-height: auto; }
-  /* Topbar mobile: stack title above flight cards, horizontal scroll */
-  .topbar {
-    flex-wrap: wrap;
-    padding: 8px 16px;
-  }
-  .topbar-title {
-    width: 100%;
-    margin-bottom: 6px;
-    font-size: 13px;
-  }
-  .topbar-flights {
-    width: 100%;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
-    gap: 6px;
-  }
-  .flight-card {
-    flex-shrink: 0;
-    padding: 3px 8px;
-    font-size: 10px;
-  }
+  .flight-strip { padding: 6px 16px; gap: 6px; flex-wrap: wrap; }
+  .flight-card { flex: 1 1 auto; padding: 3px 8px; font-size: 10px; gap: 5px; min-width: 0; }
+  .flight-code { min-width: 34px; }
+  .flight-route { font-size: 9px; }
+  .flight-date { font-size: 9px; padding-left: 4px; }
 }
 .hero h1 {
   font-family: var(--serif);
@@ -857,20 +847,22 @@ a:hover { text-decoration: underline; }
 <!-- ═══ Top bar ═══ -->
 <div class="topbar">
   <div class="topbar-title">峴港家庭之旅</div>
-  <div class="topbar-flights">
-    <div class="flight-card">
-      <span class="flight-code">UO552</span>
-      <span class="flight-route">HKG <span class="flight-arrow">→</span> DAD</span>
-      <span class="flight-time">08:25 <span class="flight-sep">|</span> 09:20</span>
-      <span class="flight-date">8/11</span>
-    </div>
-    <div class="flight-card return">
-      <span class="flight-code">UO553</span>
-      <span class="flight-route">DAD <span class="flight-arrow">→</span> HKG</span>
-      <span class="flight-time">10:05 <span class="flight-sep">|</span> 13:40</span>
-      <span class="flight-date">8/16</span>
-    </div>
-    <button class="dark-toggle" onclick="toggleDark()" title="切換暗色模式" aria-label="切換暗色模式">◐</button>
+  <button class="dark-toggle" onclick="toggleDark()" title="切換暗色模式" aria-label="切換暗色模式">◐</button>
+</div>
+
+<!-- ═══ Flight strip ═══ -->
+<div class="flight-strip">
+  <div class="flight-card">
+    <span class="flight-code">UO552</span>
+    <span class="flight-route">HKG <span class="flight-arrow">→</span> DAD</span>
+    <span class="flight-time">08:25 <span class="flight-sep">|</span> 09:20</span>
+    <span class="flight-date">8/11</span>
+  </div>
+  <div class="flight-card return">
+    <span class="flight-code">UO553</span>
+    <span class="flight-route">DAD <span class="flight-arrow">→</span> HKG</span>
+    <span class="flight-time">10:05 <span class="flight-sep">|</span> 13:40</span>
+    <span class="flight-date">8/16</span>
   </div>
 </div>
 
