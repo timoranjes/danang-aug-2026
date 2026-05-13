@@ -63,81 +63,40 @@ body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* ═══ Top bar (title + boarding pass) ═══ */
+/* ═══ Top bar ═══ */
 .topbar {
   position: sticky; top: 0; z-index: 100;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-  padding: 0;
-}
-.topbar-row1 {
+  padding: 8px 24px;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 24px 0 24px;
   font-size: 13px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 .topbar-title {
   font-family: var(--serif);
   font-weight: 700; font-size: 14px;
+  flex-shrink: 0;
 }
+.topbar-flights {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text);
+}
+.topbar-flights .sep { color: var(--muted); }
+.topbar-flights .fc { color: var(--accent); font-weight: 700; }
 .dark-toggle {
   cursor: pointer;
   background: none; border: 1px solid var(--border);
   color: var(--text); width: 28px; height: 28px;
   border-radius: 4px; font-size: 14px;
   display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
   transition: background 0.15s;
 }
 .dark-toggle:hover { background: var(--bg-alt); }
-
-/* Boarding pass */
-.flight-pass {
-  display: grid;
-  grid-template-columns: 1fr 1px 1fr auto;
-  align-items: center;
-  padding: 8px 24px 10px 24px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text);
-}
-.flight-pass .pass-out,
-.flight-pass .pass-return {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.flight-pass .pass-out { padding-right: 12px; }
-.flight-pass .pass-return { padding-left: 12px; }
-.pass-label {
-  font-size: 9px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--muted);
-}
-.pass-code {
-  font-weight: 700;
-  color: var(--accent);
-  font-size: 12px;
-}
-.pass-route {
-  font-size: 11px;
-  color: var(--text);
-}
-.pass-divider {
-  width: 1px;
-  border: none;
-  background: repeating-linear-gradient(
-    to bottom, var(--border) 0, var(--border) 4px, transparent 4px, transparent 8px
-  );
-}
-.pass-date-right {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
-  padding-left: 12px;
-  font-size: 10px;
-  color: var(--muted);
-}
 
 /* ═══ Hero ═══ */
 .hero { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
@@ -151,25 +110,8 @@ a:hover { text-decoration: underline; }
 }
 @media (max-width: 768px) {
   .hero-inner { grid-template-columns: 1fr; gap: 24px; min-height: auto; }
-  .topbar-row1 { padding: 8px 16px 0 16px; }
-  .topbar-title { font-size: 13px; }
-  .flight-pass {
-    grid-template-columns: 1fr;
-    padding: 8px 16px 10px 16px;
-    gap: 4px;
-  }
-  .pass-out { padding-right: 0 !important; }
-  .pass-return { padding-left: 0 !important; border-top: 1px dashed var(--border); padding-top: 6px; }
-  .pass-divider { display: none; }
-  .pass-date-right {
-    flex-direction: row;
-    gap: 16px;
-    align-items: center;
-    padding-left: 0 !important;
-    border-top: 1px dashed var(--border);
-    padding-top: 6px;
-    font-size: 11px;
-  }
+  .topbar { padding: 8px 16px; gap: 8px; }
+  .topbar-flights { font-size: 10px; gap: 5px; }
 }
 .hero h1 {
   font-family: var(--serif);
@@ -860,27 +802,17 @@ a:hover { text-decoration: underline; }
 
 <!-- ═══ Top bar ═══ -->
 <div class="topbar">
-  <div class="topbar-row1">
-    <div class="topbar-title">峴港家庭之旅</div>
-    <button class="dark-toggle" onclick="toggleDark()" title="切換暗色模式" aria-label="切換暗色模式">◐</button>
+  <div class="topbar-title">峴港家庭之旅</div>
+  <div class="topbar-flights">
+    <span>8/11</span>
+    <span class="fc">UO552</span>
+    <span>08:25</span>
+    <span class="sep">|</span>
+    <span>8/16</span>
+    <span class="fc">UO553</span>
+    <span>10:05</span>
   </div>
-  <div class="flight-pass">
-    <div class="pass-out">
-      <span class="pass-label">去程</span>
-      <span class="pass-code">UO552</span>
-      <span class="pass-route">HKG 08:25 → DAD 09:20</span>
-    </div>
-    <div class="pass-divider"></div>
-    <div class="pass-return">
-      <span class="pass-label">回程</span>
-      <span class="pass-code">UO553</span>
-      <span class="pass-route">DAD 10:05 → HKG 13:40</span>
-    </div>
-    <div class="pass-date-right">
-      <span>8/11</span>
-      <span>8/16</span>
-    </div>
-  </div>
+  <button class="dark-toggle" onclick="toggleDark()" title="切換暗色模式" aria-label="切換暗色模式">◐</button>
 </div>
 
 <!-- ═══ Hero ═══ -->
