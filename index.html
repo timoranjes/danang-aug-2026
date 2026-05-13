@@ -429,6 +429,83 @@ a:hover { text-decoration: underline; }
   flex-shrink: 0;
 }
 
+/* ═══ Foldable sections (Packing, Emergency, Reference) ═══ */
+.foldable {
+  margin-top: 32px;
+  border: 1px solid var(--border);
+}
+.foldable-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px;
+  cursor: pointer; user-select: none;
+  background: var(--bg-alt);
+  transition: background 0.15s;
+}
+.foldable-header:hover { background: var(--border-light); }
+.foldable-header h3 {
+  margin: 0; font-size: 13px; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 1px; color: var(--fg);
+}
+.foldable-header .sub {
+  font-size: 11px; color: var(--muted); margin-left: 10px;
+  font-family: var(--sans); text-transform: none; letter-spacing: 0;
+}
+.fold-chevron {
+  display: inline-block; width: 16px; height: 16px;
+  transition: transform 0.2s ease;
+  color: var(--muted);
+}
+.fold-chevron::before { content: '▾'; font-size: 14px; }
+.foldable.open .fold-chevron { transform: rotate(180deg); }
+.foldable-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+.foldable.open .foldable-body { max-height: 2000px; }
+
+/* ═══ Packing checkboxes ═══ */
+.pack-progress {
+  padding: 8px 20px;
+  font-size: 11px; color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--mono);
+  display: flex; align-items: center; gap: 8px;
+}
+.pack-bar {
+  flex: 1; height: 3px; background: var(--border-light);
+  border-radius: 2px; overflow: hidden;
+}
+.pack-bar-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.2s; width: 0; }
+.pack-cat { padding: 0; }
+.pack-cat h4 {
+  font-size: 11px; font-family: var(--mono);
+  text-transform: uppercase; letter-spacing: 1px;
+  color: var(--muted); padding: 10px 20px 6px;
+}
+.pack-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 20px; font-size: 13px;
+  border-bottom: 1px solid var(--border-light);
+  cursor: pointer;
+}
+.pack-item:last-child { border-bottom: none; }
+.pack-item input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 16px; height: 16px; border: 1px solid var(--border);
+  border-radius: 2px; cursor: pointer; flex-shrink: 0;
+  position: relative; background: var(--bg);
+}
+.pack-item input[type="checkbox"]:checked {
+  background: var(--accent); border-color: var(--accent);
+}
+.pack-item input[type="checkbox"]:checked::after {
+  content: ''; position: absolute;
+  top: 1px; left: 4px; width: 5px; height: 9px;
+  border: solid var(--bg); border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.pack-item.checked { color: var(--muted); text-decoration: line-through; opacity: 0.6; }
+
 /* ═══ Emergency info ═══ */
 .emergency-grid {
   display: grid;
@@ -991,99 +1068,116 @@ a:hover { text-decoration: underline; }
       「會安的燈籠、巴拿山的雲海、美溪海灘的日落——<br>這趟旅程的每一刻，都是家庭的共同記憶。」
     </div>
 
-    <!-- ═══ Packing checklist ═══ -->
-    <div class="section-title" style="margin-top:48px">
-      打包清單
-      <span class="sub">出發前檢查</span>
-    </div>
-    <div class="packing-cols">
-      <div class="packing-col">
-        <h4>證件與金錢</h4>
-        <ul>
-          <li>護照（有效期 6 個月以上）</li>
-          <li>E-Visa 列印件</li>
-          <li>VND 現金 / 港幣備用</li>
-          <li>Visa / Mastercard</li>
-          <li>旅遊保險單</li>
-          <li>Airbnb 確認信</li>
-          <li>機票確認信</li>
-        </ul>
-        <h4>衣物</h4>
-        <ul>
-          <li>輕便夏裝（每日替換）</li>
-          <li>防曬衣 / 薄外套</li>
-          <li>泳裝</li>
-          <li>舒適行山鞋</li>
-          <li>拖鞋 / 沙灘鞋</li>
-          <li>寺廟用長褲 / 長裙</li>
-          <li>帽子 / 太陽眼鏡</li>
-        </ul>
+    <!-- ═══ Packing checklist (foldable) ═══ -->
+    <div class="foldable" id="fold-packing">
+      <div class="foldable-header" onclick="toggleFold('fold-packing')">
+        <div><h3>打包清單<span class="sub">出發前檢查</span></h3></div>
+        <span class="fold-chevron"></span>
       </div>
-      <div class="packing-col">
-        <h4>電子用品</h4>
-        <ul>
-          <li>手機充電器</li>
-          <li>萬用插頭轉換器</li>
-          <li>行動電源</li>
-          <li>相機 / 記憶卡</li>
-          <li>防水手機袋（海灘用）</li>
-        </ul>
-        <h4>日常用品</h4>
-        <ul>
-          <li>防曬霜 SPF50+</li>
-          <li>防蚊液</li>
-          <li>個人藥品（腸胃藥、暈車藥）</li>
-          <li>雨傘 / 雨衣</li>
-          <li>濕紙巾</li>
-          <li>頸枕（飛機用）</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- ═══ Emergency info ═══ -->
-    <div class="section-title" style="margin-top:48px">
-      緊急資訊
-      <span class="sub">重要電話與地址</span>
-    </div>
-    <div class="emergency-grid">
-      <div class="em-item">
-        <h4>香港駐曼谷經濟貿易辦事處（兼管越南）</h4>
-        <p>領事協助熱線（24小時）</p>
-        <span class="em-num">+852 1868</span>
-      </div>
-      <div class="em-item">
-        <h4>越南緊急電話</h4>
-        <p>報警 · 救火 · 救護</p>
-        <span class="em-num">113 / 114 / 115</span>
-      </div>
-      <div class="em-item">
-        <h4>峴港 Family Hospital</h4>
-        <p>私立醫院，有英文服務<br>291-293 Nguyen Van Linh, Thanh Khe</p>
-        <span class="em-num">0236 3565 800</span>
-      </div>
-      <div class="em-item">
-        <h4>Airbnb 地址</h4>
-        <p>入住時填寫（待確認）</p>
-        <span class="em-num" style="font-size:13px;color:var(--muted)">出發前更新</span>
+      <div class="foldable-body">
+        <div class="pack-progress">
+          <span id="packCount">0/29</span>
+          <div class="pack-bar"><div class="pack-bar-fill" id="packBarFill"></div></div>
+        </div>
+        <div class="packing-cols">
+          <div class="packing-col">
+            <div class="pack-cat">
+              <h4>證件與金錢</h4>
+              <label class="pack-item"><input type="checkbox" data-pack="passport">護照（有效期 6 個月以上）</label>
+              <label class="pack-item"><input type="checkbox" data-pack="evisa">E-Visa 列印件</label>
+              <label class="pack-item"><input type="checkbox" data-pack="cash">VND 現金 / 港幣備用</label>
+              <label class="pack-item"><input type="checkbox" data-pack="card">Visa / Mastercard</label>
+              <label class="pack-item"><input type="checkbox" data-pack="insurance">旅遊保險單</label>
+              <label class="pack-item"><input type="checkbox" data-pack="airbnb">Airbnb 確認信</label>
+              <label class="pack-item"><input type="checkbox" data-pack="flight">機票確認信</label>
+            </div>
+            <div class="pack-cat">
+              <h4>衣物</h4>
+              <label class="pack-item"><input type="checkbox" data-pack="summer">輕便夏裝（每日替換）</label>
+              <label class="pack-item"><input type="checkbox" data-pack="jacket">防曬衣 / 薄外套</label>
+              <label class="pack-item"><input type="checkbox" data-pack="swim">泳裝</label>
+              <label class="pack-item"><input type="checkbox" data-pack="shoes">舒適行山鞋</label>
+              <label class="pack-item"><input type="checkbox" data-pack="sandals">拖鞋 / 沙灘鞋</label>
+              <label class="pack-item"><input type="checkbox" data-pack="pants">寺廟用長褲 / 長裙</label>
+              <label class="pack-item"><input type="checkbox" data-pack="hat">帽子 / 太陽眼鏡</label>
+            </div>
+          </div>
+          <div class="packing-col">
+            <div class="pack-cat">
+              <h4>電子用品</h4>
+              <label class="pack-item"><input type="checkbox" data-pack="charger">手機充電器</label>
+              <label class="pack-item"><input type="checkbox" data-pack="adapter">萬用插頭轉換器</label>
+              <label class="pack-item"><input type="checkbox" data-pack="powerbank">行動電源</label>
+              <label class="pack-item"><input type="checkbox" data-pack="camera">相機 / 記憶卡</label>
+              <label class="pack-item"><input type="checkbox" data-pack="waterbag">防水手機袋（海灘用）</label>
+            </div>
+            <div class="pack-cat">
+              <h4>日常用品</h4>
+              <label class="pack-item"><input type="checkbox" data-pack="sunscreen">防曬霜 SPF50+</label>
+              <label class="pack-item"><input type="checkbox" data-pack="bugspray">防蚊液</label>
+              <label class="pack-item"><input type="checkbox" data-pack="meds">個人藥品（腸胃藥、暈車藥）</label>
+              <label class="pack-item"><input type="checkbox" data-pack="umbrella">雨傘 / 雨衣</label>
+              <label class="pack-item"><input type="checkbox" data-pack="wipes">濕紙巾</label>
+              <label class="pack-item"><input type="checkbox" data-pack="neckpillow">頸枕（飛機用）</label>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Quick reference cards -->
-    <div class="ref-card">
-      <h4>快速參考</h4>
-      <div class="qr-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
-      <div class="qr-item"><span>時差</span><span>比香港慢1小時（UTC+7）</span></div>
-      <div class="qr-item"><span>8月均溫</span><span>25-35°C</span></div>
-      <div class="qr-item"><span>Grab 市區</span><span>約 30K-50K VND</span></div>
-      <div class="qr-item"><span>7人車</span><span>約 200K-350K VND</span></div>
+    <!-- ═══ Emergency info (foldable) ═══ -->
+    <div class="foldable" id="fold-emergency">
+      <div class="foldable-header" onclick="toggleFold('fold-emergency')">
+        <div><h3>緊急資訊<span class="sub">重要電話與地址</span></h3></div>
+        <span class="fold-chevron"></span>
+      </div>
+      <div class="foldable-body">
+        <div class="emergency-grid">
+          <div class="em-item">
+            <h4>香港駐曼谷經濟貿易辦事處（兼管越南）</h4>
+            <p>領事協助熱線（24小時）</p>
+            <span class="em-num">+852 1868</span>
+          </div>
+          <div class="em-item">
+            <h4>越南緊急電話</h4>
+            <p>報警 · 救火 · 救護</p>
+            <span class="em-num">113 / 114 / 115</span>
+          </div>
+          <div class="em-item">
+            <h4>峴港 Family Hospital</h4>
+            <p>私立醫院，有英文服務<br>291-293 Nguyen Van Linh, Thanh Khe</p>
+            <span class="em-num">0236 3565 800</span>
+          </div>
+          <div class="em-item">
+            <h4>Airbnb 地址</h4>
+            <p>入住時填寫（待確認）</p>
+            <span class="em-num" style="font-size:13px;color:var(--muted)">出發前更新</span>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="ref-card" id="pre-trip-essentials">
-      <h4>行前必讀</h4>
-      <div class="qr-item"><span>入境單</span><span>飛機上填寫</span></div>
-      <div class="qr-item"><span>E-Visa</span><span>列印紙本備份</span></div>
-      <div class="qr-item"><span>SIM 卡</span><span>機場買 Viettel / Vinaphone</span></div>
-      <div class="qr-item"><span>SIM 費用</span><span>約 150K-200K VND</span></div>
+    <!-- Quick reference (foldable) -->
+    <div class="foldable" id="fold-ref">
+      <div class="foldable-header" onclick="toggleFold('fold-ref')">
+        <div><h3>快速參考 · 行前必讀<span class="sub">匯率 / 溫差 / 入境須知</span></h3></div>
+        <span class="fold-chevron"></span>
+      </div>
+      <div class="foldable-body">
+        <div class="ref-card" style="border:none;margin-top:0">
+          <div class="qr-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
+          <div class="qr-item"><span>時差</span><span>比香港慢1小時（UTC+7）</span></div>
+          <div class="qr-item"><span>8月均溫</span><span>25-35°C</span></div>
+          <div class="qr-item"><span>Grab 市區</span><span>約 30K-50K VND</span></div>
+          <div class="qr-item"><span>7人車</span><span>約 200K-350K VND</span></div>
+        </div>
+        <div class="ref-card" id="pre-trip-essentials" style="margin-top:0;border-top:1px solid var(--border)">
+          <div class="qr-item"><span>入境單</span><span>飛機上填寫</span></div>
+          <div class="qr-item"><span>E-Visa</span><span>列印紙本備份</span></div>
+          <div class="qr-item"><span>SIM 卡</span><span>機場買 Viettel / Vinaphone</span></div>
+          <div class="qr-item"><span>SIM 費用</span><span>約 150K-200K VND</span></div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -1229,6 +1323,54 @@ window.toggleDark = function(){
 };
 (function(){
   if(localStorage.getItem('danang-dark')==='1') document.documentElement.classList.add('dark');
+})();
+
+/* ═══ Foldable sections ═══ */
+window.toggleFold = function(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.classList.toggle('open');
+  // Save state
+  localStorage.setItem('danang-fold-'+id, el.classList.contains('open')?'1':'0');
+};
+// Restore fold state on load
+(function(){
+  ['fold-packing','fold-emergency','fold-ref'].forEach(function(id){
+    var state = localStorage.getItem('danang-fold-'+id);
+    if(state==='1') document.getElementById(id).classList.add('open');
+  });
+})();
+
+/* ═══ Packing checklist: checkboxes with localStorage ═══ */
+(function(){
+  var STORAGE_KEY = 'danang-pack';
+  var checked = {};
+  try { var saved = localStorage.getItem(STORAGE_KEY); if(saved) checked = JSON.parse(saved); } catch(e){}
+
+  // Restore checked state
+  document.querySelectorAll('.pack-item input[type="checkbox"]').forEach(function(cb){
+    var key = cb.getAttribute('data-pack');
+    if(checked[key]){ cb.checked = true; cb.closest('.pack-item').classList.add('checked'); }
+    cb.addEventListener('change', function(){
+      checked[this.getAttribute('data-pack')] = this.checked;
+      this.closest('.pack-item').classList.toggle('checked', this.checked);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checked));
+      updatePackProgress();
+    });
+  });
+
+  function updatePackProgress(){
+    var all = document.querySelectorAll('.pack-item input[type="checkbox"]');
+    var done = 0;
+    all.forEach(function(cb){ if(cb.checked) done++; });
+    var total = all.length;
+    var pct = total > 0 ? Math.round((done/total)*100) : 0;
+    var countEl = document.getElementById('packCount');
+    var barEl = document.getElementById('packBarFill');
+    if(countEl) countEl.textContent = done + '/' + total;
+    if(barEl) barEl.style.width = pct + '%';
+  }
+  updatePackProgress();
 })();
 
 /* ═══ Google Maps Modal ═══ */
