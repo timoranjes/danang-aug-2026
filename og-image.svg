@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" width="1200" height="1200">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#0d1b2a"/>
@@ -10,24 +10,23 @@
       <stop offset="100%" stop-color="#c9a961"/>
     </linearGradient>
   </defs>
-  <!-- Background -->
-  <rect width="1200" height="630" fill="url(#bg)"/>
-  <!-- Subtle wave pattern at bottom -->
-  <path d="M0 480 Q150 440 300 460 Q450 480 600 450 Q750 420 900 450 Q1050 480 1200 440 L1200 630 L0 630Z" fill="#1a2744" opacity="0.6"/>
-  <path d="M0 520 Q200 490 400 510 Q600 530 800 500 Q1000 470 1200 510 L1200 630 L0 630Z" fill="#0d1b2a" opacity="0.8"/>
+  <rect width="1200" height="1200" fill="url(#bg)"/>
+  <!-- Wave pattern -->
+  <path d="M0 850 Q150 800 300 820 Q450 840 600 810 Q750 780 900 810 Q1050 840 1200 800 L1200 1200 L0 1200Z" fill="#1a2744" opacity="0.6"/>
+  <path d="M0 920 Q200 880 400 900 Q600 920 800 890 Q1000 860 1200 900 L1200 1200 L0 1200Z" fill="#0d1b2a" opacity="0.8"/>
   <!-- Gold accent line -->
-  <rect x="100" y="200" width="1000" height="2" fill="url(#gold)" opacity="0.8"/>
+  <rect x="150" y="400" width="900" height="2" fill="url(#gold)" opacity="0.8"/>
   <!-- Title -->
-  <text x="600" y="290" font-family="Georgia, 'Noto Serif', serif" font-size="84" font-weight="700" fill="#e8d5a3" text-anchor="middle" letter-spacing="8">DA NANG</text>
-  <text x="600" y="340" font-family="Georgia, 'Noto Serif', serif" font-size="36" font-weight="400" fill="#a0b4c8" text-anchor="middle" letter-spacing="12">VIETNAM</text>
+  <text x="600" y="520" font-family="Georgia, serif" font-size="96" font-weight="700" fill="#e8d5a3" text-anchor="middle" letter-spacing="10">DA NANG</text>
+  <text x="600" y="590" font-family="Georgia, serif" font-size="42" font-weight="400" fill="#a0b4c8" text-anchor="middle" letter-spacing="14">VIETNAM</text>
   <!-- Gold accent line -->
-  <rect x="100" y="360" width="1000" height="1" fill="url(#gold)" opacity="0.5"/>
+  <rect x="150" y="620" width="900" height="1" fill="url(#gold)" opacity="0.5"/>
   <!-- Subtitle -->
-  <text x="600" y="410" font-family="Arial, sans-serif" font-size="24" font-weight="300" fill="#8899aa" text-anchor="middle" letter-spacing="4">2026 年 8 月</text>
-  <text x="600" y="445" font-family="Arial, sans-serif" font-size="22" font-weight="300" fill="#8899aa" text-anchor="middle" letter-spacing="4">家庭之旅</text>
-  <!-- Dragon Bridge simplified silhouette -->
-  <path d="M200 500 Q400 460 600 480 Q800 500 1000 470" stroke="url(#gold)" stroke-width="3" fill="none" opacity="0.4"/>
-  <path d="M950 475 Q970 460 980 440 Q990 420 1000 410 Q1010 420 1010 440 Q1010 455 1000 470" stroke="url(#gold)" stroke-width="2" fill="none" opacity="0.5"/>
-  <!-- Coordinates hint -->
-  <text x="600" y="580" font-family="'Courier New', monospace" font-size="12" fill="#4a5a6a" text-anchor="middle" letter-spacing="2">16.0544° N 108.2022° E</text>
+  <text x="600" y="690" font-family="Arial, sans-serif" font-size="28" font-weight="300" fill="#8899aa" text-anchor="middle" letter-spacing="6">2026 年 8 月</text>
+  <text x="600" y="740" font-family="Arial, sans-serif" font-size="26" font-weight="300" fill="#8899aa" text-anchor="middle" letter-spacing="6">家庭之旅</text>
+  <!-- Dragon Bridge silhouette -->
+  <path d="M250 880 Q450 830 600 850 Q750 870 950 840" stroke="url(#gold)" stroke-width="3" fill="none" opacity="0.4"/>
+  <path d="M910 845 Q930 825 940 800 Q950 780 960 770 Q970 780 970 800 Q970 815 960 835" stroke="url(#gold)" stroke-width="2" fill="none" opacity="0.5"/>
+  <!-- Coordinates -->
+  <text x="600" y="1100" font-family="'Courier New', monospace" font-size="14" fill="#4a5a6a" text-anchor="middle" letter-spacing="3">16.0544° N 108.2022° E</text>
 </svg>
