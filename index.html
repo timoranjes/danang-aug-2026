@@ -1180,6 +1180,62 @@ a:hover { text-decoration: underline; }
       </div>
     </div>
 
+    <!-- ═══ Info sections (foldable) ═══ -->
+    <div class="foldable" id="fold-evisa">
+      <div class="foldable-header" onclick="toggleFold('fold-evisa')">
+        <div><h3>電子簽證指南<span class="sub">香港特區護照需要 E-Visa，非免簽</span></h3></div>
+        <span class="fold-chevron"></span>
+      </div>
+      <div class="foldable-body">
+        <div class="visa-alert">建議出發前至少 <strong>7-10個工作日</strong> 申請。5人需分別提交5份申請。</div>
+        <div class="visa-grid">
+          <div class="visa-row"><span>申請網址</span><span><a href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank">evisa.xuatnhapcanh.gov.vn</a></span></div>
+          <div class="visa-row"><span>費用</span><span>USD $25（單次入境）/ 5人共 $125</span></div>
+          <div class="visa-row"><span>處理時間</span><span>3-5 工作日</span></div>
+          <div class="visa-row"><span>所需文件</span><span>護照掃描件、白底證件相、Airbnb 入住地址</span></div>
+          <div class="visa-row"><span>申請方式</span><span>每人獨立申請（5人 × 5份）</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="foldable" id="fold-budget">
+      <div class="foldable-header" onclick="toggleFold('fold-budget')">
+        <div><h3>預算估算<span class="sub">每人，HKD</span></h3></div>
+        <span class="fold-chevron"></span>
+      </div>
+      <div class="foldable-body">
+        <table class="budget-table">
+          <thead><tr><th>項目</th><th>說明</th><th>每人</th></tr></thead>
+          <tbody>
+            <tr><td>機票</td><td>HK Express 往返</td><td>~$2,120（已付3人）</td></tr>
+            <tr><td>Airbnb</td><td>5晚 · 2-3房</td><td>$700-1,100</td></tr>
+            <tr><td>餐飲</td><td>6天 · 街頭+餐廳混合</td><td>$500-700</td></tr>
+            <tr><td>交通</td><td>Grab / 包車</td><td>$160-240</td></tr>
+            <tr><td>門票</td><td>巴拿山+會安+SPA</td><td>$300-400</td></tr>
+            <tr><td>簽證</td><td>E-Visa × 1人</td><td>~$195</td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="2">合計（不含機票）</td><td>~$1,855-2,635</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="foldable" id="fold-tips">
+      <div class="foldable-header" onclick="toggleFold('fold-tips')">
+        <div><h3>行前準備<span class="sub">實用資訊一覽</span></h3></div>
+        <span class="fold-chevron"></span>
+      </div>
+      <div class="foldable-body">
+        <div class="tips-grid">
+          <div class="tip-item"><h4>必備 App</h4><p>Grab · Google Translate · Google Maps · XE Currency</p></div>
+          <div class="tip-item"><h4>支付方式</h4><p>餐廳收 Visa/MC，路邊攤只收 VND 現金</p></div>
+          <div class="tip-item"><h4>8月天氣</h4><p>25-35°C，炎熱潮濕 · 防曬 SPF50+ · 雨傘</p></div>
+          <div class="tip-item"><h4>注意事項</h4><p>寺廟需穿長褲 · 飲水買瓶裝 · Grab 最安全</p></div>
+          <div class="tip-item"><h4>語言</h4><p>越南語 · Google Translate 有拍照翻譯功能</p></div>
+          <div class="tip-item"><h4>插頭</h4><p>Type A/C（同香港三腳插）· 建議帶萬用</p></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- ═══ Map sidebar ═══ -->
@@ -1207,64 +1263,6 @@ a:hover { text-decoration: underline; }
       </div>
     </div>
 
-  </div>
-</div>
-
-<!-- ═══ Info sections (foldable) ═══ -->
-<div class="info-section">
-  <div class="foldable" id="fold-evisa">
-    <div class="foldable-header" onclick="toggleFold('fold-evisa')">
-      <div><h3>電子簽證指南<span class="sub">香港特區護照需要 E-Visa，非免簽</span></h3></div>
-      <span class="fold-chevron"></span>
-    </div>
-    <div class="foldable-body">
-      <div class="visa-alert">建議出發前至少 <strong>7-10個工作日</strong> 申請。5人需分別提交5份申請。</div>
-      <div class="visa-grid">
-        <div class="visa-row"><span>申請網址</span><span><a href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank">evisa.xuatnhapcanh.gov.vn</a></span></div>
-        <div class="visa-row"><span>費用</span><span>USD $25（單次入境）/ 5人共 $125</span></div>
-        <div class="visa-row"><span>處理時間</span><span>3-5 工作日</span></div>
-        <div class="visa-row"><span>所需文件</span><span>護照掃描件、白底證件相、Airbnb 入住地址</span></div>
-        <div class="visa-row"><span>申請方式</span><span>每人獨立申請（5人 × 5份）</span></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="foldable" id="fold-budget">
-    <div class="foldable-header" onclick="toggleFold('fold-budget')">
-      <div><h3>預算估算<span class="sub">每人，HKD</span></h3></div>
-      <span class="fold-chevron"></span>
-    </div>
-    <div class="foldable-body">
-      <table class="budget-table">
-        <thead><tr><th>項目</th><th>說明</th><th>每人</th></tr></thead>
-        <tbody>
-          <tr><td>機票</td><td>HK Express 往返</td><td>~$2,120（已付3人）</td></tr>
-          <tr><td>Airbnb</td><td>5晚 · 2-3房</td><td>$700-1,100</td></tr>
-          <tr><td>餐飲</td><td>6天 · 街頭+餐廳混合</td><td>$500-700</td></tr>
-          <tr><td>交通</td><td>Grab / 包車</td><td>$160-240</td></tr>
-          <tr><td>門票</td><td>巴拿山+會安+SPA</td><td>$300-400</td></tr>
-          <tr><td>簽證</td><td>E-Visa × 1人</td><td>~$195</td></tr>
-        </tbody>
-        <tfoot><tr><td colspan="2">合計（不含機票）</td><td>~$1,855-2,635</td></tr></tfoot>
-      </table>
-    </div>
-  </div>
-
-  <div class="foldable" id="fold-tips">
-    <div class="foldable-header" onclick="toggleFold('fold-tips')">
-      <div><h3>行前準備<span class="sub">實用資訊一覽</span></h3></div>
-      <span class="fold-chevron"></span>
-    </div>
-    <div class="foldable-body">
-      <div class="tips-grid">
-        <div class="tip-item"><h4>必備 App</h4><p>Grab · Google Translate · Google Maps · XE Currency</p></div>
-        <div class="tip-item"><h4>支付方式</h4><p>餐廳收 Visa/MC，路邊攤只收 VND 現金</p></div>
-        <div class="tip-item"><h4>8月天氣</h4><p>25-35°C，炎熱潮濕 · 防曬 SPF50+ · 雨傘</p></div>
-        <div class="tip-item"><h4>注意事項</h4><p>寺廟需穿長褲 · 飲水買瓶裝 · Grab 最安全</p></div>
-        <div class="tip-item"><h4>語言</h4><p>越南語 · Google Translate 有拍照翻譯功能</p></div>
-        <div class="tip-item"><h4>插頭</h4><p>Type A/C（同香港三腳插）· 建議帶萬用</p></div>
-      </div>
-    </div>
   </div>
 </div>
 
