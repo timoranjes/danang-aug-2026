@@ -303,7 +303,7 @@ a:hover { text-decoration: underline; }
 
 /* ═══ Map sidebar ═══ */
 .map-col { }
-.map-section { position: sticky; top: 92px; z-index: 10; }
+.map-section { position: sticky; top: 92px; }
 .map-header {
   font-size: 11px;
   font-family: var(--mono);
@@ -358,15 +358,14 @@ a:hover { text-decoration: underline; }
 }
 
 /* Quick reference card */
-.quick-ref {
-  margin-top: 24px;
+/* ═══ Reference cards (moved to content-col) ═══ */
+.ref-card {
+  margin-top: 16px;
   padding: 16px;
   background: var(--bg-alt);
   border: 1px solid var(--border);
-  position: relative;
-  z-index: 15;
 }
-.quick-ref h4 {
+.ref-card h4 {
   font-size: 11px;
   font-family: var(--mono);
   text-transform: uppercase;
@@ -780,7 +779,7 @@ a:hover { text-decoration: underline; }
   .panel:not(:first-child) { page-break-before: always; }
   body { background: #fff; color: #000; }
   .hero-image { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .visa-alert, .tips-grid, .quick-ref, .packing-cols, .emergency-grid {
+  .visa-alert, .tips-grid, .ref-card, .packing-cols, .emergency-grid {
     -webkit-print-color-adjust: exact; print-color-adjust: exact;
   }
   a { color: #000; text-decoration: underline; }
@@ -1055,6 +1054,24 @@ a:hover { text-decoration: underline; }
       </div>
     </div>
 
+    <!-- Quick reference cards -->
+    <div class="ref-card">
+      <h4>快速參考</h4>
+      <div class="qr-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
+      <div class="qr-item"><span>時差</span><span>比香港慢1小時（UTC+7）</span></div>
+      <div class="qr-item"><span>8月均溫</span><span>25-35°C</span></div>
+      <div class="qr-item"><span>Grab 市區</span><span>約 30K-50K VND</span></div>
+      <div class="qr-item"><span>7人車</span><span>約 200K-350K VND</span></div>
+    </div>
+
+    <div class="ref-card" id="pre-trip-essentials">
+      <h4>行前必讀</h4>
+      <div class="qr-item"><span>入境單</span><span>飛機上填寫</span></div>
+      <div class="qr-item"><span>E-Visa</span><span>列印紙本備份</span></div>
+      <div class="qr-item"><span>SIM 卡</span><span>機場買 Viettel / Vinaphone</span></div>
+      <div class="qr-item"><span>SIM 費用</span><span>約 150K-200K VND</span></div>
+    </div>
+
   </div>
 
   <!-- ═══ Map sidebar ═══ -->
@@ -1082,22 +1099,6 @@ a:hover { text-decoration: underline; }
       </div>
     </div>
 
-    <div class="quick-ref">
-      <h4>快速參考</h4>
-      <div class="qr-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
-      <div class="qr-item"><span>時差</span><span>比香港慢1小時（UTC+7）</span></div>
-      <div class="qr-item"><span>8月均溫</span><span>25-35°C</span></div>
-      <div class="qr-item"><span>Grab 市區</span><span>約 30K-50K VND</span></div>
-      <div class="qr-item"><span>7人車</span><span>約 200K-350K VND</span></div>
-    </div>
-
-    <div class="quick-ref" id="map-packing-mobile">
-      <h4>行前必讀</h4>
-      <div class="qr-item"><span>入境單</span><span>飛機上填寫</span></div>
-      <div class="qr-item"><span>E-Visa</span><span>列印紙本備份</span></div>
-      <div class="qr-item"><span>SIM 卡</span><span>機場買 Viettel / Vinaphone</span></div>
-      <div class="qr-item"><span>SIM 費用</span><span>約 150K-200K VND</span></div>
-    </div>
   </div>
 </div>
 
