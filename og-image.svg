@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1b2a"/>
+      <stop offset="100%" stop-color="#1b2838"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c9a961"/>
+      <stop offset="50%" stop-color="#e8d5a3"/>
+      <stop offset="100%" stop-color="#c9a961"/>
+    </linearGradient>
+  </defs>
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Subtle wave pattern at bottom -->
+  <path d="M0 480 Q150 440 300 460 Q450 480 600 450 Q750 420 900 450 Q1050 480 1200 440 L1200 630 L0 630Z" fill="#1a2744" opacity="0.6"/>
+  <path d="M0 520 Q200 490 400 510 Q600 530 800 500 Q1000 470 1200 510 L1200 630 L0 630Z" fill="#0d1b2a" opacity="0.8"/>
+  <!-- Gold accent line -->
+  <rect x="100" y="200" width="1000" height="2" fill="url(#gold)" opacity="0.8"/>
+  <!-- Title -->
+  <text x="600" y="290" font-family="Georgia, 'Noto Serif', serif" font-size="84" font-weight="700" fill="#e8d5a3" text-anchor="middle" letter-spacing="8">DA NANG</text>
+  <text x="600" y="340" font-family="Georgia, 'Noto Serif', serif" font-size="36" font-weight="400" fill="#a0b4c8" text-anchor="middle" letter-spacing="12">VIETNAM</text>
+  <!-- Gold accent line -->
+  <rect x="100" y="360" width="1000" height="1" fill="url(#gold)" opacity="0.5"/>
+  <!-- Subtitle -->
+  <text x="600" y="410" font-family="Arial, sans-serif" font-size="24" font-weight="300" fill="#8899aa" text-anchor="middle" letter-spacing="4">2026 年 8 月</text>
+  <text x="600" y="445" font-family="Arial, sans-serif" font-size="22" font-weight="300" fill="#8899aa" text-anchor="middle" letter-spacing="4">家庭之旅</text>
+  <!-- Dragon Bridge simplified silhouette -->
+  <path d="M200 500 Q400 460 600 480 Q800 500 1000 470" stroke="url(#gold)" stroke-width="3" fill="none" opacity="0.4"/>
+  <path d="M950 475 Q970 460 980 440 Q990 420 1000 410 Q1010 420 1010 440 Q1010 455 1000 470" stroke="url(#gold)" stroke-width="2" fill="none" opacity="0.5"/>
+  <!-- Coordinates hint -->
+  <text x="600" y="580" font-family="'Courier New', monospace" font-size="12" fill="#4a5a6a" text-anchor="middle" letter-spacing="2">16.0544° N 108.2022° E</text>
+</svg>
