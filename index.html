@@ -1184,8 +1184,8 @@ a:hover { text-decoration: underline; }
     <div class="pi-body">
       <div class="pi-actions">
         <a id="piGmapsLink" href="" target="_blank" class="primary">Google Maps</a>
-        <a id="piDirLink" href="" target="_blank">街景</a>
-        <a id="piStreetView" href="" target="_blank">導航</a>
+        <a id="piDirLink" href="" target="_blank">導航</a>
+        <a id="piStreetView" href="" target="_blank">街景</a>
       </div>
     </div>
   </div>
@@ -1249,7 +1249,7 @@ window.openPlaceInfo = function(idx){
   });
   // Links
   document.getElementById('piGmapsLink').href = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery);
-  document.getElementById('piStreetView').href = 'https://www.google.com/maps/@?api=1query='+encodeURIComponent(p.gmapsQuery)+'&query_place_id=';map_action=panoquery='+encodeURIComponent(p.gmapsQuery)+'&query_place_id=';viewpoint='+p.lat+','+p.lng;
+  document.getElementById('piStreetView').href = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lng;
   document.getElementById('piDirLink').href = 'https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'&travelmode=driving';
   document.getElementById('piModal').classList.add('show');
 };
