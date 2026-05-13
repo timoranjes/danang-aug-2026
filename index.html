@@ -6,8 +6,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>Da Nang · Aug 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Serif+TC:wght@400;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>window.L||document.write('<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"><\/script>')</script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1057,7 +1058,7 @@ a:hover { text-decoration: underline; }
   <div class="map-col">
     <div class="map-section">
       <div class="map-header">行程地圖</div>
-      <div id="map"></div>
+      <div id="map"><div id="map-fallback" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--muted);font-size:13px;">地圖載入中...</div></div>
       <div class="map-legend">
         <!-- Day legend -->
         <div class="leg-section">
@@ -1483,6 +1484,8 @@ var map;
   function init(){
     if(typeof L==='undefined'){setTimeout(init,100);return;}
     map = L.map('map',{center:[16.0544,108.2022],zoom:11});
+    var fb = document.getElementById('map-fallback');
+    if(fb)fb.style.display='none';
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
     var c={1:'#1c1917',2:'#0369a1',3:'#d97706',4:'#dc2626',5:'#7c3aed'};
 
