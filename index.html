@@ -1183,8 +1183,9 @@ a:hover { text-decoration: underline; }
     <div class="pi-gallery" id="piGallery"></div>
     <div class="pi-body">
       <div class="pi-actions">
-        <a id="piGmapsLink" href="" target="_blank" class="primary">Google Maps 查看</a>
-        <a id="piDirLink" href="" target="_blank">導航前往</a>
+        <a id="piGmapsLink" href="" target="_blank" class="primary">Google Maps</a>
+        <a id="piDirLink" href="" target="_blank">街景</a>
+        <a id="piStreetView" href="" target="_blank">導航</a>
       </div>
     </div>
   </div>
@@ -1247,7 +1248,8 @@ window.openPlaceInfo = function(idx){
     gal.innerHTML += '<img src="'+url+'" loading="lazy" alt="'+p.titleEn+'" onerror="this.style.display='none'">';
   });
   // Links
-  document.getElementById('piGmapsLink').href = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery)+'&query_place_id=';
+  document.getElementById('piGmapsLink').href = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery);
+  document.getElementById('piStreetView').href = 'https://www.google.com/maps/@?api=1query='+encodeURIComponent(p.gmapsQuery)+'&query_place_id=';map_action=panoquery='+encodeURIComponent(p.gmapsQuery)+'&query_place_id=';viewpoint='+p.lat+','+p.lng;
   document.getElementById('piDirLink').href = 'https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'&travelmode=driving';
   document.getElementById('piModal').classList.add('show');
 };
@@ -1306,7 +1308,7 @@ var spots = [
     photos:[
       'https://images.unsplash.com/photo-1556388158-158ea5ccac32?w=600&q=70',
       'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Da_Nang_International_Airport.jpg/640px-Da_Nang_International_Airport.jpg'
-    ],
+      'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=70',    ],
     gmapsQuery:'Da Nang International Airport'
   },
   {
@@ -1339,7 +1341,7 @@ var spots = [
     photos:[
       'https://images.unsplash.com/photo-1571713343936-b27b7bedddab?w=600&q=70',
       'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Dragon_Bridge%2C_Da_Nang.jpg/640px-Dragon_Bridge%2C_Da_Nang.jpg'
-    ],
+      'https://images.unsplash.com/photo-1583267746897-2cf415867147?w=600&q=70',    ],
     gmapsQuery:'Dragon Bridge Da Nang'
   },
   {
@@ -1405,7 +1407,7 @@ var spots = [
     photos:[
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=70',
       'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Basket_boat_Hoi_An.jpg/640px-Basket_boat_Hoi_An.jpg'
-    ],
+      'https://images.unsplash.com/photo-1598970434795-0c54fe7c0648?w=600&q=70',    ],
     gmapsQuery:'Cam Thanh coconut basket boat Hoi An'
   },
   {
@@ -1421,7 +1423,7 @@ var spots = [
     photos:[
       'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=70',
       'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4a/Marble_Mountains_Da_Nang.jpg/640px-Marble_Mountains_Da_Nang.jpg'
-    ],
+      'https://images.unsplash.com/photo-1596422846543-75c6fc187be9?w=600&q=70',    ],
     gmapsQuery:'Marble Mountains Da Nang'
   },
   {
@@ -1436,7 +1438,7 @@ var spots = [
     bestTime:'上午或下午',
     photos:[
       'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Lady_Buddha_Linh_Ung_Pagoda.jpg/480px-Lady_Buddha_Linh_Ung_Pagoda.jpg',
-      'https://images.unsplash.com/photo-1528181304800-259b08848526?w=600&q=70'
+      'https://images.unsplash.com/photo-1528181304800-259b08848526?w=600&q=70',      'https://images.unsplash.com/photo-1528181304800-259b08848526?w=600&q=70'
     ],
     gmapsQuery:'Linh Ung Pagoda Son Tra Da Nang Lady Buddha'
   },
@@ -1452,7 +1454,7 @@ var spots = [
     bestTime:'上午9:30開館後',
     photos:[
       'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Cham_Sculpture_Museum.jpg/640px-Cham_Sculpture_Museum.jpg',
-      'https://images.unsplash.com/photo-1555529733-0e670556d004?w=600&q=70'
+      'https://images.unsplash.com/photo-1555529733-0e670556d004?w=600&q=70',      'https://images.unsplash.com/photo-1555529733-0e670556d004?w=600&q=70',      'https://images.unsplash.com/photo-1555529733-0e670556d004?w=600&q=70'
     ],
     gmapsQuery:'Museum of Cham Sculpture Da Nang'
   },
@@ -1469,7 +1471,7 @@ var spots = [
     photos:[
       'https://images.unsplash.com/photo-1555529733-0e670556d004?w=600&q=70',
       'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Han_Market_Da_Nang.jpg/640px-Han_Market_Da_Nang.jpg'
-    ],
+      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&q=70',    ],
     gmapsQuery:'Han Market Cho Han Da Nang'
   }
 ];
@@ -1486,13 +1488,8 @@ var map;
 
     spots.forEach(function(p, idx){
       var icon = mkIcon(c[p.day], p.type);
-      var popupContent = '<div style="text-align:center;font-family:sans-serif;padding:4px;">'+
-        '<b style="font-size:14px;">'+p.title+'</b><br>'+
-        '<span style="font-size:11px;color:#666;">'+p.titleEn+'</span><br>'+
-        '<button onclick="openPlaceInfo('+idx+')" style="margin-top:6px;padding:4px 10px;font-size:11px;background:#0369a1;color:#fff;border:none;border-radius:3px;cursor:pointer;">詳細資訊</button>'+
-        '</div>';
-      var m = L.marker([p.lat,p.lng],{icon:icon}).bindPopup(popupContent).addTo(map);
-      m._day = p.day;
+      var m = L.marker([p.lat,p.lng],{icon:icon}).addTo(map);
+      m.on('click', function(){ openPlaceInfo(idx); });      m._day = p.day;
       m._idx = idx;
       allMarkers.push(m);
     });
@@ -1517,7 +1514,7 @@ var map;
       {type:'hotel',label:'住宿'}
     ];
     items.forEach(function(item){
-      var svg = '<svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0"><g fill="'+(getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()||'#0369a1')+'">'+iconSVGs[item.type]+'</g></svg>';
+      var svg = '<svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0"><g fill="'+('#0369a1')+'">'+iconSVGs[item.type]+'</g></svg>';
       el.innerHTML += '<div class="leg-icon-row">'+svg+item.label+'</div>';
     });
   }
