@@ -1287,8 +1287,8 @@ var typeLabels = {
 function mkIcon(color, type){
   var iconPath = iconSVGs[type] || iconSVGs.mountain;
   var s = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="42" viewBox="0 0 30 42">'+
-    '<path d="M15 0C6.72 0 0 6.72 0 15c0 11.25 15 27 15 27s15-15.75 15-27C30 6.72 23.28 0 15 0z" fill="'+color+'" stroke="#fff" stroke-width="2"/>'+
-    '<g transform="translate(5,4) scale(0.48)">'+iconPath+'</g>'+
+    '<path d="M15 0C6.72 0 0 6.72 0 15c0 11.25 15 27 15 27s15-15.75 15-27C30 6.72 23.28 0 15 0z" fill="'+color+'" stroke="#fff" stroke-width="1.5"/>'+
+    '<g transform="translate(6,10) scale(0.72)" fill="#ffffff">'+iconPath+'</g>'+
     '</svg>';
   return L.divIcon({html:s, className:'', iconSize:[30,42], iconAnchor:[15,42]});
 }
