@@ -55,8 +55,6 @@ a{color:var(--gold)}
 @media(min-width:900px){
   .main{grid-template-columns:1fr 400px;gap:0}
   .itinerary-col{padding:24px;border-right:1px solid var(--border)}
-  .map-col{position:sticky;top:100px;height:calc(100vh - 120px)}
-  .map-col #map{width:100%;height:100%;z-index:1}
 }
 
 .itinerary-col{padding:20px 16px 60px}
@@ -87,27 +85,6 @@ a{color:var(--gold)}
 .story-photo{margin:14px 0 0;height:160px;border-radius:8px;background-size:cover;background-position:center;position:relative;overflow:hidden;box-shadow:var(--shadow)}
 .story-photo .caption{position:absolute;bottom:8px;right:8px;font-size:11px;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.5);padding:2px 8px;border-radius:4px;font-weight:500}
 
-.map-col{position:relative}
-@media(min-width:900px){
-  .map-col{position:sticky;top:100px;height:calc(100vh - 120px)}
-  .map-col #map{width:100%;height:100%}
-}
-@media(max-width:899px){
-  .main{display:flex;flex-direction:column}
-  .map-col{order:-1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:12px;overflow:hidden}
-  .map-col #map{width:100%;height:300px;background:#e8e0d8;border-radius:0}
-  .map-col #map .leaflet-container{background:#e8e0d8!important}
-  .map-label{padding:10px 14px}
-  .map-filter{padding:0 14px 8px}
-  .itinerary-col{padding:20px 16px 60px;border-right:none}
-}
-
-.map-label{display:flex;align-items:center;gap:8px;padding:12px 16px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border)}
-.map-label::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold)}
-.map-filter{display:flex;gap:4px;padding:10px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-.map-fbtn{padding:4px 10px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-size:11px;cursor:pointer;transition:all 0.15s;font-weight:500}
-.map-fbtn:hover{background:var(--surface2)}
-.map-fbtn.active{background:var(--gold);border-color:var(--gold);color:#fff}
 
 .info-sections{max-width:1200px;margin:0 auto;padding:0 16px 60px}
 .info-sections .section-title{font-family:var(--font-serif);font-size:20px;font-weight:700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid var(--gold);display:inline-block}
@@ -214,17 +191,33 @@ a{color:var(--gold)}
 .pi-actions a{flex:1;text-align:center;padding:10px;border-radius:6px;font-size:13px;font-weight:500;border:1px solid var(--border);color:var(--text)}
 .pi-actions a.primary{background:var(--gold);border-color:var(--gold);color:#fff}
 
+
+/* ═══ Map ═══ */
+.map-col{position:relative}
+.map-label{display:flex;align-items:center;gap:8px;padding:12px 16px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border)}
+.map-label::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.map-filter{display:flex;gap:4px;padding:10px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.map-fbtn{padding:4px 10px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-size:11px;cursor:pointer;transition:all 0.15s;font-weight:500}
+.map-fbtn:hover{background:var(--surface2)}
+.map-fbtn.active{background:var(--gold);border-color:var(--gold);color:#fff}
+
+@media(min-width:900px){
+  .map-col{position:sticky;top:100px;height:calc(100vh - 120px)}
+  .map-col #map{width:100%;height:100%}
+}
+@media(max-width:899px){
+  .map-col{margin:16px 0 24px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .map-col #map{width:100%;height:350px}
+  .map-label{padding:10px 14px}
+  .map-filter{padding:0 14px 8px}
+}
+
+
 html.dark{
   --bg:#0a0a0a;--surface:#141414;--surface2:#1e1e1e;--surface3:#2a2a2a;
   --text:#f5f5f5;--text-secondary:#a0a0a0;--text-muted:#606060;
   --border:#2a2a2a;--gold:#d4a853;--gold-soft:rgba(212,168,83,0.1);--gold-light:rgba(212,168,83,0.15);
   --shadow:0 1px 3px rgba(0,0,0,0.2);--shadow-lg:0 4px 12px rgba(0,0,0,0.3);
-}
-#map.leaflet-loaded .map-loading{display:none}
-@media(max-width:899px){
-  #map{display:none!important}
-  #map-iframe{display:block!important;width:100%;height:300px}
-  #map-iframe iframe{width:100%;height:100%;border:none}
 }
 html.dark .hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%)}
 html.dark .hero::after{color:rgba(255,255,255,0.02)}
@@ -239,8 +232,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
   .flight-bar{padding:8px 16px}
 }
 </style>
-</head>
-<body>
+</head><body>
 
 <header class="hero">
   <div class="hero-inner">
@@ -513,10 +505,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
       <button class="map-fbtn" onclick="filterMapDay(5)">D5</button>
       <button class="map-fbtn" onclick="filterMapDay(6)">D6</button>
     </div>
-    <div id="map" style="position:relative">
-  <div class="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#78716c;font-size:13px;z-index:1000;background:#e8e0d8">🗺️ 載入地圖中...</div>
-</div>
-<div id="map-iframe" style="display:none"></div>
+    <div id="map"></div>
   </div>
 </div>
 
@@ -721,17 +710,30 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
     gmapsQuery:'Han Market Cho Han Da Nang'
   }
 ];
-
 var dayColors = ["#78716c","#0284c7","#d97706","#dc2626","#7c3aed","#059669"];
+var currentDay = 1;
+var mainMap = null;
+var allMarkers = [];
+
+/* ═══ Numbered day marker icons ═══ */
+function mkDayIcon(color, dayNum){
+  var s = '<div style="position:relative;width:36px;height:36px;">'+
+    '<svg width="36" height="36" viewBox="0 0 36 36" xmlns="http://www.w3.org/2000/svg">'+
+    '<circle cx="18" cy="18" r="16" fill="'+color+'" stroke="#fff" stroke-width="2.5" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.3))"/>'+
+    '<text x="18" y="23" text-anchor="middle" font-size="15" font-weight="700" fill="#fff" font-family="Inter,sans-serif">'+dayNum+'</text>'+
+    '</svg></div>';
+  return L.divIcon({html:s,className:'',iconSize:[36,36],iconAnchor:[18,18],popupAnchor:[0,-20]});
+}
 
 /* ═══ Day switch ═══ */
-var currentDay = 1;
 window.switchDay = function(n){
   currentDay = n;
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
   document.querySelectorAll('.day-tab').forEach(function(t){t.classList.remove('active');});
-  document.getElementById('panel'+n).classList.add('active');
-  document.querySelectorAll('.day-tab')[n-1].classList.add('active');
+  var panel = document.getElementById('panel'+n);
+  if(panel) panel.classList.add('active');
+  var tabs = document.querySelectorAll('.day-tab');
+  if(tabs[n-1]) tabs[n-1].classList.add('active');
   filterMapDay(n);
 };
 
@@ -813,7 +815,7 @@ window.openPlaceInfo = function(idx){
   var gal = document.getElementById('piGallery');
   gal.innerHTML = '';
   p.photos.forEach(function(url){
-    gal.innerHTML += '<img src="'+url+'" loading="lazy" alt="'+p.titleEn+'" onerror="this.style.display=\x27none\x27">';
+    gal.innerHTML += '<img src="'+url+'" loading="lazy" alt="'+p.titleEn+'" onerror="this.style.display=\'none\'">';
   });
   document.getElementById('piGmapsLink').href = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery);
   document.getElementById('piStreetView').href = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lng;
@@ -824,101 +826,54 @@ window.closePlaceInfo = function(){
   document.getElementById('piModal').classList.remove('show');
 };
 
-/* ═══ SVG Icons ═══ */
-var iconSVGs = {
-  airport: '<path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>',
-  beach: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>',
-  bridge: '<path d="M1 11v3h3v7h14v-7h3v-3L12 1 1 11zm3 0l8-7.2V14h-1V8.5l-2 1.86V14H8V6.71L4 10.29V14h1v-3H3zm4 6h4v3H8v-3z"/>',
-  mountain: '<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>',
-  oldtown: '<path d="M15 11V5l-3-3L9 5v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/>',
-  boat: '<path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v2h2c1.38 0 2.74-.34 3.98-1.03 1.26.71 2.7.97 4.02.97 1.32 0 2.76-.26 4.02-.97C17.26 20.66 18.62 21 20 21h2v-2h-2zM3.95 19H4c1.6 0 3.02-.88 4-2 .98 1.12 2.4 2 4 2s3.02-.88 4-2c.98 1.12 2.4 2 4 2h.05l1.89-6.68c.08-.26.06-.54-.06-.78s-.34-.42-.6-.5L20 10.62V6c0-1.1-.9-2-2-2h-3V1H9v3H6c-1.1 0-2 .9-2 2v4.62l-1.29.42c-.26.08-.48.26-.6.5s-.14.52-.05.78L3.95 19zM6 6h12v3.97L12 8 6 9.97V6z"/>',
-  temple: '<path d="M11.25 11.75L12 12l.75-.25 1.74-2.53.62.9-2.86 3.21-.5.27-.5-.27-2.86-3.21.62-.9 1.74 2.53zM12 2L8 6v2H6v2H4v2H2v2h20v-2h-2v-2h-2V6h-2V2zm-1 4h2v1h-2V6z M3 14h18v2H3v-2zm-1 4v2h20v-2H2z"/>',
-  museum: '<path d="M9 2v2H6l-4 4v2h1v7h1v-7h1v7h1v-7h1v7h1v-7h1v7h1v-7h1v-2l-4-4h-3V2zm6 3h-2V3h2v2zm-5 0H8V3h2v2z"/>',
-  market: '<path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/>',
-  hotel: '<path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/>'
-};
-var typeLabels = {airport:'機場·Airport',beach:'海灘·Beach',bridge:'橋樑·Bridge',mountain:'山峰·Mountain',oldtown:'古鎮·Old Town',boat:'水上體驗·Boat',temple:'寺廟·Temple',museum:'博物館·Museum',market:'市場·Market',hotel:'住宿·Hotel'};
-
-function mkIcon(color, type){
-  var iconPath = iconSVGs[type] || iconSVGs.mountain;
-  var s = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="42" viewBox="0 0 30 42"><path d="M15 0C6.72 0 0 6.72 0 15c0 11.25 15 27 15 27s15-15.75 15-27C30 6.72 23.28 0 15 0z" fill="'+color+'" stroke="#fff" stroke-width="1.5"/><g transform="translate(6,10) scale(0.72)" fill="#ffffff">'+iconPath+'</g></svg>';
-  return L.divIcon({html:s, className:'', iconSize:[30,42], iconAnchor:[15,42]});
-}
-
 /* ═══ Map initialization ═══ */
-var mainMap = null;
-var allMarkers = [];
-
-function initMaps(){
-  if(!document.getElementById('map')) return;
-  if(mainMap) { mainMap.invalidateSize(); return; }
-  
+function initMap(){
+  var el = document.getElementById('map');
+  if(!el || mainMap) return;
   try {
-    mainMap = L.map('map',{zoomControl:true,zoomAnimation:true,preferCanvas:true}).setView([16.0544,108.2157],12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-      attribution:'© OpenStreetMap',
-      crossOrigin:true
-    }).addTo(mainMap);
-    document.getElementById('map').classList.add('leaflet-loaded');
-    
+    mainMap = L.map('map',{zoomControl:true,zoomAnimation:true}).setView([16.0544,108.2157],12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(mainMap);
     spots.forEach(function(p,i){
-      var c = dayColors[p.day-1]||'#888';
-      var m = L.marker([p.lat,p.lng],{icon:mkIcon(c,p.type)}).addTo(mainMap);
-      m.on('click',function(){window.openPlaceInfo(i);});
-      allMarkers.push({marker:m,day:p.day});
+      var color = dayColors[p.day-1]||'#888';
+      var icon = mkDayIcon(color, p.day);
+      var popup = '<b>'+p.title+'</b><br>'+p.titleEn;
+      var marker = L.marker([p.lat,p.lng],{icon:icon}).bindPopup(popup).addTo(mainMap);
+      marker.on('click',function(){window.openPlaceInfo(i);});
+      allMarkers.push({marker:marker,day:p.day});
     });
-    
-    // Multiple invalidateSize calls for mobile reliability
-    setTimeout(function(){ if(mainMap) mainMap.invalidateSize(); }, 300);
-    setTimeout(function(){ if(mainMap) mainMap.invalidateSize(); }, 800);
-    setTimeout(function(){ if(mainMap) mainMap.invalidateSize(); }, 2000);
-  } catch(e) {
-    console.warn('Map init failed:', e);
-  }
+    setTimeout(function(){if(mainMap)mainMap.invalidateSize();},300);
+    setTimeout(function(){if(mainMap)mainMap.invalidateSize();},800);
+  } catch(e){console.warn('Map init failed:',e);}
   filterMapDay(currentDay);
 }
 
-/* Recalculate on resize and orientation change */
-var resizeTimer;
-function safeInvalidate(){
-  clearTimeout(resizeTimer);
-  resizeTimer = setTimeout(function(){
-    if(mainMap) mainMap.invalidateSize();
-  }, 300);
-}
-window.addEventListener('resize', safeInvalidate);
-window.addEventListener('orientationchange', function(){
-  setTimeout(safeInvalidate, 500);
-});
-
+/* ═══ Filter markers by day ═══ */
 window.filterMapDay = function(day){
   allMarkers.forEach(function(m){
     var el = m.marker.getElement();
     if(el) el.style.display = (day===0||m.day===day)?'':'none';
   });
   document.querySelectorAll('.map-fbtn').forEach(function(btn){
-    var n = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
-    btn.classList.toggle('active', n===day);
+    var onclick = btn.getAttribute('onclick');
+    if(onclick){var n=parseInt(onclick.match(/\d+/)[0]);btn.classList.toggle('active',n===day);}
   });
 };
 
-if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initMaps);}
-else{setTimeout(initMaps,100);}
+/* ═══ Resize handler ═══ */
+var _resizeTimer;
+window.addEventListener('resize',function(){
+  clearTimeout(_resizeTimer);
+  _resizeTimer=setTimeout(function(){if(mainMap)mainMap.invalidateSize();},300);
+});
 
-/* Mobile Google Maps iframe */
-(function(){
-  var iframeDiv = document.getElementById('map-iframe');
-  if(iframeDiv && !iframeDiv.querySelector('iframe')){
-    iframeDiv.innerHTML = '<iframe src="https://maps.google.com/maps?q=16.0544,108.2157+(Da+Nang+Trip)&z=12&output=embed&t=m" width="100%" height="100%" style="border:none;display:block" allowfullscreen loading="lazy"></iframe>';
-  }
-})();
+/* ═══ Init ═══ */
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initMap);}
+else{setTimeout(initMap,200);}
 
+/* ═══ Hash day ═══ */
 (function(){
-  var hash = window.location.hash;
-  if(hash && /^#\d+$/.test(hash)){
-    var day = parseInt(hash.substring(1));
-    if(day>=1&&day<=6) window.switchDay(day);
-  }
+  var hash=window.location.hash;
+  if(hash&&/^#\d+$/.test(hash)){var d=parseInt(hash.substring(1));if(d>=1&&d<=6)window.switchDay(d);}
 })();
 </script>
 </body>
