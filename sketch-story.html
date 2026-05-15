@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch: Story Timeline — Da Nang</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', -apple-system, sans-serif; background: #0a0a0a; color: #f0f0f0; }
+
+/* Full-screen hero */
+.hero {
+  position: relative; height: 100vh; min-height: 500px; display: flex; align-items: center; justify-content: center;
+  background: url('https://images.unsplash.com/photo-1603054561323-09f79d5df183?w=1600&q=80') center/cover;
+}
+.hero::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.55); }
+.hero-content { position: relative; z-index: 2; text-align: center; padding: 0 24px; }
+.hero-date { font-size: 13px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: #fbbf24; margin-bottom: 20px; }
+.hero h1 { font-size: 72px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+@media (max-width: 768px) { .hero h1 { font-size: 36px; } }
+.hero .sub { font-size: 18px; font-weight: 300; opacity: 0.8; max-width: 500px; margin: 0 auto; }
+.scroll-hint { position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%); z-index: 2; animation: bounce 2s infinite; }
+.scroll-hint span { display: block; width: 24px; height: 24px; border-right: 2px solid rgba(255,255,255,0.5); border-bottom: 2px solid rgba(255,255,255,0.5); transform: rotate(45deg); }
+@keyframes bounce { 0%,100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+
+/* Day nav — fixed side */
+.side-nav {
+  position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 100;
+  display: flex; flex-direction: column; gap: 12px; align-items: center;
+}
+.side-dot {
+  width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.2s;
+}
+.side-dot:hover { border-color: #fbbf24; color: #fbbf24; }
+.side-dot.active { background: #fbbf24; border-color: #fbbf24; color: #000; }
+@media (max-width: 768px) {
+  .side-nav { position: sticky; top: 0; right: auto; left: 0; flex-direction: row; justify-content: center; padding: 12px; background: #0a0a0a; border-bottom: 1px solid #222; transform: none; }
+}
+
+/* Sections */
+.section { max-width: 700px; margin: 0 auto; padding: 80px 24px; position: relative; }
+@media (max-width: 768px) { .section { padding: 48px 20px; } }
+.section::before {
+  content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(#222, #333, #222); transform: translateX(-50%);
+}
+@media (max-width: 768px) { .section::before { left: 20px; } }
+
+/* Day label */
+.day-label { display: inline-flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+.day-circle {
+  width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 800; color: #000; position: relative; z-index: 2;
+}
+.day-circle.c1 { background: #3b82f6; } .day-circle.c2 { background: #8b5cf6; }
+.day-circle.c3 { background: #f59e0b; } .day-circle.c4 { background: #ef4444; }
+.day-circle.c5 { background: #10b981; }
+.day-label h2 { font-size: 24px; font-weight: 800; }
+.day-label .meta { font-size: 12px; color: #888; margin-left: 50px; margin-top: 4px; }
+
+/* Full-width image */
+.full-img {
+  width: 100vw; margin-left: calc(-50vw + 50%); height: 300px; margin-bottom: 32px;
+  background-size: cover; background-position: center; position: relative;
+}
+.full-img::after {
+  content: attr(data-caption); position: absolute; bottom: 16px; left: calc(50vw - 40%);
+  font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.5); padding: 4px 12px; border-radius: 4px;
+}
+
+/* Timeline items */
+.t-item { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid #1a1a1a; }
+.t-time { font-size: 13px; font-weight: 600; color: #fbbf24; padding-top: 2px; text-align: right; }
+.t-title { font-size: 16px; font-weight: 600; margin-bottom: 3px; }
+.t-desc { font-size: 14px; color: #888; line-height: 1.5; }
+.t-badge { display: inline-block; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 600; margin-top: 6px; background: #1a1a1a; color: #aaa; }
+
+/* Info bar */
+.info-bar {
+  display: flex; gap: 16px; padding: 16px 20px; background: #111; border: 1px solid #222; border-radius: 12px; margin-top: 16px;
+}
+.info-item { flex: 1; text-align: center; }
+.info-item .val { font-size: 18px; font-weight: 700; color: #fbbf24; }
+.info-item .label { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+/* Map section */
+.map-section { max-width: 700px; margin: 0 auto; padding: 40px 24px 80px; }
+.map-section h2 { font-size: 20px; font-weight: 800; margin-bottom: 16px; text-align: center; }
+#map { height: 300px; background: #1a1a1a; border-radius: 16px; border: 1px solid #333; display: flex; align-items: center; justify-content: center; color: #555; }
+
+/* Footer */
+.footer { text-align: center; padding: 40px 24px; border-top: 1px solid #1a1a1a; font-size: 12px; color: #444; letter-spacing: 2px; text-transform: uppercase; }
+
+.sketch-badge { position: fixed; top: 12px; right: 12px; background: #fbbf24; color: #000; font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 6px; z-index: 999; }
+</style>
+</head>
+<body>
+<div class="sketch-badge">4 / 4 — Story Timeline</div>
+
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-date">August 2026 · Vietnam</div>
+    <h1>峴港家庭之旅</h1>
+    <p class="sub">五位成人 · 6天5夜 · 香港往返 · 節奏輕鬆 · 長者友善</p>
+  </div>
+  <div class="scroll-hint"><span></span></div>
+</div>
+
+<div class="side-nav">
+  <div class="side-dot active">D1</div>
+  <div class="side-dot">D2</div>
+  <div class="side-dot">D3</div>
+  <div class="side-dot">D4</div>
+  <div class="side-dot">D5</div>
+</div>
+
+<div class="section">
+  <div class="day-label">
+    <div class="day-circle c1">1</div>
+    <h2>抵達峴港</h2>
+  </div>
+  <p class="meta">8月11日 · 週二 · 輕鬆適應</p>
+
+  <div class="full-img" data-caption="Da Nang Coastline" style="background-image:url('https://images.unsplash.com/photo-1603054561323-09f79d5df183?w=1400&q=75')"></div>
+
+  <div class="info-bar">
+    <div class="info-item"><div class="val">~4,000</div><div class="label">步數</div></div>
+    <div class="info-item"><div class="val">~30m</div><div class="label">行車</div></div>
+    <div class="info-item"><div class="val">輕鬆</div><div class="label">節奏</div></div>
+  </div>
+
+  <div class="t-item"><div class="t-time">08:25</div><div><div class="t-title">抵達峴港機場</div><div class="t-desc">UO552 · HKG → DAD · 過關約30分鐘</div><span class="t-badge">✈️ 交通</span></div></div>
+  <div class="t-item"><div class="t-time">10:00</div><div><div class="t-title">Grab 前往住宿</div><div class="t-desc">美溪海灘附近 · 車程約15分鐘 · ~40K VND</div><span class="t-badge">🚗 交通</span></div></div>
+  <div class="t-item"><div class="t-time">11:00</div><div><div class="t-title">入住 · 休息</div><div class="t-desc">熟悉周邊便利店、餐廳</div></div></div>
+  <div class="t-item"><div class="t-time">15:30</div><div><div class="t-title">美溪海灘漫步</div><div class="t-desc">福布斯全球最美海灘之一 · 避開正午UV高峰</div><span class="t-badge">🏖️ 景點 · 免費</span></div></div>
+  <div class="t-item"><div class="t-time">18:30</div><div><div class="t-title">海鮮晚餐</div><div class="t-desc">海灘附近餐廳 · 人均 ~500K VND</div><span class="t-badge">🦞 美食</span></div></div>
+  <div class="t-item"><div class="t-time">21:00</div><div><div class="t-title">龍橋噴火表演</div><div class="t-desc">週六日 21:00 · 龍口噴火約5分鐘</div><span class="t-badge">🌉 景點 · 免費</span></div></div>
+</div>
+
+<div class="map-section">
+  <h2>行程地圖</h2>
+  <div id="map">📍 互動地圖</div>
+</div>
+
+<div class="footer">Liao Family · August 2026 · Da Nang, Vietnam</div>
+</body>
+</html>

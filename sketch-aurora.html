@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch: Aurora — Da Nang</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f0f4ff; --card: rgba(255,255,255,0.65); --card-border: rgba(255,255,255,0.8);
+  --text: #1e293b; --muted: #64748b;
+  --sky: #0ea5e9; --warm: #f59e0b; --rose: #f43f5e; --violet: #8b5cf6;
+  --sans: 'Inter', -apple-system, sans-serif;
+}
+body { font-family: var(--sans); color: var(--text); background: var(--bg); overflow-x: hidden; }
+
+/* Aurora hero */
+.hero {
+  position: relative; height: 80vh; min-height: 500px; display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.aurora {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 40%, rgba(14,165,233,0.35), transparent),
+    radial-gradient(ellipse 70% 50% at 75% 30%, rgba(139,92,246,0.30), transparent),
+    radial-gradient(ellipse 60% 70% at 50% 70%, rgba(244,63,94,0.25), transparent),
+    radial-gradient(ellipse 50% 40% at 85% 80%, rgba(245,158,11,0.30), transparent),
+    linear-gradient(160deg, #f0f4ff 0%, #e0e7ff 30%, #fce7f3 60%, #fef3c7 100%);
+  animation: auroraShift 12s ease-in-out infinite alternate;
+}
+@keyframes auroraShift {
+  0% { filter: hue-rotate(0deg) saturate(1.1); transform: scale(1); }
+  50% { filter: hue-rotate(15deg) saturate(1.2); transform: scale(1.03); }
+  100% { filter: hue-rotate(-10deg) saturate(1.05); transform: scale(1); }
+}
+.hero-inner { position: relative; z-index: 2; text-align: center; max-width: 700px; padding: 0 24px; }
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 16px;
+  background: rgba(255,255,255,0.5); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.7); border-radius: 50px;
+  font-size: 12px; font-weight: 600; color: var(--sky); letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero h1 { font-size: 56px; font-weight: 800; line-height: 1.1; margin-bottom: 12px; background: linear-gradient(135deg, #1e293b, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+@media (max-width: 768px) { .hero h1 { font-size: 32px; } }
+.hero .sub { font-size: 18px; color: var(--muted); font-weight: 300; margin-bottom: 24px; }
+.hero-pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.hero-pill {
+  padding: 8px 16px; background: rgba(255,255,255,0.45); backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.6); border-radius: 50px;
+  font-size: 13px; font-weight: 500; color: var(--text);
+}
+
+/* Nav */
+.nav { position: sticky; top: 0; z-index: 100; background: rgba(240,244,255,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255,255,255,0.6); padding: 12px 20px; display: flex; align-items: center; gap: 8px; overflow-x: auto; }
+.nav-pill {
+  flex-shrink: 0; padding: 8px 18px; border-radius: 50px; border: none;
+  font-size: 13px; font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.4);
+  color: var(--muted); transition: all 0.2s;
+}
+.nav-pill:hover { background: rgba(255,255,255,0.7); }
+.nav-pill.active { background: var(--sky); color: #fff; box-shadow: 0 2px 12px rgba(14,165,233,0.3); }
+
+/* Glass cards */
+.glass-card {
+  background: var(--card); backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border); border-radius: 20px;
+  padding: 24px; box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+}
+@media (max-width: 768px) { .glass-card { border-radius: 16px; padding: 16px; } }
+
+/* Content */
+.content { max-width: 800px; margin: 0 auto; padding: 32px 20px 64px; }
+.day-header { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.day-badge { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; color: #fff; }
+.day-badge.d1 { background: linear-gradient(135deg, var(--sky), #0284c7); }
+.day-badge.d2 { background: linear-gradient(135deg, var(--violet), #7c3aed); }
+.day-badge.d3 { background: linear-gradient(135deg, var(--warm), #d97706); }
+.day-badge.d4 { background: linear-gradient(135deg, var(--rose), #e11d48); }
+.day-badge.d5 { background: linear-gradient(135deg, #10b981, #059669); }
+.day-info h2 { font-size: 20px; font-weight: 700; }
+.day-info .meta { font-size: 12px; color: var(--muted); }
+
+/* Timeline */
+.t-item { display: grid; grid-template-columns: 52px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.t-item:last-child { border-bottom: none; }
+.t-time { font-size: 12px; font-weight: 600; color: var(--sky); padding-top: 2px; }
+.t-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.t-desc { font-size: 13px; color: var(--muted); }
+.t-tag { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 10px; font-weight: 600; margin-top: 4px; }
+.t-tag.free { background: #dcfce7; color: #16a34a; }
+.t-tag.food { background: #fef3c7; color: #d97706; }
+.t-tag.activity { background: #ede9fe; color: #7c3aed; }
+
+/* Map */
+.map-card { margin-top: 32px; }
+#map { height: 280px; background: #e2e8f0; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+
+/* Footer */
+.footer { text-align: center; padding: 32px; font-size: 12px; color: var(--muted); }
+
+.sketch-badge { position: fixed; top: 12px; right: 12px; background: linear-gradient(135deg, var(--sky), var(--violet)); color: #fff; font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 50px; z-index: 999; }
+</style>
+</head>
+<body>
+<div class="sketch-badge">1 / 4 — Aurora</div>
+
+<div class="hero">
+  <div class="aurora"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">Vietnam · Aug 2026</div>
+    <h1>峴港家庭之旅</h1>
+    <p class="sub">8月11日–16日 · 五位成人 · 香港往返 · 節奏輕鬆</p>
+    <div class="hero-pills">
+      <span class="hero-pill">UO552 · 08:25</span>
+      <span class="hero-pill">UO553 · 10:05</span>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="nav-pill active">D1 抵達</button>
+  <button class="nav-pill">D2 巴拿山</button>
+  <button class="nav-pill">D3 會安</button>
+  <button class="nav-pill">D4 五行山</button>
+  <button class="nav-pill">D5 市區</button>
+</div>
+
+<div class="content">
+  <div class="glass-card">
+    <div class="day-header">
+      <div class="day-badge d1">D1</div>
+      <div class="day-info"><h2>抵達峴港 · 輕鬆適應</h2><span class="meta">8月11日 · 週二</span></div>
+    </div>
+
+    <div class="t-item"><div class="t-time">08:25</div><div><div class="t-title">抵達峴港機場</div><div class="t-desc">UO552 · HKG → DAD · 過關約30分鐘</div><span class="t-tag activity">交通</span></div></div>
+    <div class="t-item"><div class="t-time">10:00</div><div><div class="t-title">Grab 前往住宿</div><div class="t-desc">美溪海灘附近 · 車程約15分鐘</div><span class="t-tag activity">交通</span></div></div>
+    <div class="t-item"><div class="t-time">11:00</div><div><div class="t-title">入住 · 休息</div><div class="t-desc">熟悉周邊便利店、餐廳</div></div></div>
+    <div class="t-item"><div class="t-time">15:30</div><div><div class="t-title">美溪海灘漫步</div><div class="t-desc">福布斯全球最美海灘之一</div><span class="t-tag free">免費</span></div></div>
+    <div class="t-item"><div class="t-time">18:30</div><div><div class="t-title">海鮮晚餐</div><div class="t-desc">海灘附近餐廳 · 人均 ~500K VND</div><span class="t-tag food">美食</span></div></div>
+    <div class="t-item"><div class="t-time">21:00</div><div><div class="t-title">龍橋噴火表演</div><div class="t-desc">週六日 21:00 · 龍口噴火約5分鐘</div><span class="t-tag free">免費</span></div></div>
+  </div>
+
+  <div class="glass-card map-card">
+    <h3 style="font-size:16px;font-weight:700;margin-bottom:12px;">行程地圖</h3>
+    <div id="map">📍 互動地圖</div>
+  </div>
+</div>
+
+<div class="footer">Liao Family · August 2026 · Da Nang</div>
+</body>
+</html>

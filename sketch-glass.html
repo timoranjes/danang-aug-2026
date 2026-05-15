@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch: Glassmorphism — Da Nang</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #e8f0fe; --glass: rgba(255,255,255,0.55); --glass-border: rgba(255,255,255,0.7);
+  --text: #0f172a; --muted: #475569;
+  --blue: #3b82f6; --gold: #f59e0b;
+  --sans: 'Inter', -apple-system, sans-serif;
+}
+body { font-family: var(--sans); color: var(--text); background: var(--bg); min-height: 100vh; }
+
+/* Background blobs */
+.bg { position: fixed; inset: 0; z-index: 0; overflow: hidden; }
+.blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.6; }
+.blob-1 { width: 400px; height: 400px; background: #93c5fd; top: -100px; right: -50px; }
+.blob-2 { width: 350px; height: 350px; background: #fde68a; bottom: 100px; left: -80px; }
+.blob-3 { width: 300px; height: 300px; background: #c4b5fd; top: 50%; right: 20%; }
+
+/* Topbar */
+.topbar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.5); backdrop-filter: blur(20px); border-bottom: 1px solid var(--glass-border); padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; }
+.topbar h2 { font-size: 16px; font-weight: 700; }
+.topbar-info { font-size: 12px; color: var(--muted); display: flex; gap: 12px; }
+.topbar-info span { padding: 4px 10px; background: rgba(255,255,255,0.6); border-radius: 20px; }
+
+/* Hero */
+.hero { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 40px 20px 0; }
+.hero-card {
+  background: var(--glass); backdrop-filter: blur(24px);
+  border: 1px solid var(--glass-border); border-radius: 24px;
+  padding: 40px; text-align: center;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+.hero-card h1 { font-size: 36px; font-weight: 800; margin-bottom: 6px; }
+.hero-card .en { font-size: 13px; font-weight: 400; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+.hero-card .desc { font-size: 15px; color: var(--muted); margin-top: 8px; }
+.hero-stats { display: flex; justify-content: center; gap: 24px; margin-top: 20px; }
+.hero-stat { text-align: center; }
+.hero-stat .val { font-size: 20px; font-weight: 700; color: var(--blue); }
+.hero-stat .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+/* Day tabs */
+.tabs { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 24px 20px 0; }
+.tab-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.tab-btn {
+  flex-shrink: 0; padding: 10px 22px; border-radius: 16px; border: 1px solid var(--glass-border);
+  background: var(--glass); backdrop-filter: blur(12px); font-size: 13px; font-weight: 600;
+  color: var(--muted); cursor: pointer; transition: all 0.2s;
+}
+.tab-btn:hover { background: rgba(255,255,255,0.7); }
+.tab-btn.active { background: var(--blue); color: #fff; border-color: var(--blue); box-shadow: 0 4px 16px rgba(59,130,246,0.3); }
+
+/* Content */
+.content { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 24px 20px 64px; }
+
+/* Day panel */
+.day-panel {
+  background: var(--glass); backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 24px;
+  padding: 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+}
+.day-panel h2 { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.day-panel .meta { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+
+/* Summary chips */
+.summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+.chip { padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+.chip.blue { background: #dbeafe; color: #2563eb; }
+.chip.gold { background: #fef3c7; color: #b45309; }
+.chip.green { background: #dcfce7; color: #16a34a; }
+
+/* Timeline */
+.t-item { display: grid; grid-template-columns: 52px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(0,0,0,0.06); }
+.t-item:last-child { border-bottom: none; }
+.t-time { font-size: 12px; font-weight: 600; color: var(--blue); padding-top: 2px; text-align: right; }
+.t-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.t-desc { font-size: 13px; color: var(--muted); }
+.t-emoji { font-size: 20px; margin-right: 8px; }
+
+/* Map card */
+.map-card {
+  margin-top: 24px; background: var(--glass); backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 24px; padding: 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+}
+#map { height: 260px; background: #e2e8f0; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--muted); }
+
+/* Ref cards */
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 24px; }
+@media (max-width: 640px) { .ref-grid { grid-template-columns: 1fr; } }
+.ref-card {
+  background: var(--glass); backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+.ref-card h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 12px; }
+.ref-item { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+.ref-item:last-child { border-bottom: none; }
+.ref-item span:first-child { color: var(--muted); }
+
+.footer { text-align: center; padding: 24px; font-size: 12px; color: var(--muted); position: relative; z-index: 1; }
+.sketch-badge { position: fixed; top: 12px; right: 12px; background: var(--blue); color: #fff; font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 50px; z-index: 999; }
+</style>
+</head>
+<body>
+<div class="bg"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
+<div class="sketch-badge">2 / 4 — Glass</div>
+
+<div class="topbar">
+  <h2>峴港家庭之旅</h2>
+  <div class="topbar-info">
+    <span>UO552 08:25</span><span>UO553 10:05</span>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-card">
+    <div class="en">Da Nang · Vietnam</div>
+    <h1>峴港家庭之旅</h1>
+    <p class="desc">2026年8月11–16日 · 五位成人 · 香港往返 · 6天5夜</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="val">6天</div><div class="label">行程</div></div>
+      <div class="hero-stat"><div class="val">~$2,635</div><div class="label">人均 HKD</div></div>
+      <div class="hero-stat"><div class="val">25-35°</div><div class="label">氣溫</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab-bar">
+    <button class="tab-btn active">D1 抵達</button>
+    <button class="tab-btn">D2 巴拿山</button>
+    <button class="tab-btn">D3 會安</button>
+    <button class="tab-btn">D4 五行山</button>
+    <button class="tab-btn">D5 市區</button>
+  </div>
+</div>
+
+<div class="content">
+  <div class="day-panel">
+    <h2>D1 · 抵達峴港 · 輕鬆適應</h2>
+    <p class="meta">8月11日 · 週二</p>
+    <div class="summary">
+      <span class="chip blue">步數 ~4,000</span>
+      <span class="chip gold">行車 ~30 min</span>
+      <span class="chip green">輕鬆</span>
+    </div>
+    <div class="t-item"><div class="t-time">08:25</div><div><div class="t-title"><span class="t-emoji">✈️</span>抵達峴港機場</div><div class="t-desc">UO552 · HKG → DAD</div></div></div>
+    <div class="t-item"><div class="t-time">10:00</div><div><div class="t-title"><span class="t-emoji">🚗</span>Grab 前往住宿</div><div class="t-desc">美溪海灘附近 · ~15 min</div></div></div>
+    <div class="t-item"><div class="t-time">11:00</div><div><div class="t-title"><span class="t-emoji">🏨</span>入住 · 休息</div><div class="t-desc">熟悉周邊</div></div></div>
+    <div class="t-item"><div class="t-time">15:30</div><div><div class="t-title"><span class="t-emoji">🏖️</span>美溪海灘漫步</div><div class="t-desc">福布斯全球最美海灘</div></div></div>
+    <div class="t-item"><div class="t-time">18:30</div><div><div class="t-title"><span class="t-emoji">🦞</span>海鮮晚餐</div><div class="t-desc">海灘附近 · 人均 ~500K VND</div></div></div>
+    <div class="t-item"><div class="t-time">21:00</div><div><div class="t-title"><span class="t-emoji">🌉</span>龍橋噴火表演</div><div class="t-desc">21:00 噴火約5分鐘</div></div></div>
+  </div>
+
+  <div class="map-card">
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:10px;">行程地圖</h3>
+    <div id="map">📍 互動地圖</div>
+  </div>
+
+  <div class="ref-grid">
+    <div class="ref-card">
+      <h4>快速參考</h4>
+      <div class="ref-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
+      <div class="ref-item"><span>時差</span><span>UTC+7（慢1h）</span></div>
+      <div class="ref-item"><span>8月均溫</span><span>25-35°C</span></div>
+    </div>
+    <div class="ref-card">
+      <h4>行前必讀</h4>
+      <div class="ref-item"><span>E-Visa</span><span>列印紙本</span></div>
+      <div class="ref-item"><span>SIM卡</span><span>機場買Viettel</span></div>
+      <div class="ref-item"><span>入境單</span><span>飛機上填寫</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">Liao Family · August 2026</div>
+</body>
+</html>

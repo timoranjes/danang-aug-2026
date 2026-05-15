@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch: Vibrant Blocks — Da Nang</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --sans: 'Inter', -apple-system, sans-serif;
+}
+body { font-family: var(--sans); background: #fafafa; color: #111; }
+
+/* Hero block */
+.hero-block {
+  background: linear-gradient(135deg, #0c4a6e 0%, #0369a1 40%, #0891b2 70%, #06b6d4 100%);
+  color: #fff; padding: 0 0 0 0;
+}
+.hero-grid {
+  max-width: 1100px; margin: 0 auto; display: grid;
+  grid-template-columns: 1fr 1fr; min-height: 400px;
+}
+@media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } }
+.hero-left { padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; }
+.hero-right {
+  background: url('https://images.unsplash.com/photo-1603054561323-09f79d5df183?w=800&q=70') center/cover;
+  position: relative; min-height: 250px;
+}
+.hero-right::after {
+  content: 'DA NANG'; position: absolute; bottom: 16px; left: 16px;
+  font-size: 48px; font-weight: 900; opacity: 0.15; letter-spacing: 4px;
+}
+.hero-tag { display: inline-block; padding: 4px 12px; background: rgba(255,255,255,0.15); border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+.hero-left h1 { font-size: 42px; font-weight: 900; line-height: 1.15; margin-bottom: 12px; }
+.hero-left .desc { font-size: 15px; opacity: 0.8; }
+.hero-flight { display: inline-flex; gap: 16px; margin-top: 20px; padding: 10px 16px; background: rgba(255,255,255,0.1); border-radius: 10px; font-size: 13px; font-weight: 600; }
+
+/* Nav block */
+.nav-block { background: #0f172a; color: #fff; padding: 0; position: sticky; top: 0; z-index: 100; }
+.nav-inner { max-width: 1100px; margin: 0 auto; display: flex; overflow-x: auto; }
+.nav-day {
+  flex-shrink: 0; padding: 14px 24px; font-size: 13px; font-weight: 600; cursor: pointer;
+  border-bottom: 3px solid transparent; color: #94a3b8; transition: all 0.15s;
+}
+.nav-day:hover { color: #fff; }
+.nav-day.active { color: #fff; border-bottom-color: #06b6d4; }
+
+/* Content */
+.content { max-width: 1100px; margin: 0 auto; padding: 32px 20px 64px; }
+
+/* Color block day header */
+.day-block-header {
+  padding: 24px 28px; border-radius: 16px 16px 0 0; color: #fff;
+  display: flex; align-items: center; gap: 16px;
+}
+.day-block-header.c1 { background: #0369a1; }
+.day-block-header.c2 { background: #7c3aed; }
+.day-block-header.c3 { background: #b45309; }
+.day-block-header.c4 { background: #dc2626; }
+.day-block-header.c5 { background: #059669; }
+.day-num { width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; flex-shrink: 0; }
+.day-block-header h2 { font-size: 22px; font-weight: 800; }
+.day-block-header .meta { font-size: 12px; opacity: 0.8; }
+
+/* Timeline in block */
+.day-block-body { background: #fff; border-radius: 0 0 16px 16px; border: 1px solid #e5e7eb; border-top: none; padding: 8px 28px 20px; }
+.t-item { display: grid; grid-template-columns: 56px 1fr; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f3f4f6; }
+.t-item:last-child { border-bottom: none; }
+.t-time { font-size: 13px; font-weight: 700; color: #0369a1; padding-top: 1px; }
+.t-title { font-size: 14px; font-weight: 600; }
+.t-desc { font-size: 13px; color: #6b7280; }
+
+/* Photo block */
+.photo-block {
+  background: url('https://images.unsplash.com/photo-1632823471565-1ecdf5c6da20?w=1200&q=75') center/cover;
+  height: 200px; border-radius: 16px; margin: 24px 0; position: relative; overflow: hidden;
+}
+.photo-block::after {
+  content: 'My Khe Beach · 美溪海灘'; position: absolute; bottom: 12px; left: 16px;
+  font-size: 13px; font-weight: 700; color: #fff; background: rgba(0,0,0,0.4); padding: 6px 14px; border-radius: 8px;
+}
+
+/* Ref blocks */
+.ref-blocks { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-top: 32px; }
+@media (max-width: 768px) { .ref-blocks { grid-template-columns: 1fr; } }
+.ref-block {
+  border-radius: 16px; padding: 20px 24px; color: #fff;
+}
+.ref-block.blue { background: linear-gradient(135deg, #0369a1, #0891b2); }
+.ref-block.violet { background: linear-gradient(135deg, #7c3aed, #8b5cf6); }
+.ref-block.amber { background: linear-gradient(135deg, #d97706, #f59e0b); }
+.ref-block h4 { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.7; margin-bottom: 12px; }
+.ref-item { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
+.ref-item:last-child { border-bottom: none; }
+
+/* Map */
+.map-block { background: #fff; border: 1px solid #e5e7eb; border-radius: 16px; padding: 20px 24px; margin-top: 24px; }
+#map { height: 260px; background: #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #6b7280; }
+
+.footer { text-align: center; padding: 24px; font-size: 12px; color: #6b7280; }
+.sketch-badge { position: fixed; top: 12px; right: 12px; background: #b45309; color: #fff; font-size: 11px; font-weight: 700; padding: 5px 14px; border-radius: 8px; z-index: 999; }
+</style>
+</head>
+<body>
+<div class="sketch-badge">3 / 4 — Vibrant Blocks</div>
+
+<div class="hero-block">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-tag">Vietnam · Aug 2026</div>
+      <h1>峴港家庭之旅</h1>
+      <p class="desc">8月11–16日 · 五位成人 · 香港往返 · 6天5夜</p>
+      <div class="hero-flight">
+        <span>UO552 · 8/11 08:25</span>
+        <span style="opacity:0.5">→</span>
+        <span>UO553 · 8/16 10:05</span>
+      </div>
+    </div>
+    <div class="hero-right"></div>
+  </div>
+</div>
+
+<div class="nav-block">
+  <div class="nav-inner">
+    <div class="nav-day active">D1 抵達</div>
+    <div class="nav-day">D2 巴拿山</div>
+    <div class="nav-day">D3 會安</div>
+    <div class="nav-day">D4 五行山</div>
+    <div class="nav-day">D5 市區</div>
+  </div>
+</div>
+
+<div class="content">
+  <div>
+    <div class="day-block-header c1">
+      <div class="day-num">D1</div>
+      <div><h2>抵達峴港 · 輕鬆適應</h2><span class="meta">8月11日 · 週二</span></div>
+    </div>
+    <div class="day-block-body">
+      <div class="t-item"><div class="t-time">08:25</div><div><div class="t-title">抵達峴港機場</div><div class="t-desc">UO552 · HKG → DAD · 過關約30分鐘</div></div></div>
+      <div class="t-item"><div class="t-time">10:00</div><div><div class="t-title">Grab 前往住宿</div><div class="t-desc">美溪海灘附近 · ~15 min</div></div></div>
+      <div class="t-item"><div class="t-time">11:00</div><div><div class="t-title">入住 · 休息</div><div class="t-desc">熟悉周邊便利店、餐廳</div></div></div>
+      <div class="t-item"><div class="t-time">15:30</div><div><div class="t-title">美溪海灘漫步</div><div class="t-desc">福布斯全球最美海灘之一 · 免費</div></div></div>
+      <div class="t-item"><div class="t-time">18:30</div><div><div class="t-title">海鮮晚餐</div><div class="t-desc">海灘附近餐廳 · 人均 ~500K VND</div></div></div>
+      <div class="t-item"><div class="t-time">21:00</div><div><div class="t-title">龍橋噴火表演</div><div class="t-desc">週六日 21:00 · 龍口噴火約5分鐘</div></div></div>
+    </div>
+  </div>
+
+  <div class="photo-block"></div>
+
+  <div class="ref-blocks">
+    <div class="ref-block blue">
+      <h4>快速參考</h4>
+      <div class="ref-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
+      <div class="ref-item"><span>時差</span><span>UTC+7（慢1h）</span></div>
+      <div class="ref-item"><span>氣溫</span><span>25-35°C</span></div>
+    </div>
+    <div class="ref-block violet">
+      <h4>行前必讀</h4>
+      <div class="ref-item"><span>E-Visa</span><span>列印紙本</span></div>
+      <div class="ref-item"><span>SIM卡</span><span>機場買Viettel</span></div>
+      <div class="ref-item"><span>入境單</span><span>飛機上填寫</span></div>
+    </div>
+    <div class="ref-block amber">
+      <h4>人均預算</h4>
+      <div class="ref-item"><span>機票</span><span>~HKD 1,800</span></div>
+      <div class="ref-item"><span>住宿</span><span>~HKD 500</span></div>
+      <div class="ref-item"><span>餐飲活動</span><span>~HKD 335</span></div>
+    </div>
+  </div>
+
+  <div class="map-block">
+    <h3 style="font-size:15px;font-weight:700;margin-bottom:12px;">行程地圖</h3>
+    <div id="map">📍 互動地圖</div>
+  </div>
+</div>
+
+<div class="footer">Liao Family · August 2026 · Da Nang</div>
+</body>
+</html>
