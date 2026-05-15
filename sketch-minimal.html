@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sketch: Minimal Single — Da Nang</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #ffffff; --text: #111; --muted: #666;
+  --accent: #000; --border: #e0e0e0; --rule: #d0d0d0;
+  --serif: 'Noto Serif TC', serif; --sans: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+body { font-family: var(--sans); color: var(--text); background: var(--bg); line-height: 1.6; max-width: 740px; margin: 0 auto; padding: 0 24px; }
+
+/* No topbar — hero IS the header */
+.hero { padding: 64px 0 32px; border-bottom: 1px solid var(--border); }
+.hero h1 { font-family: var(--serif); font-size: 32px; font-weight: 900; line-height: 1.2; }
+.hero h1 .en { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.hero .meta { margin-top: 8px; font-size: 13px; color: var(--muted); }
+.hero .flights { margin-top: 16px; font-family: var(--mono); font-size: 11px; display: flex; gap: 16px; }
+
+/* Day nav — simple text links */
+.day-nav { padding: 16px 0; border-bottom: 1px solid var(--border); display: flex; gap: 24px; overflow-x: auto; }
+.day-nav a { font-size: 13px; color: var(--muted); text-decoration: none; white-space: nowrap; padding: 4px 0; border-bottom: 1px solid transparent; transition: all 0.15s; }
+.day-nav a:hover { color: var(--text); }
+.day-nav a.active { color: var(--text); border-bottom-color: var(--text); }
+
+/* Day content */
+.day-section { padding: 32px 0; border-bottom: 1px solid var(--border); }
+.day-heading { font-family: var(--serif); font-size: 22px; font-weight: 700; margin-bottom: 2px; }
+.day-date { font-size: 12px; color: var(--muted); margin-bottom: 24px; }
+
+/* Summary bar */
+.summary { display: flex; gap: 12px; flex-wrap: wrap; padding: 8px 12px; background: #f7f7f7; font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 20px; }
+
+/* Timeline — minimal */
+.t-item { display: grid; grid-template-columns: 48px 1fr; gap: 12px; padding: 12px 0; }
+.t-time { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--muted); text-align: right; padding-top: 2px; }
+.t-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.t-desc { font-size: 13px; color: var(--muted); }
+
+/* Map — full width */
+.map-section { padding: 32px 0; }
+.map-section h2 { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+#map { height: 280px; background: #f5f5f5; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--muted); font-size: 13px; }
+
+/* Reference sections */
+.ref-section { padding: 24px 0; border-bottom: 1px solid var(--border); }
+.ref-section h2 { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.ref-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 600px) { .ref-grid { grid-template-columns: 1fr; } }
+.ref-item { font-size: 13px; padding: 6px 0; display: flex; justify-content: space-between; }
+.ref-item span:first-child { color: var(--muted); }
+
+/* Foldable */
+.fold { border: none; border-bottom: 1px solid var(--border); }
+.fold-hdr { display: flex; justify-content: space-between; padding: 16px 0; cursor: pointer; }
+.fold-hdr h3 { font-family: var(--mono); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin: 0; }
+.fold-body { padding: 0 0 16px; display: none; }
+.fold.open .fold-body { display: block; }
+
+/* Footer */
+.footer { padding: 32px 0; font-size: 11px; color: var(--muted); text-align: center; font-family: var(--mono); }
+
+/* Sketch badge */
+.sketch-badge { position: fixed; top: 8px; right: 8px; background: #111; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 12px; letter-spacing: 1px; text-transform: uppercase; z-index: 999; }
+</style>
+</head>
+<body>
+<div class="sketch-badge">Sketch 4/4</div>
+
+<div class="hero">
+  <h1><span class="en">Da Nang · Aug 2026</span>峴港家庭之旅</h1>
+  <p class="meta">五位成人 · 6天5夜 · 香港往返 · 節奏輕鬆</p>
+  <div class="flights">
+    <span>去程 UO552 · 8/11 08:25</span>
+    <span>回程 UO553 · 8/16 10:05</span>
+  </div>
+</div>
+
+<div class="day-nav">
+  <a href="#" class="active">D1 · 抵達</a>
+  <a href="#">D2 · 巴拿山</a>
+  <a href="#">D3 · 會安</a>
+  <a href="#">D4 · 五行山</a>
+  <a href="#">D5 · 市區</a>
+</div>
+
+<div class="day-section">
+  <div class="day-heading">抵達峴港 · 輕鬆適應</div>
+  <div class="day-date">8月11日 · 週二</div>
+
+  <div class="summary">
+    <span>步數 ~4,000</span>
+    <span>行車 ~30 min</span>
+    <span>節奏：輕鬆</span>
+  </div>
+
+  <div class="t-item">
+    <div class="t-time">08:25</div>
+    <div>
+      <div class="t-title">抵達峴港機場</div>
+      <div class="t-desc">UO552 · HKG → DAD · 過關約30分鐘</div>
+    </div>
+  </div>
+  <div class="t-item">
+    <div class="t-time">10:00</div>
+    <div>
+      <div class="t-title">Grab 前往住宿</div>
+      <div class="t-desc">美溪海灘附近 · 車程約15分鐘</div>
+    </div>
+  </div>
+  <div class="t-item">
+    <div class="t-time">11:00</div>
+    <div>
+      <div class="t-title">入住 · 休息</div>
+      <div class="t-desc">熟悉周邊便利店、餐廳</div>
+    </div>
+  </div>
+  <div class="t-item">
+    <div class="t-time">15:30</div>
+    <div>
+      <div class="t-title">美溪海灘漫步</div>
+      <div class="t-desc">福布斯全球最美海灘之一 · 免費 · 避開正午UV</div>
+    </div>
+  </div>
+  <div class="t-item">
+    <div class="t-time">18:30</div>
+    <div>
+      <div class="t-title">海鮮晚餐</div>
+      <div class="t-desc">海灘附近餐廳 · 人均約 500K VND</div>
+    </div>
+  </div>
+  <div class="t-item">
+    <div class="t-time">21:00</div>
+    <div>
+      <div class="t-title">龍橋噴火表演</div>
+      <div class="t-desc">週六日 21:00 · 龍口噴火約5分鐘</div>
+    </div>
+  </div>
+</div>
+
+<div class="day-section">
+  <div class="day-heading">巴拿山 · 黃金橋</div>
+  <div class="day-date">8月12日 · 週三</div>
+
+  <div class="summary">
+    <span>步數 ~8,000</span>
+    <span>行車 ~60 min</span>
+    <span>節奏：中等</span>
+  </div>
+
+  <div class="t-item">
+    <div class="t-time">07:30</div>
+    <div>
+      <div class="t-title">出發前往巴拿山</div>
+      <div class="t-desc">早到避開人潮 · 車程約40分鐘</div>
+    </div>
+  </div>
+  <div class="t-item">
+    <div class="t-time">08:00</div>
+    <div>
+      <div class="t-title">搭乘纜車上山</div>
+      <div class="t-desc">世界最長纜車之一 · 20分鐘</div>
+    </div>
+  </div>
+</div>
+
+<div class="map-section">
+  <h2>行程地圖</h2>
+  <div id="map">📍 互動地圖</div>
+</div>
+
+<div class="ref-section">
+  <h2>快速參考</h2>
+  <div class="ref-grid">
+    <div class="ref-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
+    <div class="ref-item"><span>時差</span><span>UTC+7（慢1小時）</span></div>
+    <div class="ref-item"><span>8月均溫</span><span>25–35°C</span></div>
+    <div class="ref-item"><span>緊急</span><span>+852 1868</span></div>
+  </div>
+</div>
+
+<div class="fold">
+  <div class="fold-hdr" onclick="this.closest('.fold').classList.toggle('open')">
+    <h3>打包清單</h3><span>▸</span>
+  </div>
+  <div class="fold-body"><div style="font-size:13px;color:var(--muted)">護照、E-Visa、現金、防曬…</div></div>
+</div>
+
+<div class="fold">
+  <div class="fold-hdr" onclick="this.closest('.fold').classList.toggle('open')">
+    <h3>預算估算</h3><span>▸</span>
+  </div>
+  <div class="fold-body"><div style="font-size:13px;color:var(--muted)">每人 ~HKD 2,635</div></div>
+</div>
+
+<div class="footer">Liao Family · August 2026</div>
+</body>
+</html>
