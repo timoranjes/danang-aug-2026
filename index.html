@@ -221,6 +221,11 @@ html.dark{
   --shadow:0 1px 3px rgba(0,0,0,0.2);--shadow-lg:0 4px 12px rgba(0,0,0,0.3);
 }
 #map.leaflet-loaded .map-loading{display:none}
+@media(max-width:899px){
+  #map{display:none!important}
+  #map-iframe{display:block!important;width:100%;height:300px}
+  #map-iframe iframe{width:100%;height:100%;border:none}
+}
 html.dark .hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%)}
 html.dark .hero::after{color:rgba(255,255,255,0.02)}
 html.dark .hero h1 .en{color:var(--text-muted)}
@@ -508,7 +513,10 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
       <button class="map-fbtn" onclick="filterMapDay(5)">D5</button>
       <button class="map-fbtn" onclick="filterMapDay(6)">D6</button>
     </div>
-    <div id="map"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#78716c;font-size:13px;z-index:1000;background:#e8e0d8" class="map-loading">🗺️ 載入地圖中...</div></div>
+    <div id="map" style="position:relative">
+  <div class="map-loading" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#78716c;font-size:13px;z-index:1000;background:#e8e0d8">🗺️ 載入地圖中...</div>
+</div>
+<div id="map-iframe" style="display:none"></div>
   </div>
 </div>
 
@@ -896,6 +904,14 @@ window.filterMapDay = function(day){
 
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initMaps);}
 else{setTimeout(initMaps,100);}
+
+/* Mobile Google Maps iframe */
+(function(){
+  var iframeDiv = document.getElementById('map-iframe');
+  if(iframeDiv && !iframeDiv.querySelector('iframe')){
+    iframeDiv.innerHTML = '<iframe src="https://maps.google.com/maps?q=16.0544,108.2157+(Da+Nang+Trip)&z=12&output=embed&t=m" width="100%" height="100%" style="border:none;display:block" allowfullscreen loading="lazy"></iframe>';
+  }
+})();
 
 (function(){
   var hash = window.location.hash;
