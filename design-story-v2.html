@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Da Nang · 峴港家庭之旅</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--surface:#141414;--surface2:#1e1e1e;--text:#f5f5f5;--text-secondary:#a0a0a0;
+  --text-muted:#606060;--border:#2a2a2a;--gold:#d4a853;--gold-soft:rgba(212,168,83,0.15);
+  --d1:#78716c;--d2:#38bdf8;--d3:#fbbf24;--d4:#f87171;--d5:#a78bfa;--d6:#34d399;
+  --font-sans:'Inter',-apple-system,sans-serif;
+  --font-serif:'Newsreader','Noto Serif TC',serif;
+}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font-sans);color:var(--text);background:var(--bg);line-height:1.6;overflow-x:hidden}
+a{color:var(--gold)}
+
+/* Full-bleed cinematic hero */
+.hero-cinema{position:relative;height:70vh;min-height:400px;display:flex;align-items:flex-end;overflow:hidden}
+.hero-cinema::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,0.3) 0%,rgba(10,10,10,0.6) 50%,rgba(10,10,10,0.95) 100%),
+  linear-gradient(135deg,#1a1a2e 0%,#16213e 30%,#0f3460 60%,#533483 100%);background-size:cover,cover}
+.hero-cinema::after{content:'DA NANG';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:clamp(60px,15vw,160px);font-weight:700;color:rgba(255,255,255,0.03);font-family:var(--font-serif);letter-spacing:0.2em;white-space:nowrap}
+.hero-cinema .hero-content{position:relative;z-index:2;padding:0 24px 48px;max-width:700px}
+.hero-cinema .tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.15em;color:var(--gold);margin-bottom:20px}
+.hero-cinema .tag::before{content:'';width:24px;height:1px;background:var(--gold)}
+.hero-cinema h1{font-family:var(--font-serif);font-size:clamp(32px,6vw,56px);font-weight:700;line-height:1.1;margin-bottom:12px}
+.hero-cinema h1 .en{display:block;font-size:0.4em;color:var(--text-secondary);font-weight:400;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px}
+.hero-cinema .lead{color:var(--text-secondary);font-size:15px;line-height:1.7}
+
+/* Flight bar */
+.flight-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-secondary);font-variant-numeric:tabular-nums}
+.flight-bar .fc{color:var(--gold);font-weight:600}
+.flight-bar .sep{color:var(--text-muted);margin:0 8px}
+.dark-toggle{width:36px;height:36px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+
+/* Day nav - horizontal scroll with gold active */
+.day-nav{position:sticky;top:0;z-index:100;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.day-nav::-webkit-scrollbar{display:none}
+.day-nav-inner{display:flex;gap:0;min-width:max-content}
+.day-tab{padding:14px 22px;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
+.day-tab:hover{color:var(--text-secondary)}
+.day-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.day-tab .day-num{font-weight:700;margin-right:4px}
+
+/* Panels */
+.panels{max-width:700px;margin:0 auto;padding:32px 20px 80px}
+.panel{display:none}.panel.active{display:block;animation:fadeUp 0.4s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* Story header with photo */
+.story-header{margin-bottom:32px;position:relative}
+.story-header .day-number{font-size:120px;font-weight:700;color:var(--surface2);position:absolute;top:-40px;left:-10px;z-index:-1;line-height:1;user-select:none}
+.story-header h2{font-family:var(--font-serif);font-size:28px;font-weight:700;margin-bottom:6px;position:relative}
+.story-header .meta{color:var(--text-secondary);font-size:14px;position:relative}
+.story-header .meta em{font-style:normal;color:var(--text-muted);margin-left:8px;font-size:12px;text-transform:uppercase}
+.story-header .summary{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;font-size:13px;color:var(--text-muted);position:relative}
+.story-header .summary .sep{color:var(--text-muted)}
+
+/* Vertical timeline - gold line */
+.story-timeline{position:relative;padding-left:32px}
+.story-timeline::before{content:'';position:absolute;left:11px;top:0;bottom:0;width:1px;background:var(--border)}
+.story-item{position:relative;padding:0 0 24px}
+.story-item:last-child{padding-bottom:0}
+.story-dot{position:absolute;left:-32px;top:2px;width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+.story-dot::before{content:'';width:10px;height:10px;border-radius:50%;border:2px solid var(--gold);background:var(--bg)}
+.story-time{font-size:12px;font-weight:700;color:var(--gold);margin-bottom:4px;font-variant-numeric:tabular-nums;letter-spacing:0.05em}
+.story-title{font-size:16px;font-weight:600;margin-bottom:2px}
+.story-desc{font-size:14px;color:var(--text-secondary)}
+.story-note{font-size:13px;color:var(--text-muted);margin-top:6px;padding:8px 12px;border-radius:6px;background:var(--gold-soft);border-left:2px solid var(--gold)}
+.loc-link{color:var(--gold);cursor:pointer;border-bottom:1px dashed rgba(212,168,83,0.4)}
+.loc-link:hover{border-bottom-style:solid}
+
+/* Photo in timeline */
+.story-photo{margin:16px 0 0;height:200px;border-radius:8px;background-size:cover;background-position:center;position:relative;overflow:hidden}
+.story-photo .caption{position:absolute;bottom:6px;right:10px;font-size:11px;color:rgba(255,255,255,0.7);background:rgba(0,0,0,0.6);padding:2px 6px;border-radius:3px}
+
+/* Section cards */
+.section-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:12px;overflow:hidden}
+.section-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer}
+.section-header:hover{background:var(--surface2)}
+.section-header h3{font-size:16px;font-weight:600}
+.section-header .sub{display:block;font-size:13px;color:var(--text-muted);font-weight:400}
+.section-chevron{width:16px;height:16px;border-right:1.5px solid var(--text-muted);border-bottom:1.5px solid var(--text-muted);transform:rotate(45deg);transition:transform 0.2s}
+.section.open .section-chevron{transform:rotate(-135deg)}
+.section-body{display:none;padding:0 18px 18px}
+.section.open .section-body{display:block}
+
+/* Packing */
+.pack-progress{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-size:13px;color:var(--text-secondary)}
+.pack-bar{flex:1;height:4px;border-radius:2px;background:var(--surface2);overflow:hidden}
+.pack-bar-fill{height:100%;border-radius:2px;background:var(--gold);transition:width 0.3s}
+.packing-cols{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:600px){.packing-cols{grid-template-columns:1fr 1fr}}
+.pack-cat h4{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--border);color:var(--gold)}
+.pack-item{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:14px;color:var(--text-secondary);cursor:pointer}
+.pack-item input[type="checkbox"]{width:16px;height:16px;accent-color:var(--gold)}
+.pack-item.checked{text-decoration:line-through;color:var(--text-muted)}
+
+/* Emergency */
+.emergency-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:500px){.emergency-grid{grid-template-columns:1fr 1fr}}
+.em-item{padding:12px;border-radius:6px;background:var(--surface2)}
+.em-item h4{font-size:14px;font-weight:600;margin-bottom:3px}
+.em-item p{font-size:13px;color:var(--text-secondary);margin-bottom:4px}
+.em-num{font-family:monospace;font-size:15px;font-weight:700;color:var(--gold)}
+
+/* Quick ref */
+.qr-item{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px solid var(--border)}
+.qr-item:last-child{border-bottom:none}
+.qr-item span:first-child{color:var(--text-secondary)}
+
+/* Visa */
+.visa-alert{padding:10px 14px;border-radius:6px;background:rgba(234,179,8,0.08);border:1px solid rgba(234,179,8,0.15);font-size:14px;margin-bottom:12px;color:var(--gold)}
+.visa-row{display:flex;justify-content:space-between;padding:8px 0;font-size:14px;border-bottom:1px solid var(--border)}
+.visa-row span:first-child{color:var(--text-secondary)}
+.visa-row a{color:var(--gold)}
+
+/* Budget */
+.budget-table{width:100%;border-collapse:collapse;font-size:14px}
+.budget-table th,.budget-table td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border)}
+.budget-table th{font-size:11px;text-transform:uppercase;color:var(--text-muted);font-weight:600}
+.budget-table tfoot td{font-weight:700;border-top:2px solid var(--border)}
+
+/* Tips */
+.tips-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:600px){.tips-grid{grid-template-columns:1fr 1fr 1fr}}
+.tip-item{padding:12px;border-radius:6px;background:var(--surface2)}
+.tip-item h4{font-size:14px;font-weight:600;margin-bottom:4px;color:var(--gold)}
+.tip-item p{font-size:13px;color:var(--text-secondary)}
+
+/* Pull quote */
+.pull-quote{margin:40px 0;padding:28px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-family:var(--font-serif);font-size:20px;font-style:italic;line-height:1.6;color:var(--text-secondary);text-align:center}
+
+/* Footer */
+.footer{max-width:700px;margin:0 auto;padding:24px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted)}
+@media(max-width:500px){.footer{flex-direction:column;gap:4px}}
+.map-col{display:none}
+
+/* Modals */
+.gm-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:20px}
+.gm-modal.show{display:flex}
+.gm-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;max-width:600px;width:100%;max-height:80vh;overflow:hidden}
+.gm-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)}
+.gm-close{width:30px;height:30px;border-radius:4px;border:none;background:var(--surface2);color:var(--text);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.gm-body iframe{width:100%;height:260px;border:none}
+.gm-actions{padding:10px 16px;display:flex;gap:8px}
+.gm-actions a{padding:8px 14px;border-radius:6px;font-size:13px;font-weight:500;border:1px solid var(--border);color:var(--text)}
+.gm-actions a:first-child{background:var(--gold);border-color:var(--gold);color:#000}
+
+.pi-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);align-items:flex-end;justify-content:center}
+.pi-modal.show{display:flex}
+.pi-box{background:var(--surface);border:1px solid var(--border);border-radius:8px 8px 0 0;max-width:500px;width:100%;max-height:85vh;overflow-y:auto}
+@media(min-width:600px){.pi-modal{align-items:center}.pi-box{border-radius:8px}}
+.pi-hero{height:140px;background-size:cover;background-position:center;position:relative}
+.pi-close-btn{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:4px;border:none;background:rgba(0,0,0,0.6);color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.pi-hero-title{position:absolute;bottom:0;left:0;right:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,0.8))}
+.pi-hero-title h2{color:#fff;font-size:18px;font-family:var(--font-serif)}
+.pi-hero-title .en{font-size:12px;color:rgba(255,255,255,0.7)}
+.pi-body{padding:14px}
+.pi-type-badge{display:inline-block;padding:3px 8px;border-radius:100px;background:var(--gold-soft);font-size:11px;color:var(--gold);margin-bottom:8px}
+.pi-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:10px}
+.pi-meta-item{padding:8px 10px;border-radius:4px;background:var(--surface2);margin-bottom:6px}
+.pi-meta-item .label{font-size:11px;color:var(--text-muted)}
+.pi-meta-item .value{font-size:13px}
+.pi-gallery{display:flex;gap:6px;overflow-x:auto;padding:0 14px 10px;scroll-snap-type:x mandatory}
+.pi-gallery::-webkit-scrollbar{display:none}
+.pi-gallery img{flex-shrink:0;width:130px;height:80px;object-fit:cover;border-radius:4px;scroll-snap-align:start}
+.pi-actions{display:flex;gap:6px;padding:0 14px 14px}
+.pi-actions a{flex:1;text-align:center;padding:10px;border-radius:6px;font-size:13px;font-weight:500;border:1px solid var(--border);color:var(--text)}
+.pi-actions a.primary{background:var(--gold);border-color:var(--gold);color:#000}
+
+/* Light mode toggle */
+html.light{
+  --bg:#fafaf9;--surface:#fff;--surface2:#f5f5f4;--text:#1c1917;--text-secondary:#57534e;
+  --text-muted:#a8a29e;--border:#e7e5e4;--gold:#b8860b;--gold-soft:rgba(184,134,11,0.08);
+  --d1:#78716c;--d2:#0284c7;--d3:#d97706;--d4:#dc2626;--d5:#7c3aed;--d6:#059669;
+}
+html.light .hero-cinema::before{background:linear-gradient(180deg,rgba(250,250,249,0.2) 0%,rgba(250,250,249,0.5) 50%,rgba(250,250,249,0.95) 100%),
+  linear-gradient(135deg,#f0f0e8 0%,#e8e8e0 30%,#e0e0d8 60%,#d8d8d0 100%)}
+html.light .hero-cinema::after{color:rgba(0,0,0,0.03)}
+html.light .story-dot::before{background:var(--bg);border-color:var(--gold)}
+html.light .visa-alert{background:rgba(234,179,8,0.08);color:#92400e}
+
+@media(min-width:768px){
+  .hero-cinema .hero-content{padding:0 40px 60px}
+  .flight-bar{padding:10px 40px}
+  .panels{padding:40px 40px 80px}
+  .footer{padding:24px 40px}
+}
+</style>
+</head>
+<body>
+
+<div class="hero-cinema">
+  <div class="hero-content">
+    <div class="tag">August 2026</div>
+    <h1><span class="en">Da Nang · Vietnam</span>峴港·五日</h1>
+    <p class="lead">2026年8月11日至16日 · 五位成人 · 香港往返<br>家庭之旅 · 節奏輕鬆 · 長者友善</p>
+  </div>
+</div>
+
+<div class="flight-bar">
+  <div><span class="fc">UO552</span><span class="sep">·</span>8/11 08:25</div>
+  <div><span class="fc">UO553</span><span class="sep">·</span>8/16 10:05</div>
+  <button class="dark-toggle" onclick="toggleDark()" aria-label="切換模式">◐</button>
+</div>
+
+<nav class="day-nav"><div class="day-nav-inner">
+  <div class="day-tab active" onclick="switchDay(1)"><span class="day-num">01</span>抵達</div>
+  <div class="day-tab" onclick="switchDay(2)"><span class="day-num">02</span>巴拿山</div>
+  <div class="day-tab" onclick="switchDay(3)"><span class="day-num">03</span>會安</div>
+  <div class="day-tab" onclick="switchDay(4)"><span class="day-num">04</span>五行山</div>
+  <div class="day-tab" onclick="switchDay(5)"><span class="day-num">05</span>市區</div>
+  <div class="day-tab" onclick="switchDay(6)"><span class="day-num">06</span>返程</div>
+</div></nav>
+
+<div class="panels">
+  <div class="panel active" id="panel1" data-day="1">
+    <div class="story-header"><div class="day-number">01</div>
+      <h2>抵達 · 輕鬆適應</h2>
+      <div class="meta">8月11日，週二<em>TUE</em></div>
+      <div class="summary"><span>步數 ~6,000</span><span class="sep">·</span><span>行車 ~40 min</span><span class="sep">·</span><span>節奏：輕鬆</span></div>
+    </div>
+    <div class="story-timeline">
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">08:25</div><div class="story-title">✈ 香港國際機場起飛</div><div class="story-desc">航班 UO552，建議 06:25 前到達機場</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">09:20</div><div class="story-title">抵達峴港國際機場</div><div class="story-desc">過關取行李約30分鐘</div><div class="story-note">5人需2台Grab或預約7人車（約150K-200K VND）</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">10:00</div><div class="story-title">前往 Airbnb 辦理入住</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">11:00</div><div class="story-title">午餐 — Bun Cha Ca 109</div><div class="story-desc">魚餅檬粉，峴港名店</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">12:30</div><div class="story-title">回 Airbnb 午休</div></div>
+      <div class="story-item" data-loc="16.0700,108.2461"><div class="story-dot"></div><div class="story-time">16:00</div><div class="story-title"><span class="loc-link" onclick="openMap(16.0700,108.2461,'美溪海灘')">美溪海灘</span>漫步</div><div class="story-desc">福布斯全球最美海灘之一</div>
+        <div class="story-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/My_Khe_Beach_Danang_Coastline.jpg/960px-My_Khe_Beach_Danang_Coastline.jpg')"><span class="caption">My Khe Beach</span></div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">18:00</div><div class="story-title">海鮮晚餐 — Be Man Seafood</div></div>
+      <div class="story-item" data-loc="16.0611,108.2272"><div class="story-dot"></div><div class="story-time">19:30</div><div class="story-title"><span class="loc-link" onclick="openMap(16.0611,108.2272,'漢江龍橋')">漢江河畔散步 · 龍橋</span></div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel2" data-day="2">
+    <div class="story-header"><div class="day-number">02</div><h2>巴拿山 · 黃金橋</h2><div class="meta">8月12日，週三<em>WED</em></div>
+      <div class="summary"><span>步數 ~12,000</span><span class="sep">·</span><span>行車 ~90 min</span><span class="sep">·</span><span>節奏：中等</span></div>
+    </div>
+    <div class="story-timeline">
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">07:00</div><div class="story-title">出發前往巴拿山</div><div class="story-desc">車程約45分鐘</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">08:00</div><div class="story-title">纜車上山</div><div class="story-desc">世界最長纜車之一，全長近6公里</div></div>
+      <div class="story-item" data-loc="15.9949,107.9963"><div class="story-dot"></div><div class="story-time">08:30</div><div class="story-title"><span class="loc-link" onclick="openMap(15.9949,107.9963,'巴拿山黃金橋')">黃金橋</span></div><div class="story-desc">巨型佛手步道，海拔1,400米</div>
+        <div class="story-photo" style="background-image:url('https://images.unsplash.com/photo-1741138327956-dfa75763b50d?w=600&q=70')"><span class="caption">Golden Bridge</span></div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">10:30</div><div class="story-title">法式小鎮 · 教堂 · 鐘樓</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">12:00</div><div class="story-title">午餐 — 山上自助餐廳</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">13:00</div><div class="story-title">Fantasy Park 室內遊樂園</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">14:00</div><div class="story-title">花園景區</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">14:30</div><div class="story-title">纜車下山 → 回 Airbnb</div><div class="story-note">8月午後易有雷陣雨</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">18:30</div><div class="story-title">晚餐 — Mi Quang</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel3" data-day="3">
+    <div class="story-header"><div class="day-number">03</div><h2>會安古鎮 · 燈籠之夜</h2><div class="meta">8月13日，週四<em>THU</em></div>
+      <div class="summary"><span>步數 ~10,000</span><span class="sep">·</span><span>行車 ~80 min</span><span class="sep">·</span><span>節奏：輕鬆-中等</span></div>
+    </div>
+    <div class="story-timeline">
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">09:00</div><div class="story-title">出發前往會安</div></div>
+      <div class="story-item" data-loc="15.8833,108.3333"><div class="story-dot"></div><div class="story-time">10:00</div><div class="story-title"><span class="loc-link" onclick="openMap(15.8833,108.3333,'會安古鎮')">會安古鎮</span>（UNESCO）</div><div class="story-desc">日本廊橋、譚家老宅、福建會館</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">12:00</div><div class="story-title">午餐 — Cao Lau、Com Ga</div></div>
+      <div class="story-item" data-loc="15.8731,108.3749"><div class="story-dot"></div><div class="story-time">15:00</div><div class="story-title"><span class="loc-link" onclick="openMap(15.8731,108.3749,'椰林竹籃船')">椰林竹籃船</span></div><div class="story-desc">Cam Thanh 椰子村</div><div class="story-note">距古鎮3km</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">16:30</div><div class="story-title">安邦海灘放鬆</div></div>
+      <div class="story-item" data-loc="15.8833,108.3333"><div class="story-dot"></div><div class="story-time">19:00</div><div class="story-title"><span class="loc-link" onclick="openMap(15.8833,108.3333,'會安夜景')">會安夜景 · 放河燈</span></div><div class="story-desc">燈籠映照秋蓬河</div>
+        <div class="story-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/28/Hoi_An_lanterns_at_night.jpg')"><span class="caption">Hoi An Lanterns</span></div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel4" data-day="4">
+    <div class="story-header"><div class="day-number">04</div><h2>五行山 · 山茶半島</h2><div class="meta">8月14日，週五<em>FRI</em></div>
+      <div class="summary"><span>步數 ~9,000</span><span class="sep">·</span><span>行車 ~60 min</span><span class="sep">·</span><span>輕度登山</span><span class="sep">·</span><span>節奏：中等</span></div>
+    </div>
+    <div class="story-timeline">
+      <div class="story-item" data-loc="16.0035,108.2646"><div class="story-dot"></div><div class="story-time">08:30</div><div class="story-title"><span class="loc-link" onclick="openMap(16.0035,108.2646,'五行山')">五行山</span></div><div class="story-desc">石灰岩山峰、天然洞穴</div><div class="story-note">輕度登山，舒適鞋，約3小時</div>
+        <div class="story-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Marble_Mountains.jpg/960px-Marble_Mountains.jpg')"><span class="caption">Marble Mountains</span></div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">12:00</div><div class="story-title">午餐 — 海鮮餐廳</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">13:00</div><div class="story-title">前往山茶半島</div></div>
+      <div class="story-item" data-loc="16.1050,108.2350"><div class="story-dot"></div><div class="story-time">14:00</div><div class="story-title"><span class="loc-link" onclick="openMap(16.1050,108.2350,'靈應寺')">靈應寺（山茶半島）</span></div><div class="story-desc">67米觀音像，越南最高</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">16:00</div><div class="story-title">美溪海灘放鬆</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">19:30</div><div class="story-title">漢江夜景 · 晚餐</div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel5" data-day="5">
+    <div class="story-header"><div class="day-number">05</div><h2>自由探索 · 龍橋噴火</h2><div class="meta">8月15日，週六<em>SAT</em></div>
+      <div class="summary"><span>步數 ~8,000</span><span class="sep">·</span><span>行車 ~20 min</span><span class="sep">·</span><span>節奏：輕鬆</span></div>
+    </div>
+    <div class="story-timeline">
+      <div class="story-item" data-loc="16.0599,108.2226"><div class="story-dot"></div><div class="story-time">09:30</div><div class="story-title"><span class="loc-link" onclick="openMap(16.0599,108.2226,'佔族雕塑博物館')">佔族雕塑博物館</span></div></div>
+      <div class="story-item" data-loc="16.0677,108.2225"><div class="story-dot"></div><div class="story-time">11:00</div><div class="story-title"><span class="loc-link" onclick="openMap(16.0677,108.2225,'漢市場')">漢市場</span></div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">14:00</div><div class="story-title">按摩 / SPA</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">18:00</div><div class="story-title">告別晚餐 — 海鮮大餐</div></div>
+      <div class="story-item" data-loc="16.0611,108.2272"><div class="story-dot"></div><div class="story-time">20:30</div><div class="story-title"><span class="loc-link" onclick="openMap(16.0611,108.2272,'龍橋噴火')">龍橋噴火表演</span></div><div class="story-desc">每週六日 21:00</div>
+        <div class="story-photo" style="background-image:url('https://images.unsplash.com/photo-1571713343936-b27b7bedddab?w=600&q=70')"><span class="caption">Dragon Bridge</span></div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel6" data-day="6">
+    <div class="story-header"><div class="day-number">06</div><h2>返程</h2><div class="meta">8月16日，週日<em>SUN</em></div>
+      <div class="summary"><span>航班 UO553</span><span class="sep">·</span><span>07:00 出發</span><span class="sep">·</span><span>13:40 抵港</span></div>
+    </div>
+    <div class="story-timeline">
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">07:00</div><div class="story-title">出發前往機場</div><div class="story-note">建議提前2小時到達</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-time">10:05</div><div class="story-title">✈ 峴港起飛 → 香港</div><div class="story-desc">UO553，13:40 抵達香港</div></div>
+    </div>
+  </div>
+
+  <div class="pull-quote">「會安的燈籠、巴拿山的雲海、美溪海灘的日落——<br>這趟旅程的每一刻，都是家庭的共同記憶。」</div>
+
+  <!-- Sections -->
+  <div class="section" id="fold-packing">
+    <div class="section-header" onclick="toggleFold('fold-packing')"><div><h3>打包清單<span class="sub">出發前檢查</span></h3></div><span class="section-chevron"></span></div>
+    <div class="section-body">
+      <div class="pack-progress"><span id="packCount">0/29</span><div class="pack-bar"><div class="pack-bar-fill" id="packBarFill"></div></div></div>
+      <div class="packing-cols">
+        <div class="packing-col">
+          <div class="pack-cat"><h4>證件與金錢</h4>
+            <label class="pack-item"><input type="checkbox" data-pack="passport">護照</label>
+            <label class="pack-item"><input type="checkbox" data-pack="evisa">E-Visa</label>
+            <label class="pack-item"><input type="checkbox" data-pack="cash">VND 現金</label>
+            <label class="pack-item"><input type="checkbox" data-pack="card">Visa / MC</label>
+            <label class="pack-item"><input type="checkbox" data-pack="insurance">旅遊保險</label>
+            <label class="pack-item"><input type="checkbox" data-pack="airbnb">Airbnb</label>
+            <label class="pack-item"><input type="checkbox" data-pack="flight">機票</label>
+          </div>
+          <div class="pack-cat"><h4>衣物</h4>
+            <label class="pack-item"><input type="checkbox" data-pack="summer">夏裝</label>
+            <label class="pack-item"><input type="checkbox" data-pack="jacket">薄外套</label>
+            <label class="pack-item"><input type="checkbox" data-pack="swim">泳裝</label>
+            <label class="pack-item"><input type="checkbox" data-pack="shoes">行山鞋</label>
+            <label class="pack-item"><input type="checkbox" data-pack="sandals">拖鞋</label>
+            <label class="pack-item"><input type="checkbox" data-pack="pants">寺廟長褲</label>
+            <label class="pack-item"><input type="checkbox" data-pack="hat">帽子</label>
+          </div>
+        </div>
+        <div class="packing-col">
+          <div class="pack-cat"><h4>電子用品</h4>
+            <label class="pack-item"><input type="checkbox" data-pack="charger">充電器</label>
+            <label class="pack-item"><input type="checkbox" data-pack="adapter">轉換器</label>
+            <label class="pack-item"><input type="checkbox" data-pack="powerbank">行動電源</label>
+            <label class="pack-item"><input type="checkbox" data-pack="camera">相機</label>
+            <label class="pack-item"><input type="checkbox" data-pack="waterbag">防水袋</label>
+          </div>
+          <div class="pack-cat"><h4>日常用品</h4>
+            <label class="pack-item"><input type="checkbox" data-pack="sunscreen">防曬</label>
+            <label class="pack-item"><input type="checkbox" data-pack="bugspray">防蚊液</label>
+            <label class="pack-item"><input type="checkbox" data-pack="meds">藥品</label>
+            <label class="pack-item"><input type="checkbox" data-pack="umbrella">雨傘</label>
+            <label class="pack-item"><input type="checkbox" data-pack="wipes">濕紙巾</label>
+            <label class="pack-item"><input type="checkbox" data-pack="neckpillow">頸枕</label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="fold-emergency">
+    <div class="section-header" onclick="toggleFold('fold-emergency')"><div><h3>緊急資訊<span class="sub">重要電話</span></h3></div><span class="section-chevron"></span></div>
+    <div class="section-body">
+      <div class="emergency-grid">
+        <div class="em-item"><h4>香港駐曼谷經貿辦</h4><p>領事熱線（24小時）</p><span class="em-num">+852 1868</span></div>
+        <div class="em-item"><h4>越南緊急</h4><p>報警 · 救火 · 救護</p><span class="em-num">113 / 114 / 115</span></div>
+        <div class="em-item"><h4>Family Hospital</h4><p>291-293 Nguyen Van Linh</p><span class="em-num">0236 3565 800</span></div>
+        <div class="em-item"><h4>Airbnb</h4><p>待確認</p><span class="em-num" style="font-size:12px;color:var(--text-muted)">出發前更新</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section" id="fold-ref">
+    <div class="section-header" onclick="toggleFold('fold-ref')"><div><h3>快速參考<span class="sub">匯率 / 溫差</span></h3></div><span class="section-chevron"></span></div>
+    <div class="section-body">
+      <div class="qr-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
+      <div class="qr-item"><span>時差</span><span>慢1小時（UTC+7）</span></div>
+      <div class="qr-item"><span>8月均溫</span><span>25-35°C</span></div>
+      <div class="qr-item"><span>Grab 市區</span><span>30K-50K VND</span></div>
+      <div class="qr-item"><span>7人車</span><span>200K-350K VND</span></div>
+    </div>
+  </div>
+
+  <div class="section" id="fold-evisa">
+    <div class="section-header" onclick="toggleFold('fold-evisa')"><div><h3>電子簽證<span class="sub">E-Visa 指南</span></h3></div><span class="section-chevron"></span></div>
+    <div class="section-body">
+      <div class="visa-alert">建議出發前至少 <strong>7-10個工作日</strong> 申請。</div>
+      <div class="visa-row"><span>申請網址</span><span><a href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank">evisa.xuatnhapcanh.gov.vn</a></span></div>
+      <div class="visa-row"><span>費用</span><span>USD $25 / 5人共 $125</span></div>
+      <div class="visa-row"><span>處理時間</span><span>3-5 工作日</span></div>
+      <div class="visa-row"><span>所需文件</span><span>護照掃描件、白底證件相</span></div>
+    </div>
+  </div>
+
+  <div class="section" id="fold-budget">
+    <div class="section-header" onclick="toggleFold('fold-budget')"><div><h3>預算估算<span class="sub">每人，HKD</span></h3></div><span class="section-chevron"></span></div>
+    <div class="section-body">
+      <table class="budget-table">
+        <thead><tr><th>項目</th><th>說明</th><th>每人</th></tr></thead>
+        <tbody>
+          <tr><td>機票</td><td>HK Express</td><td>~$2,120</td></tr>
+          <tr><td>Airbnb</td><td>5晚</td><td>$700-1,100</td></tr>
+          <tr><td>餐飲</td><td>6天</td><td>$500-700</td></tr>
+          <tr><td>交通</td><td>Grab / 包車</td><td>$160-240</td></tr>
+          <tr><td>門票</td><td>巴拿山+會安</td><td>$300-400</td></tr>
+          <tr><td>簽證</td><td>E-Visa</td><td>~$195</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="2">合計（不含機票）</td><td>~$1,855-2,635</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="section" id="fold-tips">
+    <div class="section-header" onclick="toggleFold('fold-tips')"><div><h3>行前準備<span class="sub">實用資訊</span></h3></div><span class="section-chevron"></span></div>
+    <div class="section-body">
+      <div class="tips-grid">
+        <div class="tip-item"><h4>必備 App</h4><p>Grab · Google Translate · Maps</p></div>
+        <div class="tip-item"><h4>支付方式</h4><p>餐廳收 Visa/MC，路邊攤現金</p></div>
+        <div class="tip-item"><h4>8月天氣</h4><p>25-35°C · 防曬 SPF50+</p></div>
+        <div class="tip-item"><h4>注意事項</h4><p>寺廟長褲 · 瓶裝水 · Grab 安全</p></div>
+        <div class="tip-item"><h4>語言</h4><p>越南語 · Google Translate</p></div>
+        <div class="tip-item"><h4>插頭</h4><p>Type A/C · 萬用插頭</p></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer"><span>Liao Family · August 2026</span><span>Da Nang, Vietnam 🇻🇳</span></div>
+
+<div class="gm-modal" id="gmModal" onclick="if(event.target===this)closeMap()">
+  <div class="gm-box"><div class="gm-header"><span id="gmTitle"></span><button class="gm-close" onclick="closeMap()">×</button></div>
+    <div class="gm-body"><iframe id="gmFrame" src="" loading="lazy"></iframe></div>
+    <div class="gm-actions"><a id="gmDirLink" href="" target="_blank">Google Maps 導航</a><a href="#" onclick="closeMap();return false">關閉</a></div>
+  </div>
+</div>
+
+<div class="pi-modal" id="piModal" onclick="if(event.target===this)closePlaceInfo()">
+  <div class="pi-box">
+    <div class="pi-hero" id="piHero"><button class="pi-close-btn" onclick="closePlaceInfo()">×</button><div class="pi-hero-title"><h2 id="piTitle"></h2><div class="en" id="piTitleEn"></div></div></div>
+    <div class="pi-body"><div class="pi-type-badge" id="piTypeBadge"></div><div class="pi-desc" id="piDesc"></div><div class="pi-meta-grid" id="piMetaGrid"></div></div>
+    <div class="pi-gallery" id="piGallery"></div>
+    <div class="pi-actions"><a id="piGmapsLink" href="" target="_blank" class="primary">Google Maps</a><a id="piDirLink" href="" target="_blank">導航</a><a id="piStreetView" href="" target="_blank">街景</a></div>
+  </div>
+</div>
+
+<script>
+
+/* ═══ Day switch with map filter ═══ */
+var currentDay = 1;
+window.switchDay = function(n){
+  currentDay = n;
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.day-tab').forEach(function(t){t.classList.remove('active');});
+  document.getElementById('panel'+n).classList.add('active');
+  document.querySelectorAll('.day-tab')[n-1].classList.add('active');
+  filterMarkers(n);
+};
+
+/* ═══ Dark mode toggle ═══ */
+window.toggleDark = function(){
+  document.documentElement.classList.toggle('dark');
+  localStorage.setItem('danang-dark', document.documentElement.classList.contains('dark')?'1':'0');
+};
+(function(){
+  if(localStorage.getItem('danang-dark')==='1') document.documentElement.classList.add('dark');
+})();
+
+/* ═══ Foldable sections ═══ */
+window.toggleFold = function(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.classList.toggle('open');
+  // Save state
+  localStorage.setItem('danang-fold-'+id, el.classList.contains('open')?'1':'0');
+};
+// Restore fold state on load
+(function(){
+  ['fold-packing','fold-emergency','fold-ref','fold-evisa','fold-budget','fold-tips'].forEach(function(id){
+    var state = localStorage.getItem('danang-fold-'+id);
+    if(state==='1') document.getElementById(id).classList.add('open');
+  });
+})();
+
+/* ═══ Packing checklist: checkboxes with localStorage ═══ */
+(function(){
+  var STORAGE_KEY = 'danang-pack';
+  var checked = {};
+  try { var saved = localStorage.getItem(STORAGE_KEY); if(saved) checked = JSON.parse(saved); } catch(e){}
+
+  // Restore checked state
+  document.querySelectorAll('.pack-item input[type="checkbox"]').forEach(function(cb){
+    var key = cb.getAttribute('data-pack');
+    if(checked[key]){ cb.checked = true; cb.closest('.pack-item').classList.add('checked'); }
+    cb.addEventListener('change', function(){
+      checked[this.getAttribute('data-pack')] = this.checked;
+      this.closest('.pack-item').classList.toggle('checked', this.checked);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(checked));
+      updatePackProgress();
+    });
+  });
+
+  function updatePackProgress(){
+    var all = document.querySelectorAll('.pack-item input[type="checkbox"]');
+    var done = 0;
+    all.forEach(function(cb){ if(cb.checked) done++; });
+    var total = all.length;
+    var pct = total > 0 ? Math.round((done/total)*100) : 0;
+    var countEl = document.getElementById('packCount');
+    var barEl = document.getElementById('packBarFill');
+    if(countEl) countEl.textContent = done + '/' + total;
+    if(barEl) barEl.style.width = pct + '%';
+  }
+  updatePackProgress();
+})();
+
+/* ═══ Google Maps Modal ═══ */
+window.openMap = function(lat,lng,title){
+  var modal = document.getElementById('gmModal');
+  document.getElementById('gmTitle').textContent = title;
+  document.getElementById('gmFrame').src = 'https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1000!2d'+lng+'!3d'+lat+'!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2s!4v1';
+  document.getElementById('gmDirLink').href = 'https://www.google.com/maps/dir/?api=1&destination='+lat+','+lng+'&travelmode=driving';
+  modal.classList.add('show');
+};
+window.closeMap = function(){
+  document.getElementById('gmModal').classList.remove('show');
+  document.getElementById('gmFrame').src = '';
+};
+
+/* ═══ Place Info Modal ═══ */
+window.openPlaceInfo = function(idx){
+  var p = spots[idx];
+  if(!p) return;
+  document.getElementById('piHero').style.backgroundImage = "url('"+p.photos[0]+"')";
+  document.getElementById('piTitle').textContent = p.title;
+  document.getElementById('piTitleEn').textContent = p.titleEn;
+  document.getElementById('piTypeBadge').textContent = p.typeLabel;
+  document.getElementById('piDesc').textContent = p.desc;
+  // Meta grid
+  var meta = document.getElementById('piMetaGrid');
+  meta.innerHTML = '';
+  if(p.tips){meta.innerHTML+='<div class="pi-meta-item"><div class="label">遊覽建議</div><div class="value">'+p.tips+'</div></div>';}
+  if(p.duration){meta.innerHTML+='<div class="pi-meta-item"><div class="label">建議時間</div><div class="value">'+p.duration+'</div></div>';}
+  if(p.ticket){meta.innerHTML+='<div class="pi-meta-item"><div class="label">門票</div><div class="value">'+p.ticket+'</div></div>';}
+  if(p.bestTime){meta.innerHTML+='<div class="pi-meta-item"><div class="label">最佳時段</div><div class="value">'+p.bestTime+'</div></div>';}
+  // Gallery
+  var gal = document.getElementById('piGallery');
+  gal.innerHTML = '';
+  p.photos.forEach(function(url){
+    gal.innerHTML += '<img src="'+url+'" loading="lazy" alt="'+p.titleEn+'" onerror="this.style.display=\\x27none\\x27">';
+  });
+  // Links
+  document.getElementById('piGmapsLink').href = 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery);
+  document.getElementById('piStreetView').href = 'https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lng;
+  document.getElementById('piDirLink').href = 'https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'&travelmode=driving';
+  document.getElementById('piModal').classList.add('show');
+};
+window.closePlaceInfo = function(){
+  document.getElementById('piModal').classList.remove('show');
+};
+
+/* ═══ SVG Silhouette Icons ═══ */
+var iconSVGs = {
+  airport: '<path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>',
+  beach: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>',
+  bridge: '<path d="M1 11v3h3v7h14v-7h3v-3L12 1 1 11zm3 0l8-7.2V14h-1V8.5l-2 1.86V14H8V6.71L4 10.29V14h1v-3H3zm4 6h4v3H8v-3z"/>',
+  mountain: '<path d="M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z"/>',
+  oldtown: '<path d="M15 11V5l-3-3L9 5v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/>',
+  boat: '<path d="M20 21c-1.39 0-2.78-.47-4-1.32-2.44 1.71-5.56 1.71-8 0C6.78 20.53 5.39 21 4 21H2v2h2c1.38 0 2.74-.34 3.98-1.03 1.26.71 2.7.97 4.02.97 1.32 0 2.76-.26 4.02-.97C17.26 20.66 18.62 21 20 21h2v-2h-2zM3.95 19H4c1.6 0 3.02-.88 4-2 .98 1.12 2.4 2 4 2s3.02-.88 4-2c.98 1.12 2.4 2 4 2h.05l1.89-6.68c.08-.26.06-.54-.06-.78s-.34-.42-.6-.5L20 10.62V6c0-1.1-.9-2-2-2h-3V1H9v3H6c-1.1 0-2 .9-2 2v4.62l-1.29.42c-.26.08-.48.26-.6.5s-.14.52-.05.78L3.95 19zM6 6h12v3.97L12 8 6 9.97V6z"/>',
+  temple: '<path d="M11.25 11.75L12 12l.75-.25 1.74-2.53.62.9-2.86 3.21-.5.27-.5-.27-2.86-3.21.62-.9 1.74 2.53zM12 2L8 6v2H6v2H4v2H2v2h20v-2h-2v-2h-2V6h-2V2zm-1 4h2v1h-2V6z M3 14h18v2H3v-2zm-1 4v2h20v-2H2z"/>',
+  museum: '<path d="M9 2v2H6l-4 4v2h1v7h1v-7h1v7h1v-7h1v7h1v-7h1v7h1v-7h1v7h1v-7h1v-2l-4-4h-3V2zm6 3h-2V3h2v2zm-5 0H8V3h2v2z"/>',
+  market: '<path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/>',
+  hotel: '<path d="M7 13c1.66 0 3-1.34 3-3S8.66 7 7 7s-3 1.34-3 3 1.34 3 3 3zm12-6h-8v7H3V5H1v15h2v-3h18v3h2v-9c0-2.21-1.79-4-4-4z"/>'
+};
+
+var typeLabels = {
+  airport: '機場 · Airport',
+  beach: '海灘 · Beach',
+  bridge: '橋樑 · Bridge',
+  mountain: '山峰 · Mountain',
+  oldtown: '古鎮 · Old Town',
+  boat: '水上體驗 · Boat',
+  temple: '寺廟 · Temple',
+  museum: '博物館 · Museum',
+  market: '市場 · Market',
+  hotel: '住宿 · Hotel'
+};
+
+function mkIcon(color, type){
+  var iconPath = iconSVGs[type] || iconSVGs.mountain;
+  var s = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="42" viewBox="0 0 30 42">'+
+    '<path d="M15 0C6.72 0 0 6.72 0 15c0 11.25 15 27 15 27s15-15.75 15-27C30 6.72 23.28 0 15 0z" fill="'+color+'" stroke="#fff" stroke-width="1.5"/>'+
+    '<g transform="translate(6,10) scale(0.72)" fill="#ffffff">'+iconPath+'</g>'+
+    '</svg>';
+  return L.divIcon({html:s, className:'', iconSize:[30,42], iconAnchor:[15,42]});
+}
+
+/* ═══ Spot data (enriched with descriptions, tips, photos, corrected coords) ═══ */
+var spots = [
+  {
+    lat:16.0439, lng:108.2002,
+    title:'峴港機場', titleEn:'Da Nang International Airport',
+    day:1, type:'airport',
+    typeLabel:'機場 · Airport',
+    desc:'峴港國際機場（DAD）是越南第三大國際機場，距離市區僅3公里。機場設施現代，入境大廳有貨幣兌換、SIM卡櫃檯和咖啡店。過關通常需20-30分鐘。',
+    tips:'機場出口有Grab候車區，也可預先安排接機',
+    duration:'過關約30分鐘',
+    ticket:'免費',
+    bestTime:'早上航班較少',
+    photos:[
+      'https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=70',
+      'https://images.pexels.com/photos/8281056/pexels-photo-8281056.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/19940389/pexels-photo-19940389.jpeg?auto=compress&cs=tinysrgb&w=600',    ],
+    gmapsQuery:'Da Nang International Airport'
+  },
+  {
+    lat:16.0700, lng:108.2461,
+    title:'美溪海灘', titleEn:'My Khe Beach',
+    day:1, type:'beach',
+    typeLabel:'海灘 · Beach',
+    desc:'被福布斯評為全球最美海灘之一，沙質細膩，海水清澈。全長約10公里，沿線有众多海鮮餐廳和咖啡館。清晨和傍晚是最佳時段，陽光柔和、適合拍照。',
+    tips:'清晨散步或傍晚看日落最佳，夏季水溫舒適可游泳',
+    duration:'1-2小時',
+    ticket:'免費',
+    bestTime:'清晨或傍晚',
+    photos:[
+      'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=70',
+      'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=600&q=70',
+      'https://images.pexels.com/photos/31509800/pexels-photo-31509800.jpeg?auto=compress&cs=tinysrgb&w=600'
+    ],
+    gmapsQuery:'My Khe Beach Da Nang'
+  },
+  {
+    lat:16.0611, lng:108.2272,
+    title:'龍橋', titleEn:'Dragon Bridge (Cầu Rồng)',
+    day:1, type:'bridge',
+    typeLabel:'橋樑 · Bridge',
+    desc:'峴港地標，全長666米，橋身呈金色巨龍造型，橫跨漢江。每週六、日晚9點噴火表演，龍口噴出火焰和煙霧，持續約5分鐘。是峴港最具代表性的現代建築之一。',
+    tips:'噴火表演週六日 21:00，建議提前15分鐘到達占位',
+    duration:'30分鐘（噴火表演5分鐘）',
+    ticket:'免費',
+    bestTime:'週六日 20:45 開始等候',
+    photos:[
+      'https://images.unsplash.com/photo-1571713343936-b27b7bedddab?w=600&q=70',
+      'https://images.unsplash.com/photo-1603054561323-09f79d5df183?w=600&q=70',
+      'https://images.unsplash.com/photo-1732827503735-511f7ccd187e?w=600&q=70',    ],
+    gmapsQuery:'Dragon Bridge Da Nang'
+  },
+  {
+    lat:16.0580, lng:108.2400,
+    title:'住宿區域', titleEn:'Hotel / Airbnb Area',
+    day:1, type:'hotel',
+    typeLabel:'住宿 · Hotel',
+    desc:'Airbnb 住宿區域，位於美溪海灘附近。周邊有便利店、餐廳和咖啡館，步行可到海灘。',
+    tips:'入住後熟悉周邊環境，確認便利店和藥局位置',
+    duration:'全日休息點',
+    ticket:'已預訂',
+    bestTime:'下午抵達辦理入住',
+    photos:[
+      'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=70',
+      'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&q=70'
+    ],
+    gmapsQuery:'My Khe Beach Da Nang hotel'
+  },
+  {
+    lat:15.9949, lng:107.9963,
+    title:'巴拿山黃金橋', titleEn:'Golden Bridge, Ba Na Hills',
+    day:2, type:'mountain',
+    typeLabel:'山峰 · Mountain',
+    desc:'海拔1,400米的法式山頂度假勝地，世界最長纜車之一（全長近6公里，單程約20分鐘）。黃金橋（Cầu Vàng）由巨型佛手托起，全長150米，2018年開放後迅速成為越南最具代表性的打卡景點。山上還有法式小鎮、花園、遊樂園和靈應寺。',
+    tips:'早到避開人潮，山上氣溫比市區低5-10°C，帶薄外套',
+    duration:'全日（6-7小時）',
+    ticket:'纜車+門票約 750K VND/人',
+    bestTime:'早上8點前到達纜車站',
+    photos:[
+      'https://images.unsplash.com/photo-1741138327956-dfa75763b50d?w=600&q=70',
+      'https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=600&q=70',
+      'https://images.unsplash.com/photo-1559592413-dd0f4104dcfe?w=600&q=70'
+    ],
+    gmapsQuery:'Golden Bridge Ba Na Hills Da Nang'
+  },
+  {
+    lat:15.8833, lng:108.3333,
+    title:'會安古鎮', titleEn:'Hoi An Ancient Town',
+    day:3, type:'oldtown',
+    typeLabel:'古鎮 · Old Town',
+    desc:'UNESCO世界文化遺產，保存完好的15-19世紀東南亞貿易港古鎮。日本廊橋（來遠橋）、譚家老宅、福建會館等歷史建築錯落有致。夜晚的秋蓬河畔燈籠點點，是越南最具浪漫氣息的場景之一。',
+    tips:'買套票（150K VND）可參觀5個古蹟，傍晚回到古鎮看燈籠夜景',
+    duration:'3-4小時（下午）+ 晚上2小時',
+    ticket:'古鎮套票 150K VND',
+    bestTime:'下午4點後，燈光最美',
+    photos:[
+      'https://images.pexels.com/photos/7743660/pexels-photo-7743660.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/16194722/pexels-photo-16194722.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.unsplash.com/photo-1761150285206-dcae08659129?w=600&q=70'
+    ],
+    gmapsQuery:'Hoi An Ancient Town UNESCO'
+  },
+  {
+    lat:15.8731, lng:108.3749,
+    title:'椰林竹籃船', titleEn:'Cam Thanh Coconut Basket Boat',
+    day:3, type:'boat',
+    typeLabel:'水上體驗 · Boat',
+    desc:'Cam Thanh椰子村的水上體驗，搭乘圓形竹籃船穿梭在茂密的椰子林中。船夫會表演旋轉竹籃船的技巧，遊客也可嘗試划船。沿途可見漁村生活和紅樹林生態。',
+    tips:'會暈船的長者量力而為，船夫旋轉表演時抓紧船邊',
+    duration:'約1小時',
+    ticket:'約 150K-200K VND/人',
+    bestTime:'下午3-5點，陽光不烈',
+    photos:[
+      'https://images.unsplash.com/photo-1687343425600-180dcc6506d1?w=600&q=70',
+      'https://images.unsplash.com/photo-1562852223-4876db657248?w=600&q=70',
+      'https://images.unsplash.com/photo-1677854682819-d50f76e78bc0?w=600&q=70',    ],
+    gmapsQuery:'Cam Thanh coconut basket boat Hoi An'
+  },
+  {
+    lat:16.0035, lng:108.2646,
+    title:'五行山', titleEn:'Marble Mountains (Ngu Hanh Son)',
+    day:4, type:'mountain',
+    typeLabel:'山峰 · Mountain',
+    desc:'五座石灰岩山峰（金、木、水、火、土），以水山最為著名。山上有天然洞穴、佛教寺廟和觀景台。從山頂可以俯瞰美溪海灘和峴港全景。入口處的華嚴洞和非龍洞是最大的兩個洞穴。',
+    tips:'穿著舒適防滑鞋，洞穴內光線暗需小心，可乘電梯上山（15K VND）',
+    duration:'2-3小時',
+    ticket:'門票 40K VND + 電梯 15K VND',
+    bestTime:'早上8點，涼爽人少',
+    photos:[
+      'https://images.unsplash.com/photo-1498747468843-5ec2ad31cb89?w=600&q=70',
+      'https://images.unsplash.com/photo-1551696574-bf6016b8810f?w=600&q=70',
+      'https://images.pexels.com/photos/20637296/pexels-photo-20637296.jpeg?auto=compress&cs=tinysrgb&w=600',    ],
+    gmapsQuery:'Marble Mountains Da Nang'
+  },
+  {
+    lat:16.1008, lng:108.2711,
+    title:'靈應寺（山茶半島）', titleEn:'Linh Ung Pagoda, Son Tra Peninsula',
+    day:4, type:'temple',
+    typeLabel:'寺廟 · Temple',
+    desc:'山茶半島上的靈應寺，擁有67米高的觀音菩薩像（越南最高），面向南海，背靠山林。寺廟占地20公頃，建築宏偉，融合了現代與傳統越南寺廟風格。觀音像內有17層，每層供奉21尊不同形態的佛像。',
+    tips:'穿著端莊（長褲/長裙），寺廟免費參觀',
+    duration:'1-1.5小時',
+    ticket:'免費',
+    bestTime:'上午或下午',
+    photos:[
+      'https://images.unsplash.com/photo-1766345524005-8fa63ebfc703?w=600&q=70',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Lady_Buddha_Statue_at_Linh_Ung_Pagoda.jpg/960px-Lady_Buddha_Statue_at_Linh_Ung_Pagoda.jpg',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Guanyin_statue_in_Da_Nang.jpg/960px-Guanyin_statue_in_Da_Nang.jpg'
+    ],
+    gmapsQuery:'Linh Ung Pagoda Son Tra Da Nang Lady Buddha'
+  },
+  {
+    lat:16.0599, lng:108.2226,
+    title:'佔族雕塑博物館', titleEn:'Museum of Cham Sculpture',
+    day:5, type:'museum',
+    typeLabel:'博物館 · Museum',
+    desc:'全球最大的佔族藝術收藏館，位於漢河畔。館內收藏了3-15世紀佔婆王國的精美石雕，包括神像、祭壇和裝飾浮雕。建築本身是法式殖民風格，建於1915年。',
+    tips:'館內有英文說明牌，建議停留1-1.5小時',
+    duration:'1-1.5小時',
+    ticket:'門票約 40K VND',
+    bestTime:'上午9:30開館後',
+    photos:[
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Nandi%2C_view_1%2C_Tra_Kieu%2C_7th-8th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01871.JPG/960px-Nandi%2C_view_1%2C_Tra_Kieu%2C_7th-8th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01871.JPG',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Gaja_Lakshmi_typanum%2C_Dong_Duang%2C_late_9th_to_early_10th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01807.JPG/960px-Gaja_Lakshmi_typanum%2C_Dong_Duang%2C_late_9th_to_early_10th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01807.JPG',
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Nandi%2C_view_1%2C_Tra_Kieu%2C_7th-8th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01871.JPG/960px-Nandi%2C_view_1%2C_Tra_Kieu%2C_7th-8th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01871.JPG'
+    ],
+    gmapsQuery:'Museum of Cham Sculpture Da Nang'
+  },
+  {
+    lat:16.0677, lng:108.2225,
+    title:'漢市場', titleEn:'Han Market (Cho Han)',
+    day:5, type:'market',
+    typeLabel:'市場 · Market',
+    desc:'峴港歷史最悠久的傳統市場，位於市中心漢河西岸。四面臨街（Hung Vuong、Tran Phu、Tran Hung Dao、Bach Dang），分為上下兩層。上層賣服裝、紀念品和手工藝品，下層是生鮮食品。是購買越南咖啡、特產和紀念品的好去處。',
+    tips:'記得議價，現金付款為主，注意隨身物品',
+    duration:'1-2小時',
+    ticket:'免費入場',
+    bestTime:'上午，貨品較齊全',
+    photos:[
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Fabric_in_Han_Market_-_Da_Nang%2C_Vietnam_-_DSC02377.JPG/960px-Fabric_in_Han_Market_-_Da_Nang%2C_Vietnam_-_DSC02377.JPG',
+      'https://images.pexels.com/photos/17302468/pexels-photo-17302468.jpeg?auto=compress&cs=tinysrgb&w=600',
+      'https://images.pexels.com/photos/27246756/pexels-photo-27246756.jpeg?auto=compress&cs=tinysrgb&w=600',    ],
+    gmapsQuery:'Han Market Cho Han Da Nang'
+  }
+];
+
+/* ═══ Leaflet Map ═══ */
+var allMarkers = [];
+var map;
+(function(){
+  function init(){
+    if(typeof L==='undefined'){setTimeout(init,100);return;}
+    map = L.map('map',{center:[16.0544,108.2022],zoom:11});
+    var fb = document.getElementById('map-fallback');
+    if(fb)fb.style.display='none';
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:18}).addTo(map);
+    var c={1:'#1c1917',2:'#0369a1',3:'#d97706',4:'#dc2626',5:'#7c3aed'};
+
+    spots.forEach(function(p, idx){
+      var icon = mkIcon(c[p.day], p.type);
+      var m = L.marker([p.lat,p.lng],{icon:icon}).addTo(map);
+      m.on('click', function(){ openPlaceInfo(idx); });      m._day = p.day;
+      m._idx = idx;
+      allMarkers.push(m);
+    });
+
+    // Build legend icons
+    buildLegend();
+    filterMarkers(1);
+  }
+
+  function buildLegend(){
+    var el = document.getElementById('legendIcons');
+    var items = [
+      {type:'airport',label:'機場'},
+      {type:'beach',label:'海灘'},
+      {type:'bridge',label:'橋樑'},
+      {type:'mountain',label:'山峰'},
+      {type:'oldtown',label:'古鎮'},
+      {type:'boat',label:'水上'},
+      {type:'temple',label:'寺廟'},
+      {type:'museum',label:'博物館'},
+      {type:'market',label:'市場'},
+      {type:'hotel',label:'住宿'}
+    ];
+    items.forEach(function(item){
+      var svg = '<svg width="16" height="16" viewBox="0 0 24 24" style="flex-shrink:0"><g fill="'+('#0369a1')+'">'+iconSVGs[item.type]+'</g></svg>';
+      el.innerHTML += '<div class="leg-icon-row">'+svg+item.label+'</div>';
+    });
+  }
+
+  if(document.readyState==='complete')init(); else window.addEventListener('load',init);
+})();
+
+function filterMarkers(day){
+  var fitBounds = [];
+  allMarkers.forEach(function(m){
+    if(m._day===day){
+      m.setOpacity(1);
+      fitBounds.push(m.getLatLng());
+    } else {
+      m.setOpacity(0.3);
+    }
+  });
+  document.querySelectorAll('.leg-dot').forEach(function(dot){
+    var d = parseInt(dot.getAttribute('data-legend'));
+    dot.classList.toggle('dim', d!==day);
+  });
+  if(map && fitBounds.length > 0){
+    map.fitBounds(L.latLngBounds(fitBounds).pad(0.3), {maxZoom: 14, animate: true});
+  }
+}
+
+/* ═══ Keyboard: Escape to close modals ═══ */
+document.addEventListener('keydown', function(e){
+  if(e.key==='Escape'){ closeMap(); closePlaceInfo(); }
+});
+
+</script>
+</body>
+</html>
