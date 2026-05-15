@@ -67,6 +67,7 @@ a{color:var(--gold)}
 .story-header .meta{color:var(--text-secondary);font-size:14px}
 .story-header .summary{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--text-muted)}
 .story-header .summary .tag{padding:3px 8px;border-radius:4px;background:var(--surface2);font-weight:500}
+.day-number{font-family:var(--font-serif);font-size:48px;font-weight:700;color:var(--gold);line-height:1;margin-bottom:4px;opacity:0.25}
 
 .story-timeline{position:relative;padding-left:28px}
 .story-timeline::before{content:'';position:absolute;left:10px;top:0;bottom:0;width:2px;background:var(--surface3);border-radius:1px}
@@ -158,6 +159,9 @@ a{color:var(--gold)}
 .pull-quote{margin:32px 0;padding:24px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);font-family:var(--font-serif);font-size:18px;font-style:italic;line-height:1.6;color:var(--text-secondary);text-align:center}
 
 .footer{max-width:1200px;margin:0 auto;padding:20px 16px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:12px;color:var(--text-muted)}
+.top-btn{position:fixed;bottom:20px;right:20px;width:40px;height:40px;border-radius:50%;border:none;background:var(--gold);color:#fff;font-size:18px;cursor:pointer;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:all 0.3s;z-index:100}
+.top-btn.show{opacity:1;pointer-events:auto}
+@media(min-width:900px){.top-btn{display:none}}
 
 .gm-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
 .gm-modal.show{display:flex}
@@ -173,6 +177,7 @@ a{color:var(--gold)}
 .pi-modal.show{display:flex}
 .pi-box{background:var(--surface);border-radius:var(--radius) var(--radius) 0 0;max-width:480px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-lg)}
 @media(min-width:600px){.pi-modal{align-items:center}.pi-box{border-radius:var(--radius)}}
+@media(max-width:899px){.pi-box{max-height:calc(100vh - 100px - env(safe-area-inset-bottom))}}
 .pi-hero{height:130px;background-size:cover;background-position:center;position:relative}
 .pi-close-btn{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:4px;border:none;background:rgba(0,0,0,0.5);color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .pi-hero-title{position:absolute;bottom:0;left:0;right:0;padding:12px;background:linear-gradient(transparent,rgba(0,0,0,0.7))}
@@ -196,6 +201,7 @@ a{color:var(--gold)}
 .map-col{position:relative}
 .map-label{display:flex;align-items:center;gap:8px;padding:12px 16px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border)}
 .map-label::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.map-label .day-indicator{color:var(--gold);font-weight:700}
 .map-filter{display:flex;gap:4px;padding:10px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
 .map-fbtn{padding:4px 10px;border-radius:4px;border:1px solid var(--border);background:var(--surface);color:var(--text-secondary);font-size:11px;cursor:pointer;transition:all 0.15s;font-weight:500}
 .map-fbtn:hover{background:var(--surface2)}
@@ -231,6 +237,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
   .hero{padding:32px 16px 24px}
   .flight-bar{padding:8px 16px}
 }
+@media(min-width:900px) and (max-width:1200px){.hero::after{font-size:clamp(60px,12vw,100px);right:10px}}
 </style>
 </head><body>
 
@@ -251,11 +258,11 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
 <div class="flight-bar">
   <div><span class="fc">UO552</span><span class="sep">08:25 香港→峴港</span></div>
   <div><span class="fc">UO553</span><span class="sep">10:05 峴港→香港</span></div>
-  <button class="theme-btn" onclick="toggleTheme()" aria-label="切換主題">🌗</button>
+  <button class="theme-btn" onclick="toggleTheme()" aria-label="切換主題" aria-pressed="false">🌗</button>
 </div>
 
-<nav class="day-nav"><div class="day-nav-inner">
-  <div class="day-tab active" onclick="switchDay(1)"><span class="dot"></span>Day 1 抵達</div>
+<nav class="day-nav" role="tablist" aria-label="行程日曆"><div class="day-nav-inner">
+  <div class="day-tab active" id="day-tab-1" onclick="switchDay(1)" role="tab" aria-selected="true" aria-controls="panel1" tabindex="0"><span class="dot"></span>Day 1 抵達</div>
   <div class="day-tab" onclick="switchDay(2)"><span class="dot"></span>Day 2 巴拿山</div>
   <div class="day-tab" onclick="switchDay(3)"><span class="dot"></span>Day 3 會安</div>
   <div class="day-tab" onclick="switchDay(4)"><span class="dot"></span>Day 4 五行山</div>
@@ -265,7 +272,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
 
 <div class="main">
   <div class="itinerary-col">
-<div class="panel active" id="panel1" data-day="1">
+<div class="panel active" id="panel1" data-day="1" role="tabpanel" aria-labelledby="day-tab-1">
     <div class="story-header"><div class="day-number">01</div>
       <h2>抵達 · 輕鬆適應</h2>
       <div class="meta">8月11日，週二<em>TUE</em></div>
@@ -284,7 +291,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
     </div>
   </div>
 
-  <div class="panel" id="panel2" data-day="2">
+  <div class="panel" id="panel2" data-day="2" role="tabpanel" aria-labelledby="day-tab-2">
     <div class="story-header"><div class="day-number">02</div><h2>巴拿山 · 黃金橋</h2><div class="meta">8月12日，週三<em>WED</em></div>
       <div class="summary"><span>步數 ~12,000</span><span class="sep">·</span><span>行車 ~90 min</span><span class="sep">·</span><span>節奏：中等</span></div>
     </div>
@@ -302,7 +309,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
     </div>
   </div>
 
-  <div class="panel" id="panel3" data-day="3">
+  <div class="panel" id="panel3" data-day="3" role="tabpanel" aria-labelledby="day-tab-3">
     <div class="story-header"><div class="day-number">03</div><h2>會安古鎮 · 燈籠之夜</h2><div class="meta">8月13日，週四<em>THU</em></div>
       <div class="summary"><span>步數 ~10,000</span><span class="sep">·</span><span>行車 ~80 min</span><span class="sep">·</span><span>節奏：輕鬆-中等</span></div>
     </div>
@@ -317,7 +324,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
     </div>
   </div>
 
-  <div class="panel" id="panel4" data-day="4">
+  <div class="panel" id="panel4" data-day="4" role="tabpanel" aria-labelledby="day-tab-4">
     <div class="story-header"><div class="day-number">04</div><h2>五行山 · 山茶半島</h2><div class="meta">8月14日，週五<em>FRI</em></div>
       <div class="summary"><span>步數 ~9,000</span><span class="sep">·</span><span>行車 ~60 min</span><span class="sep">·</span><span>輕度登山</span><span class="sep">·</span><span>節奏：中等</span></div>
     </div>
@@ -332,7 +339,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
     </div>
   </div>
 
-  <div class="panel" id="panel5" data-day="5">
+  <div class="panel" id="panel5" data-day="5" role="tabpanel" aria-labelledby="day-tab-5">
     <div class="story-header"><div class="day-number">05</div><h2>自由探索 · 龍橋噴火</h2><div class="meta">8月15日，週六<em>SAT</em></div>
       <div class="summary"><span>步數 ~8,000</span><span class="sep">·</span><span>行車 ~20 min</span><span class="sep">·</span><span>節奏：輕鬆</span></div>
     </div>
@@ -346,7 +353,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
     </div>
   </div>
 
-  <div class="panel" id="panel6" data-day="6">
+  <div class="panel" id="panel6" data-day="6" role="tabpanel" aria-labelledby="day-tab-6">
     <div class="story-header"><div class="day-number">06</div><h2>返程</h2><div class="meta">8月16日，週日<em>SUN</em></div>
       <div class="summary"><span>航班 UO553</span><span class="sep">·</span><span>07:00 出發</span><span class="sep">·</span><span>13:40 抵港</span></div>
     </div>
@@ -356,13 +363,30 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
     </div>
 
     <div class="pull-quote">「會安的燈籠、巴拿山的雲海、美溪海灘的日落——<br>這趟旅程的每一刻，都是家庭的共同記憶。」</div>
-    
+  </div>
+
+  
+  <div class="map-col">
+    <div class="map-label">行程地圖 <span class="day-indicator" id="mapDayLabel">· Day 1</span></div>
+    <div class="map-filter">
+      <button class="map-fbtn active" onclick="filterMapDay(0)" role="button" aria-pressed="true">全部</button>
+      <button class="map-fbtn" onclick="filterMapDay(1)" role="button" aria-pressed="false">D1</button>
+      <button class="map-fbtn" onclick="filterMapDay(2)" role="button" aria-pressed="false">D2</button>
+      <button class="map-fbtn" onclick="filterMapDay(3)" role="button" aria-pressed="false">D3</button>
+      <button class="map-fbtn" onclick="filterMapDay(4)" role="button" aria-pressed="false">D4</button>
+      <button class="map-fbtn" onclick="filterMapDay(5)" role="button" aria-pressed="false">D5</button>
+      <button class="map-fbtn" onclick="filterMapDay(6)" role="button" aria-pressed="false">D6</button>
+    </div>
+    <div id="map"></div>
+  </div>
+</div>
+
     <div class="info-sections">
       <h2 class="section-title">實用資訊</h2>
       <div class="info-cards">
         
         <div class="info-card wide" id="card-packing">
-          <div class="card-header" onclick="toggleCard('card-packing')">
+          <div class="card-header" onclick="toggleCard(\'card-packing\')" role="button" aria-expanded="false" aria-controls="card-packing">
             <h3><span class="icon" style="background:var(--gold-light);color:var(--gold)">🎒</span>打包清單</h3>
             <span class="card-toggle">▾</span>
           </div>
@@ -406,8 +430,8 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
           </div>
         </div>
         
-        <div class="info-card" id="card-emergency">
-          <div class="card-header" onclick="toggleCard('card-emergency')">
+        <div class="info-card open" id="card-emergency">
+          <div class="card-header" onclick="toggleCard('card-emergency')" role="button" aria-expanded="true" aria-controls="card-emergency">
             <h3><span class="icon" style="background:rgba(220,38,38,0.1);color:#dc2626">🚨</span>緊急資訊</h3>
             <span class="card-toggle">▾</span>
           </div>
@@ -422,7 +446,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
         </div>
         
         <div class="info-card" id="card-qr">
-          <div class="card-header" onclick="toggleCard('card-qr')">
+          <div class="card-header" onclick="toggleCard(\'card-qr\')" role="button" aria-expanded="false" aria-controls="card-qr">
             <h3><span class="icon" style="background:rgba(124,58,237,0.1);color:#7c3aed">⚡</span>快速參考</h3>
             <span class="card-toggle">▾</span>
           </div>
@@ -437,8 +461,8 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
           </div>
         </div>
         
-        <div class="info-card full" id="card-evisa">
-          <div class="card-header" onclick="toggleCard('card-evisa')">
+        <div class="info-card full open" id="card-evisa">
+          <div class="card-header" onclick="toggleCard('card-evisa')" role="button" aria-expanded="true" aria-controls="card-evisa">
             <h3><span class="icon" style="background:rgba(2,132,199,0.1);color:#0284c7">📄</span>電子簽證</h3>
             <span class="card-toggle">▾</span>
           </div>
@@ -454,7 +478,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
         </div>
         
         <div class="info-card wide" id="card-budget">
-          <div class="card-header" onclick="toggleCard('card-budget')">
+          <div class="card-header" onclick="toggleCard(\'card-budget\')" role="button" aria-expanded="false" aria-controls="card-budget">
             <h3><span class="icon" style="background:rgba(5,150,105,0.1);color:#059669">💰</span>預算估算</h3>
             <span class="card-toggle">▾</span>
           </div>
@@ -475,7 +499,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
         </div>
         
         <div class="info-card full" id="card-tips">
-          <div class="card-header" onclick="toggleCard('card-tips')">
+          <div class="card-header" onclick="toggleCard(\'card-tips\')" role="button" aria-expanded="false" aria-controls="card-tips">
             <h3><span class="icon" style="background:rgba(184,134,11,0.1);color:var(--gold)">💡</span>行前準備</h3>
             <span class="card-toggle">▾</span>
           </div>
@@ -492,33 +516,18 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
         </div>
       </div>
     </div>
-  </div>
-  
-  <div class="map-col">
-    <div class="map-label">行程地圖</div>
-    <div class="map-filter">
-      <button class="map-fbtn active" onclick="filterMapDay(0)">全部</button>
-      <button class="map-fbtn" onclick="filterMapDay(1)">D1</button>
-      <button class="map-fbtn" onclick="filterMapDay(2)">D2</button>
-      <button class="map-fbtn" onclick="filterMapDay(3)">D3</button>
-      <button class="map-fbtn" onclick="filterMapDay(4)">D4</button>
-      <button class="map-fbtn" onclick="filterMapDay(5)">D5</button>
-      <button class="map-fbtn" onclick="filterMapDay(6)">D6</button>
-    </div>
-    <div id="map"></div>
-  </div>
-</div>
 
+<button class="top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到頂部">↑</button>
 <footer class="footer"><span>Liao Family · August 2026</span><span>Da Nang, Vietnam 🇻🇳</span></footer>
 
-<div class="gm-modal" id="gmModal" onclick="if(event.target===this)closeMap()">
+<div class="gm-modal" id="gmModal" role="dialog" aria-modal="true" aria-label="Google Maps 位置" onclick="if(event.target===this)closeMap()">
   <div class="gm-box"><div class="gm-header"><span id="gmTitle"></span><button class="gm-close" onclick="closeMap()">×</button></div>
     <div class="gm-body"><iframe id="gmFrame" src="" loading="lazy"></iframe></div>
     <div class="gm-actions"><a id="gmDirLink" href="" target="_blank">Google Maps 導航</a><a href="#" onclick="closeMap();return false">關閉</a></div>
   </div>
 </div>
 
-<div class="pi-modal" id="piModal" onclick="if(event.target===this)closePlaceInfo()">
+<div class="pi-modal" id="piModal" role="dialog" aria-modal="true" aria-label="景點詳情" onclick="if(event.target===this)closePlaceInfo()">
   <div class="pi-box">
     <div class="pi-hero" id="piHero"><button class="pi-close-btn" onclick="closePlaceInfo()">×</button><div class="pi-hero-title"><h2 id="piTitle"></h2><div class="en" id="piTitleEn"></div></div></div>
     <div class="pi-body"><div class="pi-type-badge" id="piTypeBadge"></div><div class="pi-desc" id="piDesc"></div></div>
@@ -729,12 +738,14 @@ function mkDayIcon(color, dayNum){
 window.switchDay = function(n){
   currentDay = n;
   document.querySelectorAll('.panel').forEach(function(p){p.classList.remove('active');});
-  document.querySelectorAll('.day-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.day-tab').forEach(function(t){t.classList.remove('active');t.setAttribute('aria-selected','false');t.setAttribute('tabindex','-1');});
   var panel = document.getElementById('panel'+n);
   if(panel) panel.classList.add('active');
   var tabs = document.querySelectorAll('.day-tab');
-  if(tabs[n-1]) tabs[n-1].classList.add('active');
+  if(tabs[n-1]) { tabs[n-1].classList.add('active'); tabs[n-1].setAttribute('aria-selected','true'); tabs[n-1].setAttribute('tabindex','0'); }
   filterMapDay(n);
+  var ml = document.getElementById('mapDayLabel');
+  if(ml) ml.textContent = '· Day '+n;
 };
 
 /* ═══ Theme toggle ═══ */
@@ -752,12 +763,18 @@ window.toggleCard = function(id){
   var el = document.getElementById(id);
   if(!el) return;
   el.classList.toggle('open');
-  localStorage.setItem('danang-card-'+id, el.classList.contains('open')?'1':'0');
+  var isOpen = el.classList.contains('open');
+  localStorage.setItem('danang-card-'+id, isOpen?'1':'0');
+  var header = el.querySelector('.card-header');
+  if(header) header.setAttribute('aria-expanded', isOpen?'true':'false');
 };
 (function(){
   document.querySelectorAll('.info-card').forEach(function(el){
     var id = el.id;
-    if(id && localStorage.getItem('danang-card-'+id)==='1') el.classList.add('open');
+    if(!id) return;
+    var stored = localStorage.getItem('danang-card-'+id);
+    if(stored==='1'){el.classList.add('open');var h=el.querySelector('.card-header');if(h)h.setAttribute('aria-expanded','true');}
+    else if(stored==='0'){el.classList.remove('open');var h=el.querySelector('.card-header');if(h)h.setAttribute('aria-expanded','false');}
   });
 })();
 
@@ -855,8 +872,10 @@ window.filterMapDay = function(day){
   });
   document.querySelectorAll('.map-fbtn').forEach(function(btn){
     var onclick = btn.getAttribute('onclick');
-    if(onclick){var n=parseInt(onclick.match(/\d+/)[0]);btn.classList.toggle('active',n===day);}
+    if(onclick){var n=parseInt(onclick.match(/\d+/)[0]);var a=n===day;btn.classList.toggle('active',a);btn.setAttribute('aria-pressed',a?'true':'false');}
   });
+  var ml = document.getElementById('mapDayLabel');
+  if(ml) ml.textContent = day===0?'':'· Day '+day;
 };
 
 /* ═══ Resize handler ═══ */
@@ -869,6 +888,13 @@ window.addEventListener('resize',function(){
 /* ═══ Init ═══ */
 if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',initMap);}
 else{setTimeout(initMap,200);}
+
+/* ═══ Scroll to top button ═══ */
+window.addEventListener('scroll',function(){
+  var btn=document.querySelector('.top-btn');
+  if(!btn) return;
+  btn.classList.toggle('show',window.scrollY>400);
+});
 
 /* ═══ Hash day ═══ */
 (function(){
