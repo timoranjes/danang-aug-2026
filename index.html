@@ -95,7 +95,8 @@ a{color:var(--gold)}
 @media(max-width:899px){
   .main{display:flex;flex-direction:column}
   .map-col{order:-1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:12px;overflow:hidden}
-  .map-col #map{width:100%;height:300px}
+  .map-col #map{width:100%;height:300px;background:#e8e0d8;border-radius:0}
+  .map-col #map .leaflet-container{background:#e8e0d8!important}
   .map-label{padding:10px 14px}
   .map-filter{padding:0 14px 8px}
   .itinerary-col{padding:20px 16px 60px;border-right:none}
@@ -219,6 +220,7 @@ html.dark{
   --border:#2a2a2a;--gold:#d4a853;--gold-soft:rgba(212,168,83,0.1);--gold-light:rgba(212,168,83,0.15);
   --shadow:0 1px 3px rgba(0,0,0,0.2);--shadow-lg:0 4px 12px rgba(0,0,0,0.3);
 }
+#map.leaflet-loaded .map-loading{display:none}
 html.dark .hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 40%,#0f3460 100%)}
 html.dark .hero::after{color:rgba(255,255,255,0.02)}
 html.dark .hero h1 .en{color:var(--text-muted)}
@@ -506,7 +508,7 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
       <button class="map-fbtn" onclick="filterMapDay(5)">D5</button>
       <button class="map-fbtn" onclick="filterMapDay(6)">D6</button>
     </div>
-    <div id="map"></div>
+    <div id="map"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#78716c;font-size:13px;z-index:1000;background:#e8e0d8" class="map-loading">🗺️ 載入地圖中...</div></div>
   </div>
 </div>
 
@@ -840,27 +842,45 @@ var mainMap = null;
 var allMarkers = [];
 
 function initMaps(){
-  if(document.getElementById('map') && !mainMap){
-    mainMap = L.map('map',{zoomControl:true}).setView([16.0544,108.2157],12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(mainMap);
+  if(!document.getElementById('map')) return;
+  if(mainMap) { mainMap.invalidateSize(); return; }
+  
+  try {
+    mainMap = L.map('map',{zoomControl:true,zoomAnimation:true,preferCanvas:true}).setView([16.0544,108.2157],12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+      attribution:'© OpenStreetMap',
+      crossOrigin:true
+    }).addTo(mainMap);
+    document.getElementById('map').classList.add('leaflet-loaded');
+    
     spots.forEach(function(p,i){
       var c = dayColors[p.day-1]||'#888';
       var m = L.marker([p.lat,p.lng],{icon:mkIcon(c,p.type)}).addTo(mainMap);
       m.on('click',function(){window.openPlaceInfo(i);});
       allMarkers.push({marker:m,day:p.day});
     });
-    setTimeout(function(){mainMap.invalidateSize();},500);
+    
+    // Multiple invalidateSize calls for mobile reliability
+    setTimeout(function(){ if(mainMap) mainMap.invalidateSize(); }, 300);
+    setTimeout(function(){ if(mainMap) mainMap.invalidateSize(); }, 800);
+    setTimeout(function(){ if(mainMap) mainMap.invalidateSize(); }, 2000);
+  } catch(e) {
+    console.warn('Map init failed:', e);
   }
   filterMapDay(currentDay);
 }
 
-/* Recalculate on resize */
+/* Recalculate on resize and orientation change */
 var resizeTimer;
-window.addEventListener('resize', function(){
+function safeInvalidate(){
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(function(){
     if(mainMap) mainMap.invalidateSize();
-  }, 250);
+  }, 300);
+}
+window.addEventListener('resize', safeInvalidate);
+window.addEventListener('orientationchange', function(){
+  setTimeout(safeInvalidate, 500);
 });
 
 window.filterMapDay = function(day){
