@@ -463,11 +463,11 @@ window.switchDay = function(n){
 
 /* ═══ Dark mode toggle ═══ */
 window.toggleDark = function(){
-  document.documentElement.classList.toggle('dark');
-  localStorage.setItem('danang-dark', document.documentElement.classList.contains('dark')?'1':'0');
+  document.documentElement.classList.toggle('light');
+  localStorage.setItem('danang-theme', document.documentElement.classList.contains('light')?'1':'0');
 };
 (function(){
-  if(localStorage.getItem('danang-dark')==='1') document.documentElement.classList.add('dark');
+  if(localStorage.getItem('danang-theme')==='1') document.documentElement.classList.add('light');
 })();
 
 /* ═══ Foldable sections ═══ */
