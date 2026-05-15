@@ -248,6 +248,16 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
 .b-amount{font-weight:600;font-variant-numeric:tabular-nums;color:var(--text);text-align:right;white-space:nowrap}
 .budget-desktop{display:none}
 @media(min-width:700px){.budget-desktop{display:table}.budget-cards{display:none}}
+
+/* ═══ Info Section Redesign Additions ═══ */
+.card-header .subtitle{font-size:12px;color:var(--text-muted);font-weight:400;margin-left:4px}
+.card-header h3 .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.card-header{min-height:52px;padding:16px}
+.pack-summary{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:10px 14px;border-radius:8px;background:var(--gold-soft)}
+.pack-summary .count{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums}
+.budget-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0;margin-top:8px;border-top:2px solid var(--border);font-weight:700;font-size:15px}
+@media(max-width:480px){.card-header{padding:14px}.card-header h3 .icon{width:28px;height:28px;font-size:14px}.em-card .phone{font-size:16px}.qr-item{padding:10px 12px}}
+
 </style>
 </head>
 <body>
@@ -394,154 +404,188 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
 </div>
 
         <div class="info-sections">
-      <h2 class="section-title">實用資訊</h2>
-      <div class="info-cards">
-        
-        <!-- Emergency: always visible, tap to copy phone -->
-        <div class="info-card open" id="card-emergency">
-          <div class="card-header" onclick="toggleCard('card-emergency')" role="button" aria-expanded="true" aria-controls="body-emergency">
-            <h3><span class="icon" style="background:rgba(220,38,38,0.1);color:#dc2626">🚨</span>緊急資訊</h3>
-            <span class="card-toggle">▾</span>
+  <h2 class="section-title">實用資訊</h2>
+  <div class="info-cards">
+
+    <!-- Emergency -->
+    <div class="info-card open" id="card-emergency">
+      <div class="card-header" onclick="toggleCard('card-emergency')">
+        <h3>
+          <span class="icon" style="background:rgba(220,38,38,0.08);color:#dc2626">🚨</span>
+          緊急資訊<span class="subtitle">重要電話</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="em-grid">
+          <div class="em-card">
+            <h4>香港駐曼谷經貿辦</h4>
+            <div class="phone">+852 1868</div>
+            <div class="note">領事熱線 · 24小時</div>
           </div>
-          <div class="card-body" id="body-emergency">
-            <div class="em-grid">
-              <div class="em-card"><h4>香港駐曼谷經貿辦</h4><div class="phone">+852 1868</div><div class="note">領事熱線（24小時）</div></div>
-              <div class="em-card"><h4>越南緊急電話</h4><div class="phone">113 / 114 / 115</div><div class="note">報警 · 救火 · 救護</div></div>
-              <div class="em-card"><h4>Family Hospital</h4><div class="phone">0236 3565 800</div><div class="note">291-293 Nguyen Van Linh</div></div>
-              <div class="em-card"><h4>Airbnb</h4><div class="note">出發前更新</div></div>
-            </div>
+          <div class="em-card">
+            <h4>越南緊急電話</h4>
+            <div class="phone">113 / 114 / 115</div>
+            <div class="note">報警 · 救火 · 救護</div>
           </div>
-        </div>
-        
-        <!-- Quick Ref: always visible summary -->
-        <div class="info-card open" id="card-qr">
-          <div class="card-header" onclick="toggleCard('card-qr')" role="button" aria-expanded="true" aria-controls="body-qr">
-            <h3><span class="icon" style="background:rgba(124,58,237,0.1);color:#7c3aed">⚡</span>快速參考</h3>
-            <span class="card-toggle">▾</span>
+          <div class="em-card">
+            <h4>Family Hospital</h4>
+            <div class="phone">0236 3565 800</div>
+            <div class="note">291-293 Nguyen Van Linh</div>
           </div>
-          <div class="card-body" id="body-qr">
-            <div class="qr-grid">
-              <div class="qr-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
-              <div class="qr-item"><span>時差</span><span>慢1小時（UTC+7）</span></div>
-              <div class="qr-item"><span>8月均溫</span><span>25-35°C</span></div>
-              <div class="qr-item"><span>Grab 市區</span><span>30K-50K</span></div>
-              <div class="qr-item"><span>7人車</span><span>200K-350K</span></div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- E-Visa: expanded by default -->
-        <div class="info-card open" id="card-evisa">
-          <div class="card-header" onclick="toggleCard('card-evisa')" role="button" aria-expanded="true" aria-controls="body-evisa">
-            <h3><span class="icon" style="background:rgba(2,132,199,0.1);color:#0284c7">📄</span>電子簽證</h3>
-            <span class="card-toggle">▾</span>
-          </div>
-          <div class="card-body" id="body-evisa">
-            <div class="visa-alert">建議出發前至少 7-10 個工作日申請</div>
-            <div class="visa-steps">
-              <div class="visa-step"><span class="num">1</span><div class="step-text">前往 <a class="visa-link" href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank">evisa.xuatnhapcanh.gov.vn</a></div></div>
-              <div class="visa-step"><span class="num">2</span><div class="step-text">費用 <strong>USD $25 / 人</strong>（5人共 $125）</div></div>
-              <div class="visa-step"><span class="num">3</span><div class="step-text">處理時間約 <strong>3-5 工作日</strong></div></div>
-              <div class="visa-step"><span class="num">4</span><div class="step-text">準備 <strong>護照掃描件</strong> + <strong>白底證件相</strong></div></div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Packing List: progress always visible, checklist expandable -->
-        <div class="info-card wide" id="card-packing">
-          <div class="card-header" onclick="toggleCard('card-packing')" role="button" aria-expanded="false" aria-controls="body-packing">
-            <h3><span class="icon" style="background:var(--gold-light);color:var(--gold)">🎒</span>打包清單</h3>
-            <span class="card-toggle">▾</span>
-          </div>
-          <div class="card-body" id="body-packing">
-            <div class="pack-progress"><span class="count" id="packCount">0/29</span><div class="pack-bar"><div class="pack-bar-fill" id="packBarFill"></div></div></div>
-            <div class="pack-grid">
-              <div>
-                <div class="pack-cat-title">證件與金錢</div>
-                <label class="pack-check"><input type="checkbox" data-pack="passport">護照</label>
-                <label class="pack-check"><input type="checkbox" data-pack="evisa">E-Visa</label>
-                <label class="pack-check"><input type="checkbox" data-pack="cash">VND 現金</label>
-                <label class="pack-check"><input type="checkbox" data-pack="card">Visa / MC</label>
-                <label class="pack-check"><input type="checkbox" data-pack="insurance">旅遊保險</label>
-                <label class="pack-check"><input type="checkbox" data-pack="airbnb">Airbnb 確認</label>
-                <label class="pack-check"><input type="checkbox" data-pack="flight">機票</label>
-                <div class="pack-cat-title" style="margin-top:12px">衣物</div>
-                <label class="pack-check"><input type="checkbox" data-pack="summer">夏裝</label>
-                <label class="pack-check"><input type="checkbox" data-pack="jacket">薄外套</label>
-                <label class="pack-check"><input type="checkbox" data-pack="swim">泳裝</label>
-                <label class="pack-check"><input type="checkbox" data-pack="shoes">行山鞋</label>
-                <label class="pack-check"><input type="checkbox" data-pack="sandals">拖鞋</label>
-                <label class="pack-check"><input type="checkbox" data-pack="pants">寺廟長褲</label>
-                <label class="pack-check"><input type="checkbox" data-pack="hat">帽子</label>
-              </div>
-              <div>
-                <div class="pack-cat-title">電子用品</div>
-                <label class="pack-check"><input type="checkbox" data-pack="charger">充電器</label>
-                <label class="pack-check"><input type="checkbox" data-pack="adapter">轉換器</label>
-                <label class="pack-check"><input type="checkbox" data-pack="powerbank">行動電源</label>
-                <label class="pack-check"><input type="checkbox" data-pack="camera">相機</label>
-                <label class="pack-check"><input type="checkbox" data-pack="waterbag">防水袋</label>
-                <div class="pack-cat-title" style="margin-top:12px">日常用品</div>
-                <label class="pack-check"><input type="checkbox" data-pack="sunscreen">防曬 SPF50+</label>
-                <label class="pack-check"><input type="checkbox" data-pack="bugspray">防蚊液</label>
-                <label class="pack-check"><input type="checkbox" data-pack="meds">藥品</label>
-                <label class="pack-check"><input type="checkbox" data-pack="umbrella">雨傘</label>
-                <label class="pack-check"><input type="checkbox" data-pack="wipes">濕紙巾</label>
-                <label class="pack-check"><input type="checkbox" data-pack="neckpillow">頸枕</label>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Budget: redesigned as cards on mobile -->
-        <div class="info-card wide" id="card-budget">
-          <div class="card-header" onclick="toggleCard('card-budget')" role="button" aria-expanded="false" aria-controls="body-budget">
-            <h3><span class="icon" style="background:rgba(5,150,105,0.1);color:#059669">💰</span>預算估算</h3>
-            <span class="card-toggle">▾</span>
-          </div>
-          <div class="card-body" id="body-budget">
-            <div class="budget-cards">
-              <div class="budget-row"><span class="b-label">機票</span><span class="b-note">HK Express 往返</span><span class="b-amount">~$2,120</span></div>
-              <div class="budget-row"><span class="b-label">Airbnb</span><span class="b-note">5晚</span><span class="b-amount">$700-1,100</span></div>
-              <div class="budget-row"><span class="b-label">餐飲</span><span class="b-note">6天</span><span class="b-amount">$500-700</span></div>
-              <div class="budget-row"><span class="b-label">交通</span><span class="b-note">Grab / 包車</span><span class="b-amount">$160-240</span></div>
-              <div class="budget-row"><span class="b-label">門票</span><span class="b-note">巴拿山+會安</span><span class="b-amount">$300-400</span></div>
-              <div class="budget-row"><span class="b-label">簽證</span><span class="b-note">E-Visa</span><span class="b-amount">~$195</span></div>
-            </div>
-            <table class="budget-table budget-desktop">
-              <thead><tr><th>項目</th><th>說明</th><th style="text-align:right">每人 HKD</th></tr></thead>
-              <tbody>
-                <tr><td>機票</td><td>HK Express 往返</td><td>~$2,120</td></tr>
-                <tr><td>Airbnb</td><td>5晚</td><td>$700-1,100</td></tr>
-                <tr><td>餐飲</td><td>6天</td><td>$500-700</td></tr>
-                <tr><td>交通</td><td>Grab / 包車</td><td>$160-240</td></tr>
-                <tr><td>門票</td><td>巴拿山+會安</td><td>$300-400</td></tr>
-                <tr><td>簽證</td><td>E-Visa</td><td>~$195</td></tr>
-              </tbody>
-              <tfoot><tr><td colspan="2">合計（不含機票）</td><td style="text-align:right">~$1,855-2,635</td></tr></tfoot>
-            </table>
-          </div>
-        </div>
-        
-        <!-- Tips: card grid -->
-        <div class="info-card full" id="card-tips">
-          <div class="card-header" onclick="toggleCard('card-tips')" role="button" aria-expanded="false" aria-controls="body-tips">
-            <h3><span class="icon" style="background:rgba(184,134,11,0.1);color:var(--gold)">💡</span>行前準備</h3>
-            <span class="card-toggle">▾</span>
-          </div>
-          <div class="card-body" id="body-tips">
-            <div class="tips-grid">
-              <div class="tip"><div class="tip-icon" style="background:rgba(2,132,199,0.1)">📱</div><div><h4>必備 App</h4><p>Grab · Google Translate · Maps</p></div></div>
-              <div class="tip"><div class="tip-icon" style="background:rgba(5,150,105,0.1)">💳</div><div><h4>支付方式</h4><p>餐廳收 Visa/MC，路邊攤現金</p></div></div>
-              <div class="tip"><div class="tip-icon" style="background:rgba(217,119,6,0.1)">☀️</div><div><h4>8月天氣</h4><p>25-35°C · 防曬 SPF50+</p></div></div>
-              <div class="tip"><div class="tip-icon" style="background:rgba(220,38,38,0.1)">⚠️</div><div><h4>注意事項</h4><p>寺廟長褲 · 瓶裝水 · Grab 安全</p></div></div>
-              <div class="tip"><div class="tip-icon" style="background:rgba(124,58,237,0.1)">🗣️</div><div><h4>語言</h4><p>越南語 · Google Translate</p></div></div>
-              <div class="tip"><div class="tip-icon" style="background:rgba(120,113,108,0.1)">🔌</div><div><h4>插頭</h4><p>Type A/C · 萬用插頭</p></div></div>
-            </div>
+          <div class="em-card">
+            <h4>Airbnb</h4>
+            <div class="note">出發前更新</div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Quick Reference -->
+    <div class="info-card open" id="card-qr">
+      <div class="card-header" onclick="toggleCard('card-qr')">
+        <h3>
+          <span class="icon" style="background:rgba(124,58,237,0.08);color:#7c3aed">⚡</span>
+          快速參考<span class="subtitle">匯率 / 溫差</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="qr-grid">
+          <div class="qr-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
+          <div class="qr-item"><span>時差</span><span>慢1小時（UTC+7）</span></div>
+          <div class="qr-item"><span>8月均溫</span><span>25-35°C</span></div>
+          <div class="qr-item"><span>Grab 市區</span><span>30K-50K</span></div>
+          <div class="qr-item"><span>7人車</span><span>200K-350K</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E-Visa -->
+    <div class="info-card open" id="card-evisa">
+      <div class="card-header" onclick="toggleCard('card-evisa')">
+        <h3>
+          <span class="icon" style="background:rgba(2,132,199,0.08);color:#0284c7">📄</span>
+          電子簽證<span class="subtitle">E-Visa 指南</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="visa-alert">建議出發前至少 7-10 個工作日申請</div>
+        <div class="visa-steps">
+          <div class="visa-step"><span class="num">1</span><div class="step-text">前往 <a class="visa-link" href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank">evisa.xuatnhapcanh.gov.vn</a></div></div>
+          <div class="visa-step"><span class="num">2</span><div class="step-text">費用 <strong>USD $25 / 人</strong>（5人共 $125）</div></div>
+          <div class="visa-step"><span class="num">3</span><div class="step-text">處理時間約 <strong>3-5 工作日</strong></div></div>
+          <div class="visa-step"><span class="num">4</span><div class="step-text">準備 <strong>護照掃描件</strong> + <strong>白底證件相</strong></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Packing List -->
+    <div class="info-card wide" id="card-packing">
+      <div class="card-header" onclick="toggleCard('card-packing')">
+        <h3>
+          <span class="icon" style="background:var(--gold-light);color:var(--gold)">🎒</span>
+          打包清單<span class="subtitle">出發前檢查</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="pack-summary"><span class="count" id="packCount">0/29</span><div class="pack-bar"><div class="pack-bar-fill" id="packBarFill" style="width:0%"></div></div></div>
+        <div class="pack-grid">
+          <div>
+            <div class="pack-cat-title">證件與金錢</div>
+            <label class="pack-check"><input type="checkbox" data-pack="passport">護照</label>
+            <label class="pack-check"><input type="checkbox" data-pack="evisa">E-Visa</label>
+            <label class="pack-check"><input type="checkbox" data-pack="cash">VND 現金</label>
+            <label class="pack-check"><input type="checkbox" data-pack="card">Visa / MC</label>
+            <label class="pack-check"><input type="checkbox" data-pack="insurance">旅遊保險</label>
+            <label class="pack-check"><input type="checkbox" data-pack="airbnb">Airbnb 確認</label>
+            <label class="pack-check"><input type="checkbox" data-pack="flight">機票</label>
+            <div class="pack-cat-title" style="margin-top:14px">衣物</div>
+            <label class="pack-check"><input type="checkbox" data-pack="summer">夏裝</label>
+            <label class="pack-check"><input type="checkbox" data-pack="jacket">薄外套</label>
+            <label class="pack-check"><input type="checkbox" data-pack="swim">泳裝</label>
+            <label class="pack-check"><input type="checkbox" data-pack="shoes">行山鞋</label>
+            <label class="pack-check"><input type="checkbox" data-pack="sandals">拖鞋</label>
+            <label class="pack-check"><input type="checkbox" data-pack="pants">寺廟長褲</label>
+            <label class="pack-check"><input type="checkbox" data-pack="hat">帽子</label>
+          </div>
+          <div>
+            <div class="pack-cat-title">電子用品</div>
+            <label class="pack-check"><input type="checkbox" data-pack="charger">充電器</label>
+            <label class="pack-check"><input type="checkbox" data-pack="adapter">轉換器</label>
+            <label class="pack-check"><input type="checkbox" data-pack="powerbank">行動電源</label>
+            <label class="pack-check"><input type="checkbox" data-pack="camera">相機</label>
+            <label class="pack-check"><input type="checkbox" data-pack="waterbag">防水袋</label>
+            <div class="pack-cat-title" style="margin-top:14px">日常用品</div>
+            <label class="pack-check"><input type="checkbox" data-pack="sunscreen">防曬 SPF50+</label>
+            <label class="pack-check"><input type="checkbox" data-pack="bugspray">防蚊液</label>
+            <label class="pack-check"><input type="checkbox" data-pack="meds">藥品</label>
+            <label class="pack-check"><input type="checkbox" data-pack="umbrella">雨傘</label>
+            <label class="pack-check"><input type="checkbox" data-pack="wipes">濕紙巾</label>
+            <label class="pack-check"><input type="checkbox" data-pack="neckpillow">頸枕</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Budget -->
+    <div class="info-card wide" id="card-budget">
+      <div class="card-header" onclick="toggleCard('card-budget')">
+        <h3>
+          <span class="icon" style="background:rgba(5,150,105,0.08);color:#059669">💰</span>
+          預算估算<span class="subtitle">每人，HKD</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="budget-cards">
+          <div class="budget-row"><span class="b-label">機票</span><span class="b-note">HK Express</span><span class="b-amount">~$2,120</span></div>
+          <div class="budget-row"><span class="b-label">Airbnb</span><span class="b-note">5晚</span><span class="b-amount">$700-1,100</span></div>
+          <div class="budget-row"><span class="b-label">餐飲</span><span class="b-note">6天</span><span class="b-amount">$500-700</span></div>
+          <div class="budget-row"><span class="b-label">交通</span><span class="b-note">Grab / 包車</span><span class="b-amount">$160-240</span></div>
+          <div class="budget-row"><span class="b-label">門票</span><span class="b-note">巴拿山+會安</span><span class="b-amount">$300-400</span></div>
+          <div class="budget-row"><span class="b-label">簽證</span><span class="b-note">E-Visa</span><span class="b-amount">~$195</span></div>
+        </div>
+        <div class="budget-total"><span>合計（不含機票）</span><span>~$1,855-2,635</span></div>
+        <table class="budget-desktop">
+          <thead><tr><th>項目</th><th>說明</th><th style="text-align:right">每人 HKD</th></tr></thead>
+          <tbody>
+            <tr><td>機票</td><td>HK Express 往返</td><td>~$2,120</td></tr>
+            <tr><td>Airbnb</td><td>5晚</td><td>$700-1,100</td></tr>
+            <tr><td>餐飲</td><td>6天</td><td>$500-700</td></tr>
+            <tr><td>交通</td><td>Grab / 包車</td><td>$160-240</td></tr>
+            <tr><td>門票</td><td>巴拿山+會安</td><td>$300-400</td></tr>
+            <tr><td>簽證</td><td>E-Visa</td><td>~$195</td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="2">合計（不含機票）</td><td style="text-align:right">~$1,855-2,635</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="info-card full" id="card-tips">
+      <div class="card-header" onclick="toggleCard('card-tips')">
+        <h3>
+          <span class="icon" style="background:rgba(184,134,11,0.08);color:var(--gold)">💡</span>
+          行前準備<span class="subtitle">實用資訊</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="tips-grid">
+          <div class="tip"><div class="tip-icon" style="background:rgba(2,132,199,0.08)">📱</div><div><h4>必備 App</h4><p>Grab · Google Translate · Maps</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(5,150,105,0.08)">💳</div><div><h4>支付方式</h4><p>餐廳收 Visa/MC，路邊攤現金</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(217,119,6,0.08)">☀️</div><div><h4>8月天氣</h4><p>25-35°C · 防曬 SPF50+</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(220,38,38,0.08)">⚠️</div><div><h4>注意事項</h4><p>寺廟長褲 · 瓶裝水 · Grab 安全</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(124,58,237,0.08)">🗣️</div><div><h4>語言</h4><p>越南語 · Google Translate</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(120,113,108,0.08)">🔌</div><div><h4>插頭</h4><p>Type A/C · 萬用插頭</p></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
 
 <button class="top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到頂部">↑</button>
 <footer class="footer"><span>Liao Family · August 2026</span><span>Da Nang, Vietnam 🇻🇳</span></footer>
