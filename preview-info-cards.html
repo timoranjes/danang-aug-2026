@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Da Nang · 實用資訊 — Mobile Redesign Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Newsreader:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#fafaf9;--surface:#fff;--surface2:#f5f5f4;--surface3:#e7e5e4;
+  --text:#1c1917;--text-secondary:#57534e;--text-muted:#a8a29e;
+  --border:#e7e5e4;--gold:#b8860b;--gold-soft:rgba(184,134,11,0.08);--gold-light:rgba(184,134,11,0.15);
+  --d1:#78716c;--d2:#0284c7;--d3:#d97706;--d4:#dc2626;--d5:#7c3aed;--d6:#059669;
+  --font-sans:'Inter',-apple-system,sans-serif;
+  --font-serif:'Newsreader','Noto Serif TC',serif;
+  --radius:12px;--shadow:0 1px 3px rgba(0,0,0,0.06),0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg:0 4px 12px rgba(0,0,0,0.08),0 2px 4px rgba(0,0,0,0.04);
+  --shadow-xl:0 8px 24px rgba(0,0,0,0.12),0 4px 8px rgba(0,0,0,0.06);
+}
+
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--font-sans);color:var(--text);background:var(--bg);line-height:1.6}
+
+/* ═══ Page Chrome ═══ */
+.preview-header{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;backdrop-filter:blur(8px);background:rgba(255,255,255,0.9)}
+.preview-header h1{font-family:var(--font-serif);font-size:18px;font-weight:600;display:flex;align-items:center;gap:8px}
+.preview-header h1::before{content:'';width:24px;height:2px;background:var(--gold)}
+.preview-meta{font-size:12px;color:var(--text-muted)}
+
+/* ═══ Section Title ═══ */
+.section-title{font-family:var(--font-serif);font-size:24px;font-weight:700;margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.section-title::before{content:'';width:4px;height:24px;border-radius:2px;background:var(--gold)}
+.section-subtitle{font-size:14px;color:var(--text-secondary);margin-top:-16px;margin-bottom:24px}
+
+/* ═══ Card Grid ═══ */
+.info-cards{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:48px}
+@media(min-width:640px){.info-cards{grid-template-columns:1fr 1fr}}
+@media(min-width:960px){.info-cards{grid-template-columns:repeat(3,1fr)}}
+
+.info-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:box-shadow 0.2s,transform 0.2s}
+.info-card:hover{box-shadow:var(--shadow-lg)}
+.info-card.wide{grid-column:span 1}
+@media(min-width:640px){.info-card.wide{grid-column:span 2}}
+@media(min-width:960px){.info-card.wide{grid-column:span 2}}
+.info-card.full{grid-column:span 1}
+@media(min-width:640px){.info-card.full{grid-column:span 2}}
+@media(min-width:960px){.info-card.full{grid-column:span 3}}
+
+/* ═══ Card Header ═══ */
+.card-header{display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;min-height:52px;transition:background 0.15s}
+.card-header:hover,.card-header:active{background:var(--surface2)}
+.card-header h3{font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
+.card-header h3 .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.card-header .subtitle{font-size:12px;color:var(--text-muted);font-weight:400;margin-left:4px}
+.card-toggle{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:transform 0.25s ease}
+.card.open .card-toggle{transform:rotate(180deg)}
+
+/* ═══ Card Body ═══ */
+.card-body{display:none;padding:0 16px 16px}
+.card.open .card-body{display:block;animation:fadeUp 0.25s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ═══ Emergency Cards ═══ */
+.em-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:480px){.em-grid{grid-template-columns:1fr 1fr}}
+.em-card{padding:14px 16px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);transition:background 0.15s}
+.em-card:hover{background:var(--surface3)}
+.em-card h4{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px}
+.em-card .phone{font-family:'SF Mono',Menlo,monospace;font-size:18px;font-weight:700;color:var(--gold);margin-top:4px;letter-spacing:0.5px}
+.em-card .note{font-size:12px;color:var(--text-muted);margin-top:2px}
+
+/* ═══ Quick Reference ═══ */
+.qr-grid{display:grid;grid-template-columns:1fr;gap:8px}
+@media(min-width:480px){.qr-grid{grid-template-columns:1fr 1fr}}
+.qr-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:8px;background:var(--surface2);font-size:14px}
+.qr-item span:first-child{color:var(--text-muted);font-size:13px}
+.qr-item span:last-child{font-weight:600;color:var(--text)}
+
+/* ═══ E-Visa Steps ═══ */
+.visa-alert{padding:12px 14px;border-radius:8px;background:var(--gold-light);font-size:13px;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.visa-alert::before{content:'⚠️'}
+.visa-steps{display:flex;flex-direction:column;gap:10px}
+.visa-step{display:flex;gap:12px;align-items:flex-start}
+.visa-step .num{width:26px;height:26px;border-radius:50%;background:var(--gold);color:#fff;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.visa-step .step-text{font-size:14px;color:var(--text-secondary);line-height:1.5}
+.visa-step .step-text strong{color:var(--text);font-weight:600}
+.visa-link{color:var(--gold);font-weight:600;text-decoration:underline;text-underline-offset:2px}
+
+/* ═══ Packing List ═══ */
+.pack-summary{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:10px 14px;border-radius:8px;background:var(--gold-soft)}
+.pack-summary .count{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;font-variant-numeric:tabular-nums}
+.pack-bar{flex:1;height:6px;border-radius:3px;background:var(--surface3);overflow:hidden}
+.pack-bar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),#d4a853);transition:width 0.3s}
+.pack-grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:480px){.pack-grid{grid-template-columns:1fr 1fr}}
+.pack-cat-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.pack-check{display:flex;align-items:center;gap:10px;padding:6px 0;cursor:pointer;font-size:14px;color:var(--text-secondary);transition:color 0.15s}
+.pack-check:hover{color:var(--text)}
+.pack-check input[type="checkbox"]{width:18px;height:18px;accent-color:var(--gold);cursor:pointer;flex-shrink:0}
+.pack-check.done{text-decoration:line-through;color:var(--text-muted)}
+
+/* ═══ Budget ═══ */
+.budget-cards{display:flex;flex-direction:column}
+.budget-row{display:grid;grid-template-columns:80px 1fr auto;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);font-size:14px}
+.budget-row:first-child{padding-top:0}
+.budget-row:last-child{border-bottom:none}
+.b-label{font-weight:600;color:var(--text)}
+.b-note{font-size:13px;color:var(--text-muted);padding-left:10px}
+.b-amount{font-weight:600;font-variant-numeric:tabular-nums;color:var(--text);text-align:right;white-space:nowrap}
+.budget-total{display:flex;justify-content:space-between;align-items:center;padding:14px 0;margin-top:8px;border-top:2px solid var(--border);font-weight:700;font-size:15px}
+
+.budget-desktop{display:none}
+@media(min-width:640px){
+  .budget-desktop{display:table;width:100%;border-collapse:collapse;font-size:14px}
+  .budget-desktop th{font-size:11px;text-transform:uppercase;color:var(--text-muted);font-weight:600;padding:8px 10px;text-align:left;border-bottom:2px solid var(--border)}
+  .budget-desktop td{padding:10px;border-bottom:1px solid var(--border);color:var(--text-secondary)}
+  .budget-desktop td:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--text)}
+  .budget-desktop tfoot td{font-weight:700;border-top:2px solid var(--border);color:var(--text);font-size:15px}
+  .budget-cards{display:none}
+}
+
+/* ═══ Tips Grid ═══ */
+.tips-grid{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:480px){.tips-grid{grid-template-columns:1fr 1fr}}
+.tip{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:10px;background:var(--surface2);border:1px solid var(--border);transition:background 0.15s}
+.tip:hover{background:var(--surface3)}
+.tip .tip-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.tip h4{font-size:14px;font-weight:600;margin-bottom:2px}
+.tip p{font-size:13px;color:var(--text-secondary);line-height:1.4}
+
+/* ═══ Dark Theme ═══ */
+html.dark{
+  --bg:#0a0a0a;--surface:#141414;--surface2:#1e1e1e;--surface3:#2a2a2a;
+  --text:#f5f5f5;--text-secondary:#a0a0a0;--text-muted:#606060;
+  --border:#2a2a2a;--gold:#d4a853;--gold-soft:rgba(212,168,83,0.1);--gold-light:rgba(212,168,83,0.15);
+  --shadow:0 1px 3px rgba(0,0,0,0.2);--shadow-lg:0 4px 12px rgba(0,0,0,0.3);
+  --shadow-xl:0 8px 24px rgba(0,0,0,0.4);
+}
+html.dark .preview-header{background:rgba(20,20,20,0.9)}
+
+/* ═══ Phone Viewport Label ═══ */
+.viewport-label{text-align:center;padding:12px;font-size:12px;color:var(--text-muted);border:1px dashed var(--border);border-radius:8px;margin-bottom:24px;background:var(--surface)}
+.viewport-label span{font-weight:600;color:var(--text)}
+
+@media(max-width:480px){
+  .section-title{font-size:20px}
+  .card-header{padding:14px}
+  .card-header h3 .icon{width:28px;height:28px;font-size:14px}
+  .em-card .phone{font-size:16px}
+  .qr-item{padding:10px 12px}
+}
+</style>
+</head><body>
+
+<header class="preview-header">
+  <h1>實用資訊 · Mobile Redesign</h1>
+  <div class="preview-meta">Da Nang Aug 2026</div>
+  <button onclick="toggleTheme()" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;font-size:16px" aria-label="切換主題">🌗</button>
+</header>
+
+<main style="max-width:800px;margin:0 auto;padding:24px 16px">
+
+  <div class="viewport-label">
+    Resize browser to test: <span>Mobile ≤480px</span> · <span>Tablet 640px+</span> · <span>Desktop 960px+</span>
+  </div>
+
+  <h2 class="section-title">實用資訊</h2>
+  <p class="section-subtitle">行前準備 · 緊急聯絡 · 預算估算</p>
+
+  <div class="info-cards">
+
+    <!-- Emergency -->
+    <div class="info-card open" id="card-emergency">
+      <div class="card-header" onclick="toggleCard('card-emergency')">
+        <h3>
+          <span class="icon" style="background:rgba(220,38,38,0.08);color:#dc2626">🚨</span>
+          緊急資訊<span class="subtitle">重要電話</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="em-grid">
+          <div class="em-card">
+            <h4>香港駐曼谷經貿辦</h4>
+            <div class="phone">+852 1868</div>
+            <div class="note">領事熱線 · 24小時</div>
+          </div>
+          <div class="em-card">
+            <h4>越南緊急電話</h4>
+            <div class="phone">113 / 114 / 115</div>
+            <div class="note">報警 · 救火 · 救護</div>
+          </div>
+          <div class="em-card">
+            <h4>Family Hospital</h4>
+            <div class="phone">0236 3565 800</div>
+            <div class="note">291-293 Nguyen Van Linh</div>
+          </div>
+          <div class="em-card">
+            <h4>Airbnb</h4>
+            <div class="note">出發前更新</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Reference -->
+    <div class="info-card open" id="card-qr">
+      <div class="card-header" onclick="toggleCard('card-qr')">
+        <h3>
+          <span class="icon" style="background:rgba(124,58,237,0.08);color:#7c3aed">⚡</span>
+          快速參考<span class="subtitle">匯率 / 溫差</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="qr-grid">
+          <div class="qr-item"><span>匯率</span><span>1 HKD ≈ 3,100 VND</span></div>
+          <div class="qr-item"><span>時差</span><span>慢1小時（UTC+7）</span></div>
+          <div class="qr-item"><span>8月均溫</span><span>25-35°C</span></div>
+          <div class="qr-item"><span>Grab 市區</span><span>30K-50K</span></div>
+          <div class="qr-item"><span>7人車</span><span>200K-350K</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- E-Visa -->
+    <div class="info-card open" id="card-evisa">
+      <div class="card-header" onclick="toggleCard('card-evisa')">
+        <h3>
+          <span class="icon" style="background:rgba(2,132,199,0.08);color:#0284c7">📄</span>
+          電子簽證<span class="subtitle">E-Visa 指南</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="visa-alert">建議出發前至少 7-10 個工作日申請</div>
+        <div class="visa-steps">
+          <div class="visa-step"><span class="num">1</span><div class="step-text">前往 <a class="visa-link" href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank">evisa.xuatnhapcanh.gov.vn</a></div></div>
+          <div class="visa-step"><span class="num">2</span><div class="step-text">費用 <strong>USD $25 / 人</strong>（5人共 $125）</div></div>
+          <div class="visa-step"><span class="num">3</span><div class="step-text">處理時間約 <strong>3-5 工作日</strong></div></div>
+          <div class="visa-step"><span class="num">4</span><div class="step-text">準備 <strong>護照掃描件</strong> + <strong>白底證件相</strong></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Packing List -->
+    <div class="info-card wide" id="card-packing">
+      <div class="card-header" onclick="toggleCard('card-packing')">
+        <h3>
+          <span class="icon" style="background:var(--gold-light);color:var(--gold)">🎒</span>
+          打包清單<span class="subtitle">出發前檢查</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="pack-summary"><span class="count" id="packCount">0/29</span><div class="pack-bar"><div class="pack-bar-fill" id="packBarFill" style="width:0%"></div></div></div>
+        <div class="pack-grid">
+          <div>
+            <div class="pack-cat-title">證件與金錢</div>
+            <label class="pack-check"><input type="checkbox" data-pack="passport">護照</label>
+            <label class="pack-check"><input type="checkbox" data-pack="evisa">E-Visa</label>
+            <label class="pack-check"><input type="checkbox" data-pack="cash">VND 現金</label>
+            <label class="pack-check"><input type="checkbox" data-pack="card">Visa / MC</label>
+            <label class="pack-check"><input type="checkbox" data-pack="insurance">旅遊保險</label>
+            <label class="pack-check"><input type="checkbox" data-pack="airbnb">Airbnb 確認</label>
+            <label class="pack-check"><input type="checkbox" data-pack="flight">機票</label>
+            <div class="pack-cat-title" style="margin-top:14px">衣物</div>
+            <label class="pack-check"><input type="checkbox" data-pack="summer">夏裝</label>
+            <label class="pack-check"><input type="checkbox" data-pack="jacket">薄外套</label>
+            <label class="pack-check"><input type="checkbox" data-pack="swim">泳裝</label>
+            <label class="pack-check"><input type="checkbox" data-pack="shoes">行山鞋</label>
+            <label class="pack-check"><input type="checkbox" data-pack="sandals">拖鞋</label>
+            <label class="pack-check"><input type="checkbox" data-pack="pants">寺廟長褲</label>
+            <label class="pack-check"><input type="checkbox" data-pack="hat">帽子</label>
+          </div>
+          <div>
+            <div class="pack-cat-title">電子用品</div>
+            <label class="pack-check"><input type="checkbox" data-pack="charger">充電器</label>
+            <label class="pack-check"><input type="checkbox" data-pack="adapter">轉換器</label>
+            <label class="pack-check"><input type="checkbox" data-pack="powerbank">行動電源</label>
+            <label class="pack-check"><input type="checkbox" data-pack="camera">相機</label>
+            <label class="pack-check"><input type="checkbox" data-pack="waterbag">防水袋</label>
+            <div class="pack-cat-title" style="margin-top:14px">日常用品</div>
+            <label class="pack-check"><input type="checkbox" data-pack="sunscreen">防曬 SPF50+</label>
+            <label class="pack-check"><input type="checkbox" data-pack="bugspray">防蚊液</label>
+            <label class="pack-check"><input type="checkbox" data-pack="meds">藥品</label>
+            <label class="pack-check"><input type="checkbox" data-pack="umbrella">雨傘</label>
+            <label class="pack-check"><input type="checkbox" data-pack="wipes">濕紙巾</label>
+            <label class="pack-check"><input type="checkbox" data-pack="neckpillow">頸枕</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Budget -->
+    <div class="info-card wide" id="card-budget">
+      <div class="card-header" onclick="toggleCard('card-budget')">
+        <h3>
+          <span class="icon" style="background:rgba(5,150,105,0.08);color:#059669">💰</span>
+          預算估算<span class="subtitle">每人，HKD</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="budget-cards">
+          <div class="budget-row"><span class="b-label">機票</span><span class="b-note">HK Express</span><span class="b-amount">~$2,120</span></div>
+          <div class="budget-row"><span class="b-label">Airbnb</span><span class="b-note">5晚</span><span class="b-amount">$700-1,100</span></div>
+          <div class="budget-row"><span class="b-label">餐飲</span><span class="b-note">6天</span><span class="b-amount">$500-700</span></div>
+          <div class="budget-row"><span class="b-label">交通</span><span class="b-note">Grab / 包車</span><span class="b-amount">$160-240</span></div>
+          <div class="budget-row"><span class="b-label">門票</span><span class="b-note">巴拿山+會安</span><span class="b-amount">$300-400</span></div>
+          <div class="budget-row"><span class="b-label">簽證</span><span class="b-note">E-Visa</span><span class="b-amount">~$195</span></div>
+        </div>
+        <div class="budget-total"><span>合計（不含機票）</span><span>~$1,855-2,635</span></div>
+        <table class="budget-desktop">
+          <thead><tr><th>項目</th><th>說明</th><th style="text-align:right">每人 HKD</th></tr></thead>
+          <tbody>
+            <tr><td>機票</td><td>HK Express 往返</td><td>~$2,120</td></tr>
+            <tr><td>Airbnb</td><td>5晚</td><td>$700-1,100</td></tr>
+            <tr><td>餐飲</td><td>6天</td><td>$500-700</td></tr>
+            <tr><td>交通</td><td>Grab / 包車</td><td>$160-240</td></tr>
+            <tr><td>門票</td><td>巴拿山+會安</td><td>$300-400</td></tr>
+            <tr><td>簽證</td><td>E-Visa</td><td>~$195</span></tr>
+          </tbody>
+          <tfoot><tr><td colspan="2">合計（不含機票）</td><td style="text-align:right">~$1,855-2,635</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="info-card full" id="card-tips">
+      <div class="card-header" onclick="toggleCard('card-tips')">
+        <h3>
+          <span class="icon" style="background:rgba(184,134,11,0.08);color:var(--gold)">💡</span>
+          行前準備<span class="subtitle">實用資訊</span>
+        </h3>
+        <span class="card-toggle">▾</span>
+      </div>
+      <div class="card-body">
+        <div class="tips-grid">
+          <div class="tip"><div class="tip-icon" style="background:rgba(2,132,199,0.08)">📱</div><div><h4>必備 App</h4><p>Grab · Google Translate · Maps</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(5,150,105,0.08)">💳</div><div><h4>支付方式</h4><p>餐廳收 Visa/MC，路邊攤現金</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(217,119,6,0.08)">☀️</div><div><h4>8月天氣</h4><p>25-35°C · 防曬 SPF50+</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(220,38,38,0.08)">⚠️</div><div><h4>注意事項</h4><p>寺廟長褲 · 瓶裝水 · Grab 安全</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(124,58,237,0.08)">🗣️</div><div><h4>語言</h4><p>越南語 · Google Translate</p></div></div>
+          <div class="tip"><div class="tip-icon" style="background:rgba(120,113,108,0.08)">🔌</div><div><h4>插頭</h4><p>Type A/C · 萬用插頭</p></div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// Theme toggle
+function toggleTheme(){
+  var isDark = document.documentElement.classList.toggle('dark');
+  localStorage.setItem('danang-theme', isDark ? 'dark' : 'light');
+}
+
+// Restore theme
+(function(){
+  var saved = localStorage.getItem('danang-theme');
+  if(saved === 'dark'){document.documentElement.classList.add('dark')}
+})();
+
+// Card toggle
+function toggleCard(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.classList.toggle('open');
+  var isOpen = el.classList.contains('open');
+  localStorage.setItem('danang-card-'+id, isOpen ? '1' : '0');
+  var header = el.querySelector('.card-header');
+  if(header) header.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+// Restore card states
+(function(){
+  ['card-emergency','card-qr','card-evisa','card-packing','card-budget','card-tips'].forEach(function(id){
+    var saved = localStorage.getItem('danang-card-'+id);
+    if(saved === '0'){document.getElementById(id).classList.remove('open')}
+  });
+})();
+
+// Packing checklist
+var STORAGE_KEY = 'danang-packing';
+document.querySelectorAll('.pack-check input').forEach(function(cb){
+  cb.addEventListener('change',function(){
+    this.closest('.pack-check').classList.toggle('done',this.checked);
+    var checked = {};
+    document.querySelectorAll('.pack-check input').forEach(function(c){
+      checked[c.dataset.pack] = c.checked;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(checked));
+    updatePackProgress();
+  });
+});
+
+// Restore packing state
+(function(){
+  try{
+    var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    document.querySelectorAll('.pack-check input').forEach(function(cb){
+      if(saved[cb.dataset.pack]){
+        cb.checked = true;
+        cb.closest('.pack-check').classList.add('done');
+      }
+    });
+  }catch(e){}
+  updatePackProgress();
+})();
+
+function updatePackProgress(){
+  var total = document.querySelectorAll('.pack-check input').length;
+  var checked = document.querySelectorAll('.pack-check input:checked').length;
+  var el = document.getElementById('packCount');
+  var bar = document.getElementById('packBarFill');
+  if(el) el.textContent = checked + '/' + total;
+  if(bar) bar.style.width = (checked / total * 100) + '%';
+}
+</script>
+</body></html>
