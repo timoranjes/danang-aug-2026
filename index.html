@@ -87,10 +87,19 @@ a{color:var(--gold)}
 .story-photo{margin:14px 0 0;height:160px;border-radius:8px;background-size:cover;background-position:center;position:relative;overflow:hidden;box-shadow:var(--shadow)}
 .story-photo .caption{position:absolute;bottom:8px;right:8px;font-size:11px;color:rgba(255,255,255,0.85);background:rgba(0,0,0,0.5);padding:2px 8px;border-radius:4px;font-weight:500}
 
-.map-col{display:none}
-.mobile-map{display:block;height:220px;margin:20px 0 24px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;position:relative}
-@media(min-width:900px){.mobile-map{display:none}.map-col{display:block}}
-.mobile-map #map-mobile{width:100%;height:100%;display:block;z-index:1}
+.map-col{position:relative}
+@media(min-width:900px){
+  .map-col{position:sticky;top:100px;height:calc(100vh - 120px)}
+  .map-col #map{width:100%;height:100%}
+}
+@media(max-width:899px){
+  .main{display:flex;flex-direction:column}
+  .map-col{order:-1;border-top:1px solid var(--border);border-bottom:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .map-col #map{width:100%;height:300px}
+  .map-label{padding:10px 14px}
+  .map-filter{padding:0 14px 8px}
+  .itinerary-col{padding:20px 16px 60px;border-right:none}
+}
 
 .map-label{display:flex;align-items:center;gap:8px;padding:12px 16px;font-size:13px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border)}
 .map-label::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--gold)}
@@ -347,8 +356,6 @@ html.dark .day-nav{background:rgba(10,10,10,0.95)}
       <div class="story-item"><div class="story-dot"></div><div class="story-time">10:05</div><div class="story-title">✈ 峴港起飛 → 香港</div><div class="story-desc">UO553，13:40 抵達香港</div></div>
     </div>
 
-    <div class="mobile-map"><div id="map-mobile"></div></div>
-    
     <div class="pull-quote">「會安的燈籠、巴拿山的雲海、美溪海灘的日落——<br>這趟旅程的每一刻，都是家庭的共同記憶。」</div>
     
     <div class="info-sections">
@@ -829,40 +836,37 @@ function mkIcon(color, type){
 }
 
 /* ═══ Map initialization ═══ */
-var desktopMap=null, mobileMap=null;
-var desktopMarkers=[], mobileMarkers=[];
+var mainMap = null;
+var allMarkers = [];
 
 function initMaps(){
-  if(document.getElementById('map') && !desktopMap){
-    desktopMap = L.map('map',{zoomControl:true}).setView([16.0544,108.2157],12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(desktopMap);
+  if(document.getElementById('map') && !mainMap){
+    mainMap = L.map('map',{zoomControl:true}).setView([16.0544,108.2157],12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(mainMap);
     spots.forEach(function(p,i){
       var c = dayColors[p.day-1]||'#888';
-      var m = L.marker([p.lat,p.lng],{icon:mkIcon(c,p.type)}).addTo(desktopMap);
+      var m = L.marker([p.lat,p.lng],{icon:mkIcon(c,p.type)}).addTo(mainMap);
       m.on('click',function(){window.openPlaceInfo(i);});
-      desktopMarkers.push({marker:m,day:p.day});
+      allMarkers.push({marker:m,day:p.day});
     });
-  }
-  if(document.getElementById('map-mobile') && !mobileMap){
-    mobileMap = L.map('map-mobile',{zoomControl:false}).setView([16.0544,108.2157],12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(mobileMap);
-    spots.forEach(function(p,i){
-      var c = dayColors[p.day-1]||'#888';
-      var m = L.marker([p.lat,p.lng],{icon:mkIcon(c,p.type)}).addTo(mobileMap);
-      m.on('click',function(){window.openPlaceInfo(i);});
-      mobileMarkers.push({marker:m,day:p.day});
-    });
-    setTimeout(function(){mobileMap.invalidateSize();},300);
+    setTimeout(function(){mainMap.invalidateSize();},500);
   }
   filterMapDay(currentDay);
 }
 
+/* Recalculate on resize */
+var resizeTimer;
+window.addEventListener('resize', function(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function(){
+    if(mainMap) mainMap.invalidateSize();
+  }, 250);
+});
+
 window.filterMapDay = function(day){
-  [desktopMarkers,mobileMarkers].forEach(function(markers){
-    markers.forEach(function(m){
-      var el = m.marker.getElement();
-      if(el) el.style.display = (day===0||m.day===day)?'':'none';
-    });
+  allMarkers.forEach(function(m){
+    var el = m.marker.getElement();
+    if(el) el.style.display = (day===0||m.day===day)?'':'none';
   });
   document.querySelectorAll('.map-fbtn').forEach(function(btn){
     var n = parseInt(btn.getAttribute('onclick').match(/\d+/)[0]);
