@@ -1231,10 +1231,16 @@ function initMap() {
 }
 
 window.filterMapDay = function(day) {
+  var bounds = [];
   allMarkers.forEach(function(m) {
     var el = m.marker.getElement();
-    if (el) el.style.display = (day === 0 || m.day === day) ? '' : 'none';
+    var visible = (day === 0 || m.day === day);
+    if (el) el.style.display = visible ? '' : 'none';
+    if (visible) bounds.push(m.marker.getLatLng());
   });
+  if (mainMap && bounds.length > 0) {
+    mainMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
+  }
   document.querySelectorAll('.map-fbtn').forEach(function(btn) {
     var n = parseInt(btn.getAttribute('data-filter'));
     var a = n === day;
