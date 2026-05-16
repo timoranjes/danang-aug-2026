@@ -8,7 +8,42 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+/* ═══ Timeline → Map Scroll + Popup ═══ */
+window.openLocFromTimeline=function(lat,lng){
+  var mapEl=document.getElementById('map');
+  if(!mapEl)return;
+  var mapCol=mapEl.closest('.map-col');
+  if(mapCol)mapCol.scrollIntoView({behavior:'smooth',block:'start'});
+  setTimeout(function(){
+    if(!mainMap)return;
+    for(var i=0;i<allMarkers.length;i++){
+      var m=allMarkers[i];
+      var ll=m.marker.getLatLng();
+      if(Math.abs(ll.lat-lat)<0.001&&Math.abs(ll.lng-lng)<0.001){
+        mainMap.setView([lat,lng],14,{animate:true});
+        m.marker.openPopup();
+        break;
+      }
+    }
+  },500);
+};
+
+/* Event delegation for loc-links */
+(function(){
+  document.addEventListener('click',function(e){
+    var link=e.target.closest('.loc-link');
+    if(!link)return;
+    var lat=link.getAttribute('data-lat');
+    var lng=link.getAttribute('data-lng');
+    if(lat&&lng){
+      e.preventDefault();
+      window.openLocFromTimeline(parseFloat(lat),parseFloat(lng));
+    }
+  });
+})();
+
+</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -595,10 +630,10 @@ html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
     <div class="story-item"><div class="story-dot"></div><div class="story-time">10:00</div><div class="story-title">前往 Airbnb 辦理入住</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">11:00</div><div class="story-title">午餐 — Bun Cha Ca 109</div><div class="story-desc">魚餅檬粉，峴港名店</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">12:30</div><div class="story-title">回 Airbnb 午休</div></div>
-    <div class="story-item" data-loc="16.0700,108.2461"><div class="story-dot"></div><div class="story-time">16:00</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=16.0700,108.2461')">美溪海灘</span>漫步</div><div class="story-desc">福布斯全球最美海灘之一</div>
+    <div class="story-item" data-loc="16.0700,108.2461"><div class="story-dot"></div><div class="story-time">16:00</div><div class="story-title"><span class="loc-link" data-lat="16.0700" data-lng="108.2461">美溪海灘</span>漫步</div><div class="story-desc">福布斯全球最美海灘之一</div>
       <div class="story-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/My_Khe_Beach_Danang_Coastline.jpg/960px-My_Khe_Beach_Danang_Coastline.jpg')"><span class="caption">My Khe Beach</span></div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">18:00</div><div class="story-title">海鮮晚餐 — Be Man Seafood</div></div>
-    <div class="story-item" data-loc="16.0611,108.2272"><div class="story-dot"></div><div class="story-time">19:30</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=16.0611,108.2272')">漢江河畔散步 · 龍橋</span></div></div>
+    <div class="story-item" data-loc="16.0611,108.2272"><div class="story-dot"></div><div class="story-time">19:30</div><div class="story-title"><span class="loc-link" data-lat="16.0611" data-lng="108.2272">漢江河畔散步 · 龍橋</span></div></div>
   </div>
 </div>
 
@@ -611,7 +646,7 @@ html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
   <div class="story-timeline">
     <div class="story-item"><div class="story-dot"></div><div class="story-time">07:00</div><div class="story-title">出發前往巴拿山</div><div class="story-desc">車程約45分鐘</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">08:00</div><div class="story-title">纜車上山</div><div class="story-desc">世界最長纜車之一，全長近6公里</div></div>
-    <div class="story-item" data-loc="15.9949,107.9963"><div class="story-dot"></div><div class="story-time">08:30</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=15.9949,107.9963')">黃金橋</span></div><div class="story-desc">巨型佛手步道，海拔1,400米</div>
+    <div class="story-item" data-loc="15.9949,107.9963"><div class="story-dot"></div><div class="story-time">08:30</div><div class="story-title"><span class="loc-link" data-lat="15.9949" data-lng="107.9963">黃金橋</span></div><div class="story-desc">巨型佛手步道，海拔1,400米</div>
       <div class="story-photo" style="background-image:url('https://images.unsplash.com/photo-1741138327956-dfa75763b50d?w=600&q=70')"><span class="caption">Golden Bridge</span></div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">10:30</div><div class="story-title">法式小鎮 · 教堂 · 鐘樓</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">12:00</div><div class="story-title">午餐 — 山上自助餐廳</div></div>
@@ -630,11 +665,11 @@ html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
   </div>
   <div class="story-timeline">
     <div class="story-item"><div class="story-dot"></div><div class="story-time">09:00</div><div class="story-title">出發前往會安</div></div>
-    <div class="story-item" data-loc="15.8833,108.3333"><div class="story-dot"></div><div class="story-time">10:00</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=15.8833,108.3333')">會安古鎮</span>（UNESCO）</div><div class="story-desc">日本廊橋、譚家老宅、福建會館</div></div>
+    <div class="story-item" data-loc="15.8833,108.3333"><div class="story-dot"></div><div class="story-time">10:00</div><div class="story-title"><span class="loc-link" data-lat="15.8833" data-lng="108.3333">會安古鎮</span>（UNESCO）</div><div class="story-desc">日本廊橋、譚家老宅、福建會館</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">12:00</div><div class="story-title">午餐 — Cao Lau、Com Ga</div></div>
-    <div class="story-item" data-loc="15.8731,108.3749"><div class="story-dot"></div><div class="story-time">15:00</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=15.8731,108.3749')">椰林竹籃船</span></div><div class="story-desc">Cam Thanh 椰子村</div><div class="story-note">距古鎮3km</div></div>
+    <div class="story-item" data-loc="15.8731,108.3749"><div class="story-dot"></div><div class="story-time">15:00</div><div class="story-title"><span class="loc-link" data-lat="15.8731" data-lng="108.3749">椰林竹籃船</span></div><div class="story-desc">Cam Thanh 椰子村</div><div class="story-note">距古鎮3km</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">16:30</div><div class="story-title">安邦海灘放鬆</div></div>
-    <div class="story-item" data-loc="15.8833,108.3333"><div class="story-dot"></div><div class="story-time">19:00</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=15.8833,108.3333')">會安夜景 · 放河燈</span></div><div class="story-desc">燈籠映照秋蓬河</div>
+    <div class="story-item" data-loc="15.8833,108.3333"><div class="story-dot"></div><div class="story-time">19:00</div><div class="story-title"><span class="loc-link" data-lat="15.8833" data-lng="108.3333">會安夜景 · 放河燈</span></div><div class="story-desc">燈籠映照秋蓬河</div>
       <div class="story-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/2/28/Hoi_An_lanterns_at_night.jpg')"><span class="caption">Hoi An Lanterns</span></div></div>
   </div>
 </div>
@@ -646,11 +681,11 @@ html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
     <div class="summary"><span class="tag">步數 ~9,000</span><span class="tag">行車 ~60 min</span><span class="tag">輕度登山</span><span class="tag">節奏：中等</span></div>
   </div>
   <div class="story-timeline">
-    <div class="story-item" data-loc="16.0035,108.2646"><div class="story-dot"></div><div class="story-time">08:30</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=16.0035,108.2646')">五行山</span></div><div class="story-desc">石灰岩山峰、天然洞穴</div><div class="story-note">輕度登山，舒適鞋，約3小時</div>
+    <div class="story-item" data-loc="16.0035,108.2646"><div class="story-dot"></div><div class="story-time">08:30</div><div class="story-title"><span class="loc-link" data-lat="16.0035" data-lng="108.2646">五行山</span></div><div class="story-desc">石灰岩山峰、天然洞穴</div><div class="story-note">輕度登山，舒適鞋，約3小時</div>
       <div class="story-photo" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Marble_Mountains.jpg/960px-Marble_Mountains.jpg')"><span class="caption">Marble Mountains</span></div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">12:00</div><div class="story-title">午餐 — 海鮮餐廳</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">13:00</div><div class="story-title">前往山茶半島</div></div>
-    <div class="story-item" data-loc="16.1050,108.2350"><div class="story-dot"></div><div class="story-time">14:00</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=16.1050,108.2350')">靈應寺（山茶半島）</span></div><div class="story-desc">67米觀音像，越南最高</div></div>
+    <div class="story-item" data-loc="16.1050,108.2350"><div class="story-dot"></div><div class="story-time">14:00</div><div class="story-title"><span class="loc-link" data-lat="16.1008" data-lng="108.2711">靈應寺（山茶半島）</span></div><div class="story-desc">67米觀音像，越南最高</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">16:00</div><div class="story-title">美溪海灘放鬆</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">19:30</div><div class="story-title">漢江夜景 · 晚餐</div></div>
   </div>
@@ -663,11 +698,11 @@ html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
     <div class="summary"><span class="tag">步數 ~8,000</span><span class="tag">行車 ~20 min</span><span class="tag">節奏：輕鬆</span></div>
   </div>
   <div class="story-timeline">
-    <div class="story-item" data-loc="16.0599,108.2226"><div class="story-dot"></div><div class="story-time">09:30</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=16.0599,108.2226')">佔族雕塑博物館</span></div></div>
-    <div class="story-item" data-loc="16.0677,108.2225"><div class="story-dot"></div><div class="story-time">11:00</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=16.0677,108.2225')">漢市場</span></div></div>
+    <div class="story-item" data-loc="16.0599,108.2226"><div class="story-dot"></div><div class="story-time">09:30</div><div class="story-title"><span class="loc-link" data-lat="16.0599" data-lng="108.2226">佔族雕塑博物館</span></div></div>
+    <div class="story-item" data-loc="16.0677,108.2225"><div class="story-dot"></div><div class="story-time">11:00</div><div class="story-title"><span class="loc-link" data-lat="16.0677" data-lng="108.2225">漢市場</span></div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">14:00</div><div class="story-title">按摩 / SPA</div></div>
     <div class="story-item"><div class="story-dot"></div><div class="story-time">18:00</div><div class="story-title">告別晚餐 — 海鮮大餐</div></div>
-    <div class="story-item" data-loc="16.0611,108.2272"><div class="story-dot"></div><div class="story-time">20:30</div><div class="story-title"><span class="loc-link" onclick="window.open('https://www.google.com/maps/search/?api=1&query=16.0611,108.2272')">龍橋噴火表演</span></div><div class="story-desc">每週六日 21:00</div>
+    <div class="story-item" data-loc="16.0611,108.2272"><div class="story-dot"></div><div class="story-time">20:30</div><div class="story-title"><span class="loc-link" data-lat="16.0611" data-lng="108.2272">龍橋噴火表演</span></div><div class="story-desc">每週六日 21:00</div>
       <div class="story-photo" style="background-image:url('https://images.unsplash.com/photo-1571713343936-b27b7bedddab?w=600&q=70')"><span class="caption">Dragon Bridge</span></div></div>
   </div>
 </div>
@@ -907,7 +942,7 @@ var spots=[
   {lat:16.1008,lng:108.2711,title:'靈應寺（山茶半島）',titleEn:'Linh Ung Pagoda, Son Tra Peninsula',day:4,type:'temple',typeLabel:'寺廟 · Temple',desc:'山茶半島上的靈應寺，擁有67米高的觀音菩薩像（越南最高），面向南海，背靠山林。寺廟占地20公頃，建築宏偉，融合了現代與傳統越南寺廟風格。觀音像內有17層，每層供奉21尊不同形態的佛像。',tips:'穿著端莊（長褲/長裙），寺廟免費參觀',duration:'1-1.5小時',ticket:'免費',bestTime:'上午或下午',photos:['https://images.unsplash.com/photo-1766345524005-8fa63ebfc703?w=600&q=70','https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Lady_Buddha_Statue_at_Linh_Ung_Pagoda.jpg/960px-Lady_Buddha_Statue_at_Linh_Ung_Pagoda.jpg','https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Guanyin_statue_in_Da_Nang.jpg/960px-Guanyin_statue_in_Da_Nang.jpg'],gmapsQuery:'Linh Ung Pagoda Son Tra Da Nang Lady Buddha'},
   {lat:16.0599,lng:108.2226,title:'佔族雕塑博物館',titleEn:'Museum of Cham Sculpture',day:5,type:'museum',typeLabel:'博物館 · Museum',desc:'全球最大的佔族藝術收藏館，位於漢河畔。館內收藏了3-15世紀佔婆王國的精美石雕，包括神像、祭壇和裝飾浮雕。建築本身是法式殖民風格，建於1915年。',tips:'館內有英文說明牌，建議停留1-1.5小時',duration:'1-1.5小時',ticket:'門票約 40K VND',bestTime:'上午9:30開館後',photos:['https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Nandi%2C_view_1%2C_Tra_Kieu%2C_7th-8th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01871.JPG/960px-Nandi%2C_view_1%2C_Tra_Kieu%2C_7th-8th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01871.JPG','https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Gaja_Lakshmi_typanum%2C_Dong_Duang%2C_late_9th_to_early_10th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01807.JPG/960px-Gaja_Lakshmi_typanum%2C_Dong_Duang%2C_late_9th_to_early_10th_century%2C_Quang_Nam_-_Museum_of_Cham_Sculpture_-_Danang%2C_Vietnam_-_DSC01807.JPG'],gmapsQuery:'Museum of Cham Sculpture Da Nang'},
   {lat:16.0677,lng:108.2225,title:'漢市場',titleEn:'Han Market (Cho Han)',day:5,type:'market',typeLabel:'市場 · Market',desc:'峴港歷史最悠久的傳統市場，位於市中心漢河西岸。四面臨街（Hung Vuong、Tran Phu、Tran Hung Dao、Bach Dang），分為上下兩層。上層賣服裝、紀念品和手工藝品，下層是生鮮食品。是購買越南咖啡、特產和紀念品的好去處。',tips:'記得議價，現金付款為主，注意隨身物品',duration:'1-2小時',ticket:'免費入場',bestTime:'上午，貨品較齊全',photos:['https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Fabric_in_Han_Market_-_Da_Nang%2C_Vietnam_-_DSC02377.JPG/960px-Fabric_in_Han_Market_-_Da_Nang%2C_Vietnam_-_DSC02377.JPG','https://images.pexels.com/photos/17302468/pexels-photo-17302468.jpeg?auto=compress&cs=tinysrgb&w=600','https://images.pexels.com/photos/27246756/pexels-photo-27246756.jpeg?auto=compress&cs=tinysrgb&w=600'],gmapsQuery:'Han Market Cho Han Da Nang'}
-];
+,{lat:15.8833,lng:108.3333,title:'會安夜景·放河燈',titleEn:'Hoi An Night Lanterns',day:3,type:'night',typeLabel:'夜景 · Night',desc:'秋蓬河畔的夜晚燈籠點點，放河燈祈福是必體驗。沿河兩岸五彩燈籠倒映水中，適合散步拍照。',tips:'晚上7-9點最佳，可租河燈 10K VND',duration:'1-2小時',ticket:'免費',bestTime:'晚上7-9點',photos:['https://images.pexels.com/photos/7743660/pexels-photo-7743660.jpeg?auto=compress&cs=tinysrgb&w=600'],gmapsQuery:'Hoi An Ancient Town night lanterns'}];
 var dayColors=["#047857","#0e7490","#d97706","#059669","#7c3aed","#dc2626"];
 var currentDay=1,mainMap=null,allMarkers=[];
 
@@ -1047,6 +1082,41 @@ if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded'
 window.addEventListener('scroll',function(){var btn=document.querySelector('.top-btn');if(!btn)return;btn.classList.toggle('visible',window.scrollY>400);});
 
 (function(){var hash=window.location.hash;if(hash&&/^#\d+$/.test(hash)){var d=parseInt(hash.substring(1));if(d>=1&&d<=6)window.switchDay(d);}})();
+
+/* ═══ Timeline → Map Scroll + Popup ═══ */
+window.openLocFromTimeline=function(lat,lng){
+  var mapEl=document.getElementById('map');
+  if(!mapEl)return;
+  var mapCol=mapEl.closest('.map-col');
+  if(mapCol)mapCol.scrollIntoView({behavior:'smooth',block:'start'});
+  setTimeout(function(){
+    if(!mainMap)return;
+    for(var i=0;i<allMarkers.length;i++){
+      var m=allMarkers[i];
+      var ll=m.marker.getLatLng();
+      if(Math.abs(ll.lat-lat)<0.001&&Math.abs(ll.lng-lng)<0.001){
+        mainMap.setView([lat,lng],14,{animate:true});
+        m.marker.openPopup();
+        break;
+      }
+    }
+  },500);
+};
+
+/* Event delegation for loc-links */
+(function(){
+  document.addEventListener('click',function(e){
+    var link=e.target.closest('.loc-link');
+    if(!link)return;
+    var lat=link.getAttribute('data-lat');
+    var lng=link.getAttribute('data-lng');
+    if(lat&&lng){
+      e.preventDefault();
+      window.openLocFromTimeline(parseFloat(lat),parseFloat(lng));
+    }
+  });
+})();
+
 </script>
 </body>
 </html>
