@@ -54,7 +54,8 @@ body{font-family:var(--font-sans);color:var(--text);background:var(--bg);line-he
 .card-header{display:flex;justify-content:space-between;align-items:center;padding:16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;min-height:52px;transition:background 0.15s}
 .card-header:hover,.card-header:active{background:var(--surface2)}
 .card-header h3{font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
-.card-header h3 .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.card-header h3 .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-header h3 .icon svg{width:18px;height:18px;fill:#fff}
 .card-header .subtitle{font-size:12px;color:var(--text-muted);font-weight:400;margin-left:4px}
 .card-toggle{width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:transform 0.25s ease}
 .card.open .card-toggle{transform:rotate(180deg)}
@@ -177,7 +178,7 @@ html.dark .preview-header{background:rgba(20,20,20,0.9)}
     <div class="info-card open" id="card-emergency">
       <div class="card-header" onclick="toggleCard('card-emergency')">
         <h3>
-          <span class="icon" style="background:rgba(220,38,38,0.08);color:#dc2626">🚨</span>
+          <span class="icon" style="background:#dc2626"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></span>
           緊急資訊<span class="subtitle">重要電話</span>
         </h3>
         <span class="card-toggle">▾</span>
@@ -211,7 +212,7 @@ html.dark .preview-header{background:rgba(20,20,20,0.9)}
     <div class="info-card open" id="card-qr">
       <div class="card-header" onclick="toggleCard('card-qr')">
         <h3>
-          <span class="icon" style="background:rgba(124,58,237,0.08);color:#7c3aed">⚡</span>
+          <span class="icon" style="background:#7c3aed"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z"/></svg></span>
           快速參考<span class="subtitle">匯率 / 溫差</span>
         </h3>
         <span class="card-toggle">▾</span>
@@ -231,7 +232,7 @@ html.dark .preview-header{background:rgba(20,20,20,0.9)}
     <div class="info-card open" id="card-evisa">
       <div class="card-header" onclick="toggleCard('card-evisa')">
         <h3>
-          <span class="icon" style="background:rgba(2,132,199,0.08);color:#0284c7">📄</span>
+          <span class="icon" style="background:#0284c7"><svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg></span>
           電子簽證<span class="subtitle">E-Visa 指南</span>
         </h3>
         <span class="card-toggle">▾</span>
@@ -251,7 +252,7 @@ html.dark .preview-header{background:rgba(20,20,20,0.9)}
     <div class="info-card wide" id="card-packing">
       <div class="card-header" onclick="toggleCard('card-packing')">
         <h3>
-          <span class="icon" style="background:var(--gold-light);color:var(--gold)">🎒</span>
+          <span class="icon" style="background:#b8860b"><svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM10 4h4v2h-4V4zm10 16H4V8h16v12z"/></svg></span>
           打包清單<span class="subtitle">出發前檢查</span>
         </h3>
         <span class="card-toggle">▾</span>
@@ -300,7 +301,7 @@ html.dark .preview-header{background:rgba(20,20,20,0.9)}
     <div class="info-card wide" id="card-budget">
       <div class="card-header" onclick="toggleCard('card-budget')">
         <h3>
-          <span class="icon" style="background:rgba(5,150,105,0.08);color:#059669">💰</span>
+          <span class="icon" style="background:#059669"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></span>
           預算估算<span class="subtitle">每人，HKD</span>
         </h3>
         <span class="card-toggle">▾</span>
@@ -334,7 +335,7 @@ html.dark .preview-header{background:rgba(20,20,20,0.9)}
     <div class="info-card full" id="card-tips">
       <div class="card-header" onclick="toggleCard('card-tips')">
         <h3>
-          <span class="icon" style="background:rgba(184,134,11,0.08);color:var(--gold)">💡</span>
+          <span class="icon" style="background:#b8860b"><svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg></span>
           行前準備<span class="subtitle">實用資訊</span>
         </h3>
         <span class="card-toggle">▾</span>
