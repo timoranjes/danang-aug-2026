@@ -8,42 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-/* ═══ Timeline → Map Scroll + Popup ═══ */
-window.openLocFromTimeline=function(lat,lng){
-  var mapEl=document.getElementById('map');
-  if(!mapEl)return;
-  var mapCol=mapEl.closest('.map-col');
-  if(mapCol)mapCol.scrollIntoView({behavior:'smooth',block:'start'});
-  setTimeout(function(){
-    if(!mainMap)return;
-    for(var i=0;i<allMarkers.length;i++){
-      var m=allMarkers[i];
-      var ll=m.marker.getLatLng();
-      if(Math.abs(ll.lat-lat)<0.001&&Math.abs(ll.lng-lng)<0.001){
-        mainMap.setView([lat,lng],14,{animate:true});
-        m.marker.openPopup();
-        break;
-      }
-    }
-  },500);
-};
-
-/* Event delegation for loc-links */
-(function(){
-  document.addEventListener('click',function(e){
-    var link=e.target.closest('.loc-link');
-    if(!link)return;
-    var lat=link.getAttribute('data-lat');
-    var lng=link.getAttribute('data-lng');
-    if(lat&&lng){
-      e.preventDefault();
-      window.openLocFromTimeline(parseFloat(lat),parseFloat(lng));
-    }
-  });
-})();
-
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -263,12 +228,14 @@ a{color:var(--primary);text-decoration:none}
 
 .card-header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px 18px;cursor:pointer;user-select:none;
+  padding:14px 16px;cursor:pointer;user-select:none;
   -webkit-tap-highlight-color:transparent;
-  transition:background 0.15s;min-height:62px;
+  transition:all 0.2s;min-height:56px;
 }
 .card-header:hover{background:var(--surface-alt)}
 .card-header:active{background:var(--bg-alt)}
+.info-card.open .card-header{background:#f5f5f5;border-bottom:1px solid var(--border-light)}
+html.dark .info-card.open .card-header{background:#1a2320}
 
 .card-header-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
 
@@ -278,66 +245,26 @@ a{color:var(--primary);text-decoration:none}
   margin-top:2px;letter-spacing:0.04em;text-transform:uppercase;
 }
 
-/* Card Icons */
+/* Card Icons - flat colors + SVG */
 .card-icon{
-  width:42px;height:42px;border-radius:12px;
+  width:40px;height:40px;border-radius:10px;
   display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;position:relative;
+  flex-shrink:0;
 }
-.card-icon.emergency{background:linear-gradient(135deg,#dc2626,#ef4444)}
-.card-icon.emergency::after{
-  content:'';width:18px;height:22px;
-  border:2px solid #fff;border-radius:2px 2px 9px 9px;position:relative;
-}
-.card-icon.emergency::before{
-  content:'';position:absolute;top:11px;left:50%;transform:translateX(-50%);
-  width:8px;height:2px;background:#fff;box-shadow:0 -4px 0 #fff,0 4px 0 #fff;
-}
-.card-icon.quickref{background:linear-gradient(135deg,#7c3aed,#8b5cf6)}
-.card-icon.quickref::after{
-  content:'';position:relative;top:2px;
-  width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;
-  border-bottom:12px solid #fff;transform:skewX(-5deg);
-}
-.card-icon.visa{background:linear-gradient(135deg,#0284c7,#0ea5e9)}
-.card-icon.visa::after{
-  content:'';width:16px;height:20px;border:2px solid #fff;border-radius:2px;position:relative;
-  background:linear-gradient(to bottom,transparent 40%,#fff 40%,#fff 44%,transparent 44%,transparent 56%,#fff 56%,#fff 60%,transparent 60%);
-}
-.card-icon.packing{background:linear-gradient(135deg,var(--accent),var(--accent-light))}
-.card-icon.packing::after{content:'';width:20px;height:16px;border:2px solid #fff;border-radius:3px;position:relative}
-.card-icon.packing::before{
-  content:'';position:absolute;top:5px;left:50%;transform:translateX(-50%);
-  width:8px;height:4px;border:2px solid #fff;border-bottom:none;border-radius:4px 4px 0 0;
-}
-.card-icon.budget{background:linear-gradient(135deg,#059669,#10b981)}
-.card-icon.budget::after{
-  content:'';width:18px;height:18px;border:2px solid #fff;border-radius:50%;position:relative;
-}
-.card-icon.budget::before{
-  content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:8px;height:2px;background:#fff;box-shadow:0 -3px 0 #fff,0 3px 0 #fff;
-}
-.card-icon.tips{background:linear-gradient(135deg,#ca8a04,#eab308)}
-.card-icon.tips::after{
-  content:'';width:14px;height:16px;border:2px solid #fff;border-radius:50% 50% 4px 4px;position:relative;top:2px;
-}
-.card-icon.tips::before{
-  content:'';position:absolute;bottom:7px;left:50%;transform:translateX(-50%);
-  width:8px;height:3px;background:#fff;border-radius:0 0 2px 2px;
-}
+.card-icon svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.card-icon.emergency{background:#dc2626}
+.card-icon.quickref{background:#7c3aed}
+.card-icon.visa{background:#0284c7}
+.card-icon.packing{background:#d97706}
+.card-icon.budget{background:#059669}
+.card-icon.tips{background:#ca8a04}
 
 /* Chevron */
 .card-chevron{
-  width:20px;height:20px;flex-shrink:0;position:relative;
+  width:20px;height:20px;flex-shrink:0;
   transition:transform 0.2s;
 }
-.card-chevron::after{
-  content:'';position:absolute;top:6px;left:3px;
-  width:10px;height:10px;
-  border-right:2px solid var(--text-muted);border-bottom:2px solid var(--text-muted);
-  transform:rotate(45deg);transition:transform 0.2s;
-}
+.card-chevron svg{width:16px;height:16px;fill:none;stroke:var(--text-muted);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .info-card.open .card-chevron{transform:rotate(180deg)}
 
 .card-body{display:none;padding:0 18px 20px}
@@ -405,12 +332,17 @@ a{color:var(--primary);text-decoration:none}
 /* ═══ Budget Table ═══ */
 .budget-table{width:100%;border-collapse:collapse;font-size:14px}
 .budget-table thead th{
-  text-align:left;padding:10px 12px;font-size:12px;
+  text-align:left;padding:10px 12px;font-size:11px;
   color:var(--text-muted);text-transform:uppercase;letter-spacing:0.04em;
-  border-bottom:2px solid var(--border);font-weight:600;
+  background:#f5f5f5;font-weight:600;
 }
-.budget-table tbody td{padding:10px 12px;border-bottom:1px solid var(--border-light);color:var(--text-secondary)}
-.budget-table tfoot td{padding:12px;font-weight:700;color:var(--text);border-top:2px solid var(--border)}
+.budget-table thead th:first-child{border-radius:8px 0 0 8px}
+.budget-table thead th:last-child{border-radius:0 8px 8px 0}
+.budget-table tbody td{padding:12px;font-size:13px;border-bottom:1px solid var(--border-light);color:var(--text-secondary);vertical-align:top}
+.budget-table tbody td:last-child{text-align:right;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;white-space:nowrap}
+.budget-table tbody tr:last-child td{border-bottom:none}
+.budget-table tfoot td{padding:14px 12px;font-weight:700;color:var(--text);border-top:2px solid var(--border);font-size:14px}
+.budget-table tfoot td:last-child{text-align:right;font-variant-numeric:tabular-nums}
 
 /* ═══ Local Tips ═══ */
 .tips-list{list-style:none;padding:0;margin:0}
@@ -490,43 +422,6 @@ html.dark .p-popup-actions a.maps{background:#182019;color:#9db0ab;border-color:
   .p-popup-desc{font-size:11px;-webkit-line-clamp:2}
 }
 
-/* ═══ Modals ═══ */
-.gm-modal,.pi-modal{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-.gm-modal.show,.pi-modal.show{display:flex}
-.gm-modal{align-items:center;justify-content:center;padding:20px}
-.pi-modal{align-items:flex-end;justify-content:center}
-@media(min-width:600px){.pi-modal{align-items:center}}
-.gm-box,.pi-box{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-xl);max-width:560px;width:100%}
-.gm-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border-light)}
-.gm-header h3{font-size:16px;font-weight:600;color:var(--text)}
-.gm-close{width:28px;height:28px;border-radius:6px;border:none;background:var(--surface-alt);color:var(--text-secondary);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
-.gm-close:hover{background:var(--bg-alt);color:var(--text)}
-.gm-body iframe{width:100%;height:240px;border:none}
-.gm-actions{padding:12px 16px;display:flex;gap:8px}
-.gm-actions a,.gm-actions button{flex:1;text-align:center;padding:10px;border-radius:var(--radius-xs);font-size:13px;font-weight:500;border:1px solid var(--border);color:var(--text);background:var(--surface);cursor:pointer;text-decoration:none}
-.gm-actions a:first-child{background:var(--primary);border-color:var(--primary);color:#fff}
-
-.pi-box{max-height:85vh;overflow-y:auto;border-radius:var(--radius) var(--radius) 0 0}
-@media(min-width:600px){.pi-box{border-radius:var(--radius)}}
-@media(max-width:899px){.pi-box{max-height:calc(100vh - 100px - env(safe-area-inset-bottom))}}
-.pi-hero{height:140px;background-size:cover;background-position:center;position:relative}
-.pi-close-btn{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:none;background:rgba(0,0,0,0.5);color:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
-.pi-hero-title{position:absolute;bottom:0;left:0;right:0;padding:12px 16px;background:linear-gradient(transparent,rgba(0,0,0,0.7))}
-.pi-hero-title h2{color:#fff;font-size:18px;font-family:var(--font-serif);font-weight:700}
-.pi-hero-title .en{font-size:11px;color:rgba(255,255,255,0.7)}
-.pi-body{padding:14px 16px}
-.pi-type-badge{display:inline-block;padding:3px 10px;border-radius:100px;background:rgba(4,120,87,0.08);font-size:11px;color:var(--primary);font-weight:500;margin-bottom:10px}
-.pi-desc{font-size:14px;color:var(--text-secondary);line-height:1.7;margin-bottom:12px}
-.pi-meta-item{padding:10px 12px;border-radius:var(--radius-sm);background:var(--surface-alt);margin-bottom:6px}
-.pi-meta-item .label{font-size:11px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.04em}
-.pi-meta-item .value{font-size:13px;color:var(--text);font-weight:500;margin-top:2px}
-.pi-gallery{display:flex;gap:6px;overflow-x:auto;padding:0 16px 12px;scroll-snap-type:x mandatory}
-.pi-gallery::-webkit-scrollbar{display:none}
-.pi-gallery img{flex-shrink:0;width:130px;height:76px;object-fit:cover;border-radius:var(--radius-xs);scroll-snap-align:start}
-.pi-actions{display:flex;gap:6px;padding:0 16px 16px}
-.pi-actions a{flex:1;text-align:center;padding:10px;border-radius:var(--radius-xs);font-size:13px;font-weight:500;border:1px solid var(--border);color:var(--text);text-decoration:none}
-.pi-actions a:first-child{background:var(--primary);border-color:var(--primary);color:#fff}
-
 /* ═══ Top Button ═══ */
 .top-btn{
   position:fixed;bottom:24px;right:20px;
@@ -554,10 +449,6 @@ html.dark .day-nav{background:rgba(10,15,14,0.92)}
 html.dark .flight-bar{background:rgba(10,15,14,0.88)}
 html.dark .story-photo .caption{background:rgba(0,0,0,0.6)}
 html.dark .pull-quote{background:linear-gradient(135deg,rgba(5,150,105,0.06),rgba(14,116,144,0.06))}
-html.dark .gm-box,html.dark .pi-box{background:var(--surface)}
-html.dark .gm-header{border-bottom-color:var(--border-light)}
-html.dark .gm-close{background:var(--surface-alt)}
-html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
 
 /* ═══ Responsive ═══ */
 @media(max-width:640px){
@@ -567,9 +458,10 @@ html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
   .flight-flights{gap:12px;font-size:12px}
   .itinerary-col{padding:16px 12px 48px}
   .section-title{margin:0 0 16px 12px;font-size:20px}
-  .card-header{padding:14px 16px;min-height:56px}
-  .card-body{padding:0 16px 16px}
-  .card-icon{width:40px;height:40px;border-radius:10px}
+  .card-header{padding:12px 14px;min-height:52px}
+  .card-body{padding:0 14px 14px}
+  .card-icon{width:36px;height:36px;border-radius:8px}
+  .card-icon svg{width:20px;height:20px}
   .story-header h2{font-size:22px}
   .em-phone{font-size:16px}
 }
@@ -736,200 +628,174 @@ html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
     </div>
     <div id="map"></div>
   </div>
+
 </div>
 
 <div class="info-sections">
-  <h2 class="section-title">實用資訊</h2>
-  <div class="info-cards">
+<h2 class="section-title">實用資訊</h2>
+<div class="info-cards">
 
-    <div class="info-card open" id="card-emergency">
-      <div class="card-header" onclick="toggleCard('card-emergency')" role="button" aria-expanded="true" aria-controls="card-emergency-body">
-        <div class="card-header-left">
-          <span class="card-icon emergency" aria-hidden="true"></span>
-          <div><h3>緊急資訊</h3><span class="card-subtitle">Emergency Contacts</span></div>
-        </div>
-        <span class="card-chevron" aria-hidden="true"></span>
+  <div class="info-card open" id="card-emergency">
+    <div class="card-header" onclick="toggleCard('card-emergency')" role="button" aria-expanded="true" aria-controls="card-emergency-body">
+      <div class="card-header-left">
+        <span class="card-icon emergency" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+        <div><h3>緊急資訊</h3><span class="card-subtitle">Emergency Contacts</span></div>
       </div>
-      <div class="card-body" id="card-emergency-body" role="region">
-        <div class="em-grid">
-          <div class="em-card"><div class="em-label">香港經貿辦</div><div class="em-phone">+852 1868</div><div class="em-note">領事熱線（24小時）</div></div>
-          <div class="em-card"><div class="em-label">越南緊急電話</div><div class="em-phone">113 / 114 / 115</div><div class="em-note">報警 / 救火 / 救護</div></div>
-          <div class="em-card"><div class="em-label">Family Hospital</div><div class="em-phone">0236 3565 800</div><div class="em-note">291-293 Nguyen Van Linh</div></div>
-          <div class="em-card"><div class="em-label">Airbnb</div><div class="em-note">出發前更新</div></div>
-        </div>
-      </div>
+      <span class="card-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
     </div>
-
-    <div class="info-card open" id="card-qr">
-      <div class="card-header" onclick="toggleCard('card-qr')" role="button" aria-expanded="true" aria-controls="card-qr-body">
-        <div class="card-header-left">
-          <span class="card-icon quickref" aria-hidden="true"></span>
-          <div><h3>快速參考</h3><span class="card-subtitle">Quick Reference</span></div>
-        </div>
-        <span class="card-chevron" aria-hidden="true"></span>
+    <div class="card-body" id="card-emergency-body" role="region">
+      <div class="em-grid">
+        <div class="em-card"><div class="em-label">香港經貿辦</div><div class="em-phone">+852 1868</div><div class="em-note">領事熱線（24小時）</div></div>
+        <div class="em-card"><div class="em-label">越南緊急電話</div><div class="em-phone">113 / 114 / 115</div><div class="em-note">報警 / 救火 / 救護</div></div>
+        <div class="em-card"><div class="em-label">Family Hospital</div><div class="em-phone">0236 3565 800</div><div class="em-note">291-293 Nguyen Van Linh</div></div>
+        <div class="em-card"><div class="em-label">Airbnb</div><div class="em-note">出發前更新</div></div>
       </div>
-      <div class="card-body" id="card-qr-body" role="region">
-        <div class="qr-grid">
-          <div class="qr-item"><span class="qr-label">匯率</span><span class="qr-value">1 HKD &#8776; 3,100 VND</span></div>
-          <div class="qr-item"><span class="qr-label">時差</span><span class="qr-value">慢1小時（UTC+7）</span></div>
-          <div class="qr-item"><span class="qr-label">8月均溫</span><span class="qr-value">25-35&#176;C</span></div>
-          <div class="qr-item"><span class="qr-label">Grab 市區</span><span class="qr-value">30K-50K VND</span></div>
-          <div class="qr-item"><span class="qr-label">7人車</span><span class="qr-value">200K-350K VND</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-card open" id="card-evisa">
-      <div class="card-header" onclick="toggleCard('card-evisa')" role="button" aria-expanded="true" aria-controls="card-evisa-body">
-        <div class="card-header-left">
-          <span class="card-icon visa" aria-hidden="true"></span>
-          <div><h3>電子簽證</h3><span class="card-subtitle">E-Visa Application</span></div>
-        </div>
-        <span class="card-chevron" aria-hidden="true"></span>
-      </div>
-      <div class="card-body" id="card-evisa-body" role="region">
-        <div class="visa-alert">建議出發前至少 7-10 個工作日申請</div>
-        <div class="visa-steps">
-          <div class="visa-step"><span class="num">1</span><div class="step-text">前往 <a class="visa-link" href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank" rel="noopener">evisa.xuatnhapcanh.gov.vn</a></div></div>
-          <div class="visa-step"><span class="num">2</span><div class="step-text">費用 <strong>USD $25 / 人</strong>（5人共 $125）</div></div>
-          <div class="visa-step"><span class="num">3</span><div class="step-text">處理時間約 <strong>3-5 工作日</strong></div></div>
-          <div class="visa-step"><span class="num">4</span><div class="step-text">準備 <strong>護照掃描件</strong> + <strong>白底證件相</strong></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-card wide" id="card-packing">
-      <div class="card-header" onclick="toggleCard('card-packing')" role="button" aria-expanded="false" aria-controls="card-packing-body">
-        <div class="card-header-left">
-          <span class="card-icon packing" aria-hidden="true"></span>
-          <div><h3>打包清單</h3><span class="card-subtitle">Packing Checklist</span></div>
-        </div>
-        <span class="card-chevron" aria-hidden="true"></span>
-      </div>
-      <div class="card-body" id="card-packing-body" role="region">
-        <div class="pack-summary">
-          <span class="count" id="packCount">0/29</span>
-          <div class="pack-bar"><div class="pack-bar-fill" id="packBarFill"></div></div>
-        </div>
-        <div class="pack-grid">
-          <div>
-            <div class="pack-cat-title">證件與金錢</div>
-            <label class="pack-check"><input type="checkbox" data-pack="passport"> 護照</label>
-            <label class="pack-check"><input type="checkbox" data-pack="evisa"> E-Visa</label>
-            <label class="pack-check"><input type="checkbox" data-pack="cash"> VND 現金</label>
-            <label class="pack-check"><input type="checkbox" data-pack="card"> Visa / MC</label>
-            <label class="pack-check"><input type="checkbox" data-pack="insurance"> 旅遊保險</label>
-            <label class="pack-check"><input type="checkbox" data-pack="airbnb"> Airbnb 確認</label>
-            <label class="pack-check"><input type="checkbox" data-pack="flight"> 機票</label>
-            <div class="pack-cat-title" style="margin-top:16px">衣物</div>
-            <label class="pack-check"><input type="checkbox" data-pack="summer"> 夏裝</label>
-            <label class="pack-check"><input type="checkbox" data-pack="jacket"> 薄外套</label>
-            <label class="pack-check"><input type="checkbox" data-pack="swim"> 泳裝</label>
-            <label class="pack-check"><input type="checkbox" data-pack="shoes"> 行山鞋</label>
-            <label class="pack-check"><input type="checkbox" data-pack="sandals"> 拖鞋</label>
-            <label class="pack-check"><input type="checkbox" data-pack="pants"> 寺廟長褲</label>
-            <label class="pack-check"><input type="checkbox" data-pack="hat"> 帽子</label>
-          </div>
-          <div>
-            <div class="pack-cat-title">電子用品</div>
-            <label class="pack-check"><input type="checkbox" data-pack="charger"> 充電器</label>
-            <label class="pack-check"><input type="checkbox" data-pack="adapter"> 轉換器</label>
-            <label class="pack-check"><input type="checkbox" data-pack="powerbank"> 行動電源</label>
-            <label class="pack-check"><input type="checkbox" data-pack="camera"> 相機</label>
-            <label class="pack-check"><input type="checkbox" data-pack="waterbag"> 防水袋</label>
-            <div class="pack-cat-title" style="margin-top:16px">日常用品</div>
-            <label class="pack-check"><input type="checkbox" data-pack="sunscreen"> 防曬 SPF50+</label>
-            <label class="pack-check"><input type="checkbox" data-pack="bugspray"> 防蚊液</label>
-            <label class="pack-check"><input type="checkbox" data-pack="meds"> 藥品</label>
-            <label class="pack-check"><input type="checkbox" data-pack="umbrella"> 雨傘</label>
-            <label class="pack-check"><input type="checkbox" data-pack="wipes"> 濕紙巾</label>
-            <label class="pack-check"><input type="checkbox" data-pack="neckpillow"> 頸枕</label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="info-card wide" id="card-budget">
-      <div class="card-header" onclick="toggleCard('card-budget')" role="button" aria-expanded="false" aria-controls="card-budget-body">
-        <div class="card-header-left">
-          <span class="card-icon budget" aria-hidden="true"></span>
-          <div><h3>預算估算</h3><span class="card-subtitle">Budget Estimate</span></div>
-        </div>
-        <span class="card-chevron" aria-hidden="true"></span>
-      </div>
-      <div class="card-body" id="card-budget-body" role="region">
-        <table class="budget-table">
-          <thead><tr><th>項目</th><th>說明</th><th style="text-align:right">每人 HKD</th></tr></thead>
-          <tbody>
-            <tr><td>機票</td><td>HK Express 往返</td><td>~$2,120</td></tr>
-            <tr><td>Airbnb</td><td>5晚</td><td>$700-1,100</td></tr>
-            <tr><td>餐飲</td><td>6天</td><td>$500-700</td></tr>
-            <tr><td>交通</td><td>Grab / 包車</td><td>$160-240</td></tr>
-            <tr><td>門票</td><td>巴拿山+會安</td><td>$300-400</td></tr>
-            <tr><td>簽證</td><td>E-Visa</td><td>~$195</td></tr>
-          </tbody>
-          <tfoot><tr><td colspan="2">合計（不含機票）</td><td style="text-align:right">~$1,855-2,635</td></tr></tfoot>
-        </table>
-      </div>
-    </div>
-
-    <div class="info-card wide" id="card-tips">
-      <div class="card-header" onclick="toggleCard('card-tips')" role="button" aria-expanded="false" aria-controls="card-tips-body">
-        <div class="card-header-left">
-          <span class="card-icon tips" aria-hidden="true"></span>
-          <div><h3>在地提醒</h3><span class="card-subtitle">Local Tips</span></div>
-        </div>
-        <span class="card-chevron" aria-hidden="true"></span>
-      </div>
-      <div class="card-body" id="card-tips-body" role="region">
-        <ul class="tips-list">
-          <li><strong>小費文化：</strong>越南有小費習慣，餐廳可給 5-10%；Grab 無需小費</li>
-          <li><strong>貨幣兌換：</strong>機場匯率較差，建議帶 USD 到市區金店換</li>
-          <li><strong>防曬防蚊：</strong>8月為雨季，隨身帶雨具；紫外線強，防曬不可少</li>
-          <li><strong>寺廟禮儀：</strong>入寺廟需穿著得體（不可露肩、露膝）</li>
-          <li><strong>交通：</strong>Grab 最方便，避免路邊攔計程車（易被騙）</li>
-          <li><strong>飲水：</strong>不要飲用自來水，買瓶裝水</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- Google Maps Modal -->
-<div class="gm-modal" id="gmModal" onclick="if(event.target===this)closeMap()">
-  <div class="gm-box">
-    <div class="gm-header"><h3 id="gmTitle"></h3><button class="gm-close" onclick="closeMap()" aria-label="Close">&#x2715;</button></div>
-    <div class="gm-body"><iframe id="gmFrame" src="" loading="lazy" allowfullscreen></iframe></div>
-    <div class="gm-actions">
-      <a id="gmDirLink" href="#" target="_blank" rel="noopener">導航</a>
-      <button onclick="closeMap()">關閉</button>
     </div>
   </div>
-</div>
 
-<!-- Place Info Modal -->
-<div class="pi-modal" id="piModal" onclick="if(event.target===this)closePlaceInfo()">
-  <div class="pi-box">
-    <div class="pi-hero" id="piHero"><button class="pi-close-btn" onclick="closePlaceInfo()" aria-label="Close">&#x2715;</button><div class="pi-hero-title"><h2 id="piTitle"></h2><div class="en" id="piTitleEn"></div></div></div>
-    <div class="pi-body">
-      <span class="pi-type-badge" id="piTypeBadge"></span>
-      <p class="pi-desc" id="piDesc"></p>
-      <div class="pi-meta-item"><span class="label">最佳時段</span><span class="value" id="piBestTime"></span></div>
-      <div class="pi-meta-item"><span class="label">門票</span><span class="value" id="piTicket"></span></div>
-      <div class="pi-meta-item"><span class="label">停留時間</span><span class="value" id="piDuration"></span></div>
+  <div class="info-card open" id="card-qr">
+    <div class="card-header" onclick="toggleCard('card-qr')" role="button" aria-expanded="true" aria-controls="card-qr-body">
+      <div class="card-header-left">
+        <span class="card-icon quickref" aria-hidden="true"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+        <div><h3>快速參考</h3><span class="card-subtitle">Quick Reference</span></div>
+      </div>
+      <span class="card-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
     </div>
-    <div class="pi-gallery" id="piGallery"></div>
-    <div class="pi-actions">
-      <a id="piGmapsLink" href="#" target="_blank" rel="noopener">Google Maps</a>
-      <a id="piStreetView" href="#" target="_blank" rel="noopener">街景</a>
-      <a id="piDirLink" href="#" target="_blank" rel="noopener">導航</a>
+    <div class="card-body" id="card-qr-body" role="region">
+      <div class="qr-grid">
+        <div class="qr-item"><span class="qr-label">匯率</span><span class="qr-value">1 HKD &#8776; 3,100 VND</span></div>
+        <div class="qr-item"><span class="qr-label">時差</span><span class="qr-value">慢1小時（UTC+7）</span></div>
+        <div class="qr-item"><span class="qr-label">8月均溫</span><span class="qr-value">25-35&#176;C</span></div>
+        <div class="qr-item"><span class="qr-label">Grab 市區</span><span class="qr-value">30K-50K VND</span></div>
+        <div class="qr-item"><span class="qr-label">7人車</span><span class="qr-value">200K-350K VND</span></div>
+      </div>
     </div>
   </div>
+
+  <div class="info-card open" id="card-evisa">
+    <div class="card-header" onclick="toggleCard('card-evisa')" role="button" aria-expanded="true" aria-controls="card-evisa-body">
+      <div class="card-header-left">
+        <span class="card-icon visa" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></span>
+        <div><h3>電子簽證</h3><span class="card-subtitle">E-Visa Application</span></div>
+      </div>
+      <span class="card-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </div>
+    <div class="card-body" id="card-evisa-body" role="region">
+      <div class="visa-alert">建議出發前至少 7-10 個工作日申請</div>
+      <div class="visa-steps">
+        <div class="visa-step"><span class="num">1</span><div class="step-text">前往 <a class="visa-link" href="https://evisa.xuatnhapcanh.gov.vn/" target="_blank" rel="noopener">evisa.xuatnhapcanh.gov.vn</a></div></div>
+        <div class="visa-step"><span class="num">2</span><div class="step-text">費用 <strong>USD $25 / 人</strong>（5人共 $125）</div></div>
+        <div class="visa-step"><span class="num">3</span><div class="step-text">處理時間約 <strong>3-5 工作日</strong></div></div>
+        <div class="visa-step"><span class="num">4</span><div class="step-text">準備 <strong>護照掃描件</strong> + <strong>白底證件相</strong></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card wide" id="card-packing">
+    <div class="card-header" onclick="toggleCard('card-packing')" role="button" aria-expanded="false" aria-controls="card-packing-body">
+      <div class="card-header-left">
+        <span class="card-icon packing" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg></span>
+        <div><h3>打包清單</h3><span class="card-subtitle">Packing Checklist</span></div>
+      </div>
+      <span class="card-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </div>
+    <div class="card-body" id="card-packing-body" role="region">
+      <div class="pack-summary">
+        <span class="count" id="packCount">0/29</span>
+        <div class="pack-bar"><div class="pack-bar-fill" id="packBarFill"></div></div>
+      </div>
+      <div class="pack-grid">
+        <div>
+          <div class="pack-cat-title">證件與金錢</div>
+          <label class="pack-check"><input type="checkbox" data-pack="passport"> 護照</label>
+          <label class="pack-check"><input type="checkbox" data-pack="evisa"> E-Visa</label>
+          <label class="pack-check"><input type="checkbox" data-pack="cash"> VND 現金</label>
+          <label class="pack-check"><input type="checkbox" data-pack="card"> Visa / MC</label>
+          <label class="pack-check"><input type="checkbox" data-pack="insurance"> 旅遊保險</label>
+          <label class="pack-check"><input type="checkbox" data-pack="airbnb"> Airbnb 確認</label>
+          <label class="pack-check"><input type="checkbox" data-pack="flight"> 機票</label>
+          <div class="pack-cat-title" style="margin-top:16px">衣物</div>
+          <label class="pack-check"><input type="checkbox" data-pack="summer"> 夏裝</label>
+          <label class="pack-check"><input type="checkbox" data-pack="jacket"> 薄外套</label>
+          <label class="pack-check"><input type="checkbox" data-pack="swim"> 泳裝</label>
+          <label class="pack-check"><input type="checkbox" data-pack="shoes"> 行山鞋</label>
+          <label class="pack-check"><input type="checkbox" data-pack="sandals"> 拖鞋</label>
+          <label class="pack-check"><input type="checkbox" data-pack="pants"> 寺廟長褲</label>
+          <label class="pack-check"><input type="checkbox" data-pack="hat"> 帽子</label>
+        </div>
+        <div>
+          <div class="pack-cat-title">電子用品</div>
+          <label class="pack-check"><input type="checkbox" data-pack="charger"> 充電器</label>
+          <label class="pack-check"><input type="checkbox" data-pack="adapter"> 轉換器</label>
+          <label class="pack-check"><input type="checkbox" data-pack="powerbank"> 行動電源</label>
+          <label class="pack-check"><input type="checkbox" data-pack="camera"> 相機</label>
+          <label class="pack-check"><input type="checkbox" data-pack="waterbag"> 防水袋</label>
+          <div class="pack-cat-title" style="margin-top:16px">日常用品</div>
+          <label class="pack-check"><input type="checkbox" data-pack="sunscreen"> 防曬 SPF50+</label>
+          <label class="pack-check"><input type="checkbox" data-pack="bugspray"> 防蚊液</label>
+          <label class="pack-check"><input type="checkbox" data-pack="meds"> 藥品</label>
+          <label class="pack-check"><input type="checkbox" data-pack="umbrella"> 雨傘</label>
+          <label class="pack-check"><input type="checkbox" data-pack="wipes"> 濕紙巾</label>
+          <label class="pack-check"><input type="checkbox" data-pack="neckpillow"> 頸枕</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card wide" id="card-budget">
+    <div class="card-header" onclick="toggleCard('card-budget')" role="button" aria-expanded="false" aria-controls="card-budget-body">
+      <div class="card-header-left">
+        <span class="card-icon budget" aria-hidden="true"><svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+        <div><h3>預算估算</h3><span class="card-subtitle">Budget Estimate</span></div>
+      </div>
+      <span class="card-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </div>
+    <div class="card-body" id="card-budget-body" role="region">
+      <table class="budget-table">
+        <thead><tr><th>項目</th><th>說明</th><th style="text-align:right">每人 HKD</th></tr></thead>
+        <tbody>
+          <tr><td>機票</td><td>HK Express 往返</td><td>~$2,120</td></tr>
+          <tr><td>Airbnb</td><td>5晚</td><td>$700-1,100</td></tr>
+          <tr><td>餐飲</td><td>6天</td><td>$500-700</td></tr>
+          <tr><td>交通</td><td>Grab / 包車</td><td>$160-240</td></tr>
+          <tr><td>門票</td><td>巴拿山+會安</td><td>$300-400</td></tr>
+          <tr><td>簽證</td><td>E-Visa</td><td>~$195</td></tr>
+        </tbody>
+        <tfoot><tr><td colspan="2">合計（不含機票）</td><td style="text-align:right">~$1,855-2,635</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+
+  <div class="info-card wide" id="card-tips">
+    <div class="card-header" onclick="toggleCard('card-tips')" role="button" aria-expanded="false" aria-controls="card-tips-body">
+      <div class="card-header-left">
+        <span class="card-icon tips" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+        <div><h3>在地提醒</h3><span class="card-subtitle">Local Tips</span></div>
+      </div>
+      <span class="card-chevron" aria-hidden="true"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></span>
+    </div>
+    <div class="card-body" id="card-tips-body" role="region">
+      <ul class="tips-list">
+        <li><strong>小費文化：</strong>越南有小費習慣，餐廳可給 5-10%；Grab 無需小費</li>
+        <li><strong>貨幣兌換：</strong>機場匯率較差，建議帶 USD 到市區金店換</li>
+        <li><strong>防曬防蚊：</strong>8月為雨季，隨身帶雨具；紫外線強，防曬不可少</li>
+        <li><strong>寺廟禮儀：</strong>入寺廟需穿著得體（不可露肩、露膝）</li>
+        <li><strong>交通：</strong>Grab 最方便，避免路邊攔計程車（易被騙）</li>
+        <li><strong>飲水：</strong>不要飲用自來水，買瓶裝水</li>
+      </ul>
+    </div>
+  </div>
+
 </div>
+</div>
+
+
+
+
 
 <button class="top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到頂部">&#8593;</button>
 
+</div>
 <script>
 var spots=[
   {lat:16.0439,lng:108.2002,title:'峴港機場',titleEn:'Da Nang International Airport',day:1,type:'airport',typeLabel:'機場 · Airport',desc:'峴港國際機場（DAD）是越南第三大國際機場，距離市區僅3公里。機場設施現代，入境大廳有貨幣兌換、SIM卡櫃檯和咖啡店。過關通常需20-30分鐘。',tips:'機場出口有Grab候車區，也可預先安排接機',duration:'過關約30分鐘',ticket:'免費',bestTime:'早上航班較少',photos:['https://images.unsplash.com/photo-1530521954074-e64f6810b32d?w=600&q=70','https://images.pexels.com/photos/8281056/pexels-photo-8281056.jpeg?auto=compress&cs=tinysrgb&w=600','https://images.pexels.com/photos/19940389/pexels-photo-19940389.jpeg?auto=compress&cs=tinysrgb&w=600'],gmapsQuery:'Da Nang International Airport'},
@@ -1030,24 +896,8 @@ window.mkPopupContent=function(idx){
     '</div></div></div>';
 };
 
-window.openPlaceInfo=function(idx){
-  var p=spots[idx];if(!p)return;
-  document.getElementById('piHero').style.backgroundImage="url('"+p.photos[0]+"')";
-  document.getElementById('piTitle').textContent=p.title;
-  document.getElementById('piTitleEn').textContent=p.titleEn;
-  document.getElementById('piTypeBadge').textContent=p.typeLabel;
-  document.getElementById('piDesc').textContent=p.desc;
-  document.getElementById('piBestTime').textContent=p.bestTime||'';
-  document.getElementById('piTicket').textContent=p.ticket||'';
-  document.getElementById('piDuration').textContent=p.duration||'';
-  var gal=document.getElementById('piGallery');gal.innerHTML='';
-  p.photos.forEach(function(url){gal.innerHTML+='<img src="'+url+'" loading="lazy" alt="'+p.titleEn+'" onerror="this.style.display=\'none\'">';});
-  document.getElementById('piGmapsLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery);
-  document.getElementById('piStreetView').href='https://www.google.com/maps/@?api=1&map_action=pano&viewpoint='+p.lat+','+p.lng;
-  document.getElementById('piDirLink').href='https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'&travelmode=driving';
-  document.getElementById('piModal').classList.add('show');
-};
-window.closePlaceInfo=function(){document.getElementById('piModal').classList.remove('show');};
+
+
 
 function initMap(){
   var el=document.getElementById('map');if(!el||mainMap)return;
