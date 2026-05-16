@@ -413,82 +413,46 @@ a{color:var(--primary);text-decoration:none}
 .map-fbtn:hover{background:var(--surface-alt)}
 .map-fbtn.active{background:var(--primary);border-color:var(--primary);color:#fff}
 
-/* ═══ Map Info Panel ═══ */
-.map-info-panel{
-  position:absolute;bottom:0;left:0;right:0;
-  background:var(--surface);
-  border-radius:16px 16px 0 0;
-  box-shadow:0 -4px 24px rgba(0,0,0,0.12);
-  transform:translateY(100%);
-  transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
-  z-index:500;
-  max-height:70%;overflow:hidden;
-}
-.map-info-panel.open{transform:translateY(0)}
-.map-panel-close{
-  position:absolute;top:8px;right:8px;z-index:10;
-  width:28px;height:28px;border-radius:50%;
-  border:none;background:rgba(0,0,0,0.4);color:#fff;
-  cursor:pointer;font-size:14px;
-  display:flex;align-items:center;justify-content:center;
-  backdrop-filter:blur(4px);
-}
-.map-panel-inner{overflow-y:auto;max-height:70vh}
-.map-panel-hero{height:140px;background-size:cover;background-position:center;position:relative}
-.map-panel-hero::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,0.4),transparent 60%);
-}
-.map-panel-body{padding:12px 14px 16px;position:relative}
-.map-panel-body::before{
-  content:'';position:absolute;top:-20px;left:0;right:0;height:20px;
-  background:linear-gradient(to top,var(--surface),transparent);
-  pointer-events:none;
-}
-.map-panel-title h3{font-size:17px;font-weight:700;color:var(--text);line-height:1.3}
-.map-panel-title .en{font-size:12px;color:var(--text-muted);display:block;margin-top:1px}
-.map-panel-badge{
-  display:inline-block;margin-top:8px;padding:3px 10px;border-radius:100px;
-  font-size:11px;color:var(--primary);font-weight:500;
-  background:rgba(4,120,87,0.08);
-}
-.map-panel-desc{font-size:13px;color:var(--text-secondary);line-height:1.6;margin:10px 0}
-.map-panel-meta{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.meta-chip{
-  flex:1;min-width:0;padding:8px 10px;border-radius:8px;
-  background:var(--surface-alt);border:1px solid var(--border-light);
-}
-.meta-label{display:block;font-size:10px;color:var(--text-muted);font-weight:500;text-transform:uppercase;letter-spacing:0.04em}
-.meta-value{display:block;font-size:12px;color:var(--text);font-weight:600;margin-top:2px}
-.map-panel-actions{display:flex;gap:6px}
-.map-panel-actions a{
-  flex:1;text-align:center;padding:10px;border-radius:var(--radius-xs);
-  font-size:13px;font-weight:500;border:1px solid var(--border);
-  color:var(--text);text-decoration:none;transition:background 0.15s;
-}
-.map-panel-actions a:first-child{background:var(--primary);border-color:var(--primary);color:#fff}
-.map-panel-actions a:first-child:hover{background:var(--primary-dark)}
-.map-panel-actions a:last-child:hover{background:var(--surface-alt)}
+/* ═══ Leaflet Popup ═══ */
+.leaflet-popup-content-wrapper{border-radius:14px!important;box-shadow:0 8px 32px rgba(0,0,0,0.15)!important;padding:0!important;overflow:hidden}
+.leaflet-popup-content{margin:0!important;min-width:260px!important;max-width:280px!important}
+.leaflet-popup-tip{box-shadow:0 4px 16px rgba(0,0,0,0.1)!important}
+.leaflet-popup-close-button{font-size:18px!important;color:#8fa39e!important;right:8px!important;top:6px!important;z-index:10!important;width:24px!important;height:24px!important;display:flex!important;align-items:center;justify-content:center!important;border-radius:50%!important}
+.leaflet-popup-close-button:hover{color:#047857!important;background:rgba(4,120,87,0.08)!important}
+.p-popup{font-family:'Noto Sans TC',system-ui,sans-serif}
+.p-popup-hero{height:100px;background-size:cover;background-position:center;position:relative}
+.p-popup-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.5),transparent 50%)}
+.p-popup-badge{position:absolute;bottom:6px;left:8px;padding:2px 8px;border-radius:100px;font-size:10px;font-weight:500;background:rgba(4,120,87,0.9);color:#fff}
+.p-popup-body{padding:10px 12px}
+.p-popup-title{font-size:14px;font-weight:700;color:#0c1f1a;line-height:1.3}
+.p-popup-title .en{display:block;font-size:11px;color:#8fa39e;font-weight:400;margin-top:1px}
+.p-popup-desc{font-size:12px;color:#4a635e;line-height:1.5;margin-top:6px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.p-popup-meta{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.p-popup-meta .chip{padding:3px 7px;border-radius:5px;background:#f0f4f5;font-size:10px;color:#4a635e;white-space:nowrap}
+.p-popup-meta .chip b{color:#0c1f1a}
+.p-popup-actions{display:flex;gap:4px;margin-top:8px}
+.p-popup-actions a{flex:1;text-align:center;padding:6px 0;border-radius:6px;font-size:11px;font-weight:600;text-decoration:none;transition:background 0.15s}
+.p-popup-actions a.dir{background:#047857;color:#fff}
+.p-popup-actions a.dir:hover{background:#065f46}
+.p-popup-actions a.maps{background:#f0f4f5;color:#4a635e;border:1px solid #dfe8e6}
+.p-popup-actions a.maps:hover{background:#e8edec}
 
-html.dark .map-info-panel{background:var(--surface)}
-html.dark .map-panel-close{background:rgba(0,0,0,0.6)}
-html.dark .map-panel-body::before{background:linear-gradient(to top,var(--surface),transparent)}
-html.dark .map-panel-meta .meta-chip{background:var(--surface-alt)}
+html.dark .leaflet-popup-content-wrapper{background:#141c1a!important;color:#e2ece9!important}
+html.dark .leaflet-popup-tip{background:#141c1a!important}
+html.dark .leaflet-popup-close-button{color:#6a7f7a!important}
+html.dark .leaflet-popup-close-button:hover{color:#059669!important;background:rgba(5,150,105,0.12)!important}
+html.dark .p-popup-title{color:#e2ece9}
+html.dark .p-popup-desc{color:#9db0ab}
+html.dark .p-popup-meta .chip{background:#182019;color:#9db0ab}
+html.dark .p-popup-meta .chip b{color:#e2ece9}
+html.dark .p-popup-actions a.maps{background:#182019;color:#9db0ab;border-color:#253029}
 
-@media(min-width:900px){
-  .map-info-panel{
-    border-radius:16px 16px 0 0;
-    max-height:60%;
-  }
-  .map-panel-inner{max-height:calc(60vh - 40px)}
-}
-@media(max-width:899px){
-  .map-info-panel{
-    border-radius:16px 16px 0 0;
-    max-height:55%;
-  }
-  .map-panel-inner{max-height:55vh}
-  .map-panel-hero{height:100px}
+@media(max-width:480px){
+  .leaflet-popup-content{min-width:220px!important;max-width:240px!important}
+  .p-popup-hero{height:80px}
+  .p-popup-body{padding:8px 10px}
+  .p-popup-title{font-size:13px}
+  .p-popup-desc{font-size:11px;-webkit-line-clamp:2}
 }
 
 /* ═══ Modals ═══ */
@@ -735,26 +699,6 @@ html.dark .pi-hero{box-shadow:inset 0 -1px 0 rgba(0,0,0,0.3)}
       <button class="map-fbtn" onclick="filterMapDay(6)" role="button" aria-pressed="false">D6</button>
     </div>
     <div id="map"></div>
-    <div class="map-info-panel" id="mapInfoPanel">
-      <button class="map-panel-close" onclick="closeMapPanel()" aria-label="關閉">&#x2715;</button>
-      <div class="map-panel-inner">
-        <div class="map-panel-hero" id="mapPanelHero"></div>
-        <div class="map-panel-body">
-          <div class="map-panel-title"><h3 id="mapPanelTitle"></h3><span class="en" id="mapPanelTitleEn"></span></div>
-          <span class="map-panel-badge" id="mapPanelBadge"></span>
-          <p class="map-panel-desc" id="mapPanelDesc"></p>
-          <div class="map-panel-meta">
-            <div class="meta-chip"><span class="meta-label">最佳時段</span><span class="meta-value" id="mapPanelTime"></span></div>
-            <div class="meta-chip"><span class="meta-label">門票</span><span class="meta-value" id="mapPanelTicket"></span></div>
-            <div class="meta-chip"><span class="meta-label">停留</span><span class="meta-value" id="mapPanelDuration"></span></div>
-          </div>
-          <div class="map-panel-actions">
-            <a id="mapPanelDir" href="#" target="_blank" rel="noopener">導航</a>
-            <a id="mapPanelGmaps" href="#" target="_blank" rel="noopener">Maps</a>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -1031,23 +975,23 @@ window.toggleCard=function(id){
   updatePackProgress();
 })();
 
-window.openMapPanel=function(idx){
-  var p=spots[idx];if(!p)return;
-  document.getElementById('mapPanelHero').style.backgroundImage="url('"+p.photos[0]+"')";
-  document.getElementById('mapPanelTitle').textContent=p.title;
-  document.getElementById('mapPanelTitleEn').textContent=p.titleEn;
-  document.getElementById('mapPanelBadge').textContent=p.typeLabel;
-  document.getElementById('mapPanelDesc').textContent=p.desc;
-  document.getElementById('mapPanelTime').textContent=p.bestTime||'—';
-  document.getElementById('mapPanelTicket').textContent=p.ticket||'—';
-  document.getElementById('mapPanelDuration').textContent=p.duration||'—';
-  document.getElementById('mapPanelDir').href='https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'&travelmode=driving';
-  document.getElementById('mapPanelGmaps').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery);
-  document.getElementById('mapInfoPanel').classList.add('open');
-  if(mainMap)mainMap.setView([p.lat,p.lng],14,{animate:true});
-};
-window.closeMapPanel=function(){
-  document.getElementById('mapInfoPanel').classList.remove('open');
+window.mkPopupContent=function(idx){
+  var p=spots[idx];if(!p)return '';
+  return '<div class="p-popup">'+
+    '<div class="p-popup-hero" style="background-image:url(\''+p.photos[0]+'\')">'+
+    '<span class="p-popup-badge">'+p.typeLabel+'</span></div>'+
+    '<div class="p-popup-body">'+
+    '<div class="p-popup-title">'+p.title+'<span class="en">'+p.titleEn+'</span></div>'+
+    '<div class="p-popup-desc">'+p.desc+'</div>'+
+    '<div class="p-popup-meta">'+
+    '<span class="chip"><b>時段</b> '+p.bestTime+'</span>'+
+    '<span class="chip"><b>門票</b> '+p.ticket+'</span>'+
+    '<span class="chip"><b>停留</b> '+p.duration+'</span>'+
+    '</div>'+
+    '<div class="p-popup-actions">'+
+    '<a class="dir" href="https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'&travelmode=driving" target="_blank" rel="noopener">導航</a>'+
+    '<a class="maps" href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.gmapsQuery)+'" target="_blank" rel="noopener">Maps</a>'+
+    '</div></div></div>';
 };
 
 window.openPlaceInfo=function(idx){
@@ -1076,9 +1020,9 @@ function initMap(){
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(mainMap);
     spots.forEach(function(p,i){
       var color=dayColors[p.day-1]||'#888',icon=mkDayIcon(color,p.day);
-      var marker=L.marker([p.lat,p.lng],{icon:icon}).bindPopup('<b>'+p.title+'</b><br>'+p.titleEn).addTo(mainMap);
-      marker.on('click',function(){window.openMapPanel(i);});
-      allMarkers.push({marker:marker,day:p.day});
+      var content=window.mkPopupContent(i);
+      var m=L.marker([p.lat,p.lng],{icon:icon}).addTo(mainMap).bindPopup(content,{maxWidth:280,minWidth:260,closeButton:true});
+      allMarkers.push({marker:m,day:p.day});
     });
     setTimeout(function(){if(mainMap)mainMap.invalidateSize();},300);
     setTimeout(function(){if(mainMap)mainMap.invalidateSize();},800);
