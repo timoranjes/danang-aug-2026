@@ -975,7 +975,7 @@
       dayTabs.forEach(t => t.classList.toggle('active', t.dataset.day === day));
       dayPanels.forEach(p => p.classList.toggle('active', p.dataset.day === day));
       mapFilters.forEach(f => f.classList.toggle('active', f.dataset.day === day));
-      if (typeof googleMap !== "undefined") {
+      if (googleMap) {
         filterMap(day);
       }
     }
