@@ -423,7 +423,11 @@
     }
   </style>
   <!-- Google Maps API -->
+<<<<<<< HEAD
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&callback=initMap&libraries=places" async defer></script>
+=======
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&callback=initMap&libraries=places" defer></script>
+>>>>>>> 4eb033f (fix: map re-focus on day switch + initMap race condition)
 </head>
 <body>
   <!-- Topbar -->
@@ -983,7 +987,7 @@
     function switchDay(day) {
       dayTabs.forEach(t => t.classList.toggle('active', t.dataset.day === day));
       dayPanels.forEach(p => p.classList.toggle('active', p.dataset.day === day));
-      mapFilters.forEach(f => f.classList.toggle('active', f.dataset.day === day || f.dataset.day === 'all'));
+      mapFilters.forEach(f => f.classList.toggle('active', f.dataset.day === day));
       if (window.googleMap) {
         filterMap(day);
       }
@@ -1085,7 +1089,7 @@
       });
 
       Object.entries(polylines).forEach(([d, line]) => {
-        const visible = showAll || d === day;
+        const visible = showAll || String(d) === String(day);
         line.setVisible(visible);
       });
 
