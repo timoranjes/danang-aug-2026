@@ -422,13 +422,7 @@
       .day-tab { padding: 12px 14px; font-size: 12px; }
     }
   </style>
-  <!-- Google Maps API -->
-  <script>
-    // Define initMap early so Google Maps callback can find it.
-    // The real implementation below will overwrite this.
-    window.initMap = function() {};
-  </script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&callback=initMap&libraries=places" defer></script>
+  <!-- Google Maps API — loaded after inline JS defines initMap -->
 </head>
 <body>
   <!-- Topbar -->
@@ -953,13 +947,8 @@
     </div>
   </div>
 
-  <!-- Google Maps API - loaded last so initMap is already defined -->
-  
-  <!-- Ensure initMap exists before Google Maps loads -->
-  <script>
-    // Placeholder - will be overwritten by the full initMap below
-    window.initMap = window.initMap || function() { console.log('initMap placeholder, waiting for definition'); };
-  </script>
+  <!-- Google Maps API — loads now that initMap is defined above -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&callback=initMap&libraries=places" defer></script>
   
   <script>
     // ── Theme ──
