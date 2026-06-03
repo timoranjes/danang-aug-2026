@@ -1149,6 +1149,9 @@
       // Initial filter based on active day
       const activeDay = document.querySelector('.day-tab.active')?.dataset.day || '1';
       filterMap(activeDay);
+      window.googleMap = googleMap;
+      window.filterMap = filterMap;
+      window.switchDay = switchDay;
     }
 
     // Dark map style
