@@ -1202,18 +1202,9 @@
 
     dayPanels.forEach(panel => observer.observe(panel));
   </script>
-
   <!-- Load Google Maps AFTER all initMap/switchDay/filterMap are defined -->
-  <script>
-    (function() {
-      var s = document.createElement('script');
-      s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&libraries=places';
-      s.onload = function() {
-        if (typeof window.initMap === 'function') window.initMap();
-      };
-      document.head.appendChild(s);
-    })();
-  </script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&libraries=places&callback=initMap" async defer></script>
+
 
 </body>
 </html>
