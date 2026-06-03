@@ -104,46 +104,146 @@
     /* ── Hero ── */
     .hero {
       position: relative; overflow: hidden;
-      background: linear-gradient(165deg, var(--bg) 0%, var(--accent-light) 50%, var(--warm-light) 100%);
+      background: linear-gradient(165deg, var(--bg) 0%, var(--accent-light) 40%, var(--warm-light) 80%, var(--bg) 100%);
+    }
+    .hero::before, .hero::after {
+      content: ''; position: absolute; border-radius: 50%; pointer-events: none;
+      opacity: 0.08;
+    }
+    .hero::before {
+      width: 600px; height: 600px; top: -200px; right: -100px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+      animation: heroFloatA 20s ease-in-out infinite;
+    }
+    .hero::after {
+      width: 400px; height: 400px; bottom: -150px; left: -50px;
+      background: radial-gradient(circle, var(--warm) 0%, transparent 70%);
+      animation: heroFloatB 25s ease-in-out infinite;
+    }
+    @keyframes heroFloatA {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(-30px, 20px) scale(1.05); }
+      66% { transform: translate(20px, -15px) scale(0.95); }
+    }
+    @keyframes heroFloatB {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(25px, -20px) scale(1.08); }
     }
     .hero-inner {
       max-width: 1280px; margin: 0 auto;
-      padding: 64px 24px 48px;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+      padding: 80px 24px 64px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;
+      position: relative; z-index: 1;
     }
     .hero-text h1 {
       font-family: var(--font-heading);
-      font-size: clamp(32px, 5vw, 52px);
+      font-size: clamp(36px, 5.5vw, 60px);
       font-weight: 600; line-height: 1.15;
       letter-spacing: -0.02em;
       margin-bottom: 16px;
+      animation: heroFadeUp 600ms ease-out both;
+    }
+    .hero-text h1 .hero-line-accent {
+      display: block; font-size: 0.55em; font-weight: 400;
+      color: var(--text-muted); letter-spacing: 0.12em; text-transform: uppercase;
+      margin-bottom: 8px; font-family: var(--font-body);
+      animation: heroFadeUp 600ms ease-out 100ms both;
     }
     .hero-text h1 em {
       font-style: italic; color: var(--accent);
     }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600;
+      background: var(--accent-light); color: var(--accent);
+      margin-bottom: 20px; letter-spacing: 0.04em;
+      animation: heroFadeUp 600ms ease-out 50ms both;
+    }
+    .hero-badge::before { content: '✈'; font-size: 14px; }
     .hero-sub {
       font-size: 16px; color: var(--text-secondary);
       line-height: 1.7; max-width: 480px;
+      animation: heroFadeUp 600ms ease-out 200ms both;
     }
     .hero-stats {
       display: flex; gap: 32px; margin-top: 32px;
       padding-top: 24px; border-top: 1px solid var(--border);
+      animation: heroFadeUp 600ms ease-out 300ms both;
+    }
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: none; }
     }
     .hero-stat { text-align: left; }
     .hero-stat-value {
       font-family: var(--font-heading);
-      font-size: 28px; font-weight: 600; color: var(--accent);
+      font-size: 32px; font-weight: 700; color: var(--accent);
     }
     .hero-stat-label {
-      font-size: 12px; color: var(--text-muted);
+      font-size: 11px; color: var(--text-muted);
       text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px;
     }
     .hero-image {
-      position: relative; border-radius: var(--radius-lg);
-      overflow: hidden; aspect-ratio: 4/3;
-      box-shadow: var(--shadow-lg);
+      position: relative;
+      animation: heroImageIn 800ms ease-out 200ms both;
     }
-    .hero-image img {
+    @keyframes heroImageIn {
+      from { opacity: 0; transform: translateX(30px) scale(0.97); }
+      to { opacity: 1; transform: none; }
+    }
+    .hero-image-main {
+      border-radius: var(--radius-lg); overflow: hidden;
+      aspect-ratio: 4/3; box-shadow: var(--shadow-lg);
+      position: relative; z-index: 2;
+    }
+    .hero-image-main img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+    .hero-float-card {
+      position: absolute; bottom: -16px; left: -24px; z-index: 3;
+      background: var(--bg-elevated); border-radius: var(--radius);
+      padding: 12px 16px; box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+      animation: heroCardFloat 3s ease-in-out infinite;
+    }
+    @keyframes heroCardFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+    .hero-float-card .hfc-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: var(--warm-light); color: var(--warm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .hero-float-card .hfc-text { font-size: 12px; color: var(--text-secondary); }
+    .hero-float-card .hfc-text strong { display: block; font-size: 14px; color: var(--text); }
+    .hero-image-accent {
+      position: absolute; top: -12px; right: -12px; z-index: 1;
+      width: 120px; height: 120px; border-radius: var(--radius-lg);
+      background: var(--accent-light); opacity: 0.5;
+    }
+
+    /* ── Clickable Timeline Items ── */
+    .timeline-item[data-spot-id] {
+      cursor: pointer; transition: var(--transition);
+      border-radius: var(--radius); margin: 0 -8px; padding-left: 44px; padding-right: 8px;
+    }
+    .timeline-item[data-spot-id]:hover {
+      background: var(--accent-light);
+    }
+    .timeline-item[data-spot-id]:hover .timeline-title {
+      color: var(--accent);
+    }
+    .timeline-item[data-spot-id]::after {
+      content: '↗'; position: absolute; right: 8px; top: 4px;
+      font-size: 12px; color: var(--text-muted); opacity: 0;
+      transition: var(--transition);
+    }
+    .timeline-item[data-spot-id]:hover::after { opacity: 1; color: var(--accent); }
+
+    /* ── Day Navigation ── */
       width: 100%; height: 100%; object-fit: cover;
     }
 
@@ -407,8 +507,11 @@
 
     /* ── Responsive ── */
     @media (max-width: 900px) {
-      .hero-inner { grid-template-columns: 1fr; padding: 40px 20px 32px; }
-      .hero-image { order: -1; aspect-ratio: 16/9; }
+      .hero-inner { grid-template-columns: 1fr; padding: 48px 20px 40px; gap: 32px; }
+      .hero-image { order: -1; }
+      .hero-image-accent { width: 80px; height: 80px; top: -8px; right: -8px; }
+      .hero-float-card { bottom: -12px; left: -12px; padding: 10px 12px; }
+      .hero-float-card .hfc-icon { width: 30px; height: 30px; font-size: 14px; }
       .hero-stats { gap: 20px; }
       .main { grid-template-columns: 1fr; padding: 24px 16px 48px; }
       .sidebar { position: static; }
@@ -417,7 +520,9 @@
     }
     @media (max-width: 480px) {
       .hero-text h1 { font-size: 28px; }
+      .hero-text h1 .hero-line-accent { font-size: 0.45em; }
       .hero-stats { flex-wrap: wrap; gap: 16px; }
+      .hero-float-card { display: none; }
       .topbar-inner { padding: 8px 16px; }
       .day-tab { padding: 12px 14px; font-size: 12px; }
     }
@@ -442,7 +547,11 @@
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-text">
-        <h1>August 2026<br><em>峴港 · Da Nang</em></h1>
+        <div class="hero-badge">Hong Kong → Da Nang</div>
+        <h1>
+          <span class="hero-line-accent">August 2026 · Family Trip</span>
+          <em>峴港 · Da Nang</em>
+        </h1>
         <p class="hero-sub">2026年8月11日至16日 · 五位成人 · 香港往返<br>家庭之旅 · 節奏輕鬆 · 長者友善</p>
         <div class="hero-stats">
           <div class="hero-stat">
@@ -464,7 +573,17 @@
         </div>
       </div>
       <div class="hero-image">
-        <img src="https://images.unsplash.com/photo-1701396173275-835886dd72ce?w=800&q=80" alt="Da Nang Dragon Bridge" loading="eager">
+        <div class="hero-image-accent"></div>
+        <div class="hero-image-main">
+          <img src="https://images.unsplash.com/photo-1701396173275-835886dd72ce?w=800&q=80" alt="Da Nang Dragon Bridge" loading="eager">
+        </div>
+        <div class="hero-float-card">
+          <div class="hfc-icon">🌴</div>
+          <div class="hfc-text">
+            <strong>5 Nights</strong>
+            Beachfront Stay
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -499,7 +618,7 @@
             <div class="timeline-title">香港國際機場起飛</div>
             <div class="timeline-desc">航班 UO552，建議 06:25 前到達機場</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="airport">
             <div class="timeline-dot transport"></div>
             <div class="timeline-time">09:20</div>
             <div class="timeline-title">降落峴港國際機場</div>
@@ -517,7 +636,7 @@
             <div class="timeline-title">前往 Airbnb 辦理入住</div>
             <div class="timeline-desc">車程約 30 分鐘</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="bun-chca">
             <div class="timeline-dot meal"></div>
             <div class="timeline-time">11:30</div>
             <div class="timeline-title">午餐 — Bun Cha Ca 109</div>
@@ -529,18 +648,18 @@
             <div class="timeline-title">回 Airbnb 午休</div>
             <div class="timeline-desc">長者建議休息 2-3 小時，適應氣候</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="my-khe">
             <div class="timeline-dot"></div>
             <div class="timeline-time">16:00</div>
             <div class="timeline-title">美溪海灘漫步</div>
             <div class="timeline-desc">福布斯全球最美海灘之一，My Khe Beach</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="be-man">
             <div class="timeline-dot meal"></div>
             <div class="timeline-time">18:00</div>
             <div class="timeline-title">海鮮晚餐 — Be Man Seafood</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="dragon-bridge">
             <div class="timeline-dot"></div>
             <div class="timeline-time">19:30</div>
             <div class="timeline-title">漢江河畔散步 · 龍橋</div>
@@ -561,19 +680,19 @@
             <div class="timeline-title">出發前往巴拿山</div>
             <div class="timeline-desc">預約 7 人車，車程約 45 分鐘。建議早出發避開人潮</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="bana-hill">
             <div class="timeline-dot"></div>
             <div class="timeline-time">08:30</div>
             <div class="timeline-title">巴拿山纜車</div>
             <div class="timeline-desc">世界最長單線纜車，全程約 20 分鐘，海拔從 300m 升至 1,487m</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="french-village">
             <div class="timeline-dot"></div>
             <div class="timeline-time">09:00</div>
             <div class="timeline-title">法國村 · 石板街</div>
             <div class="timeline-desc">哥德式建築群、教堂、廣場，適合拍照</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="golden-bridge">
             <div class="timeline-dot"></div>
             <div class="timeline-time">10:00</div>
             <div class="timeline-title">Golden Bridge · 佛手橋</div>
@@ -619,13 +738,13 @@
           <div class="day-date">8月13日，週四 · 步數 ~10,000 · 行車 ~60 min · 節奏：輕鬆</div>
         </div>
         <div class="timeline">
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="hoi-an">
             <div class="timeline-dot transport"></div>
             <div class="timeline-time">09:00</div>
             <div class="timeline-title">出發前往會安</div>
             <div class="timeline-desc">Grab 約 30 分鐘，車費 150K-200K VND</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="japanese-bridge">
             <div class="timeline-dot"></div>
             <div class="timeline-time">09:30</div>
             <div class="timeline-title">會安古鎮 · 日本廊橋</div>
@@ -637,7 +756,7 @@
             <div class="timeline-title">古宅 · 會館漫步</div>
             <div class="timeline-desc">Tan Ky Old House、福建會館、廣肇會館</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="banh-mi">
             <div class="timeline-dot meal"></div>
             <div class="timeline-time">12:00</div>
             <div class="timeline-title">午餐 — 會安特色美食</div>
@@ -684,14 +803,14 @@
             <div class="timeline-title">出發前往五行山</div>
             <div class="timeline-desc">Grab 約 15 分鐘</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="marble">
             <div class="timeline-dot"></div>
             <div class="timeline-time">09:00</div>
             <div class="timeline-title">五行山 Marble Mountains</div>
             <div class="timeline-desc">五座石灰岩山峰，探索洞穴寺廟。Thuy Son（水山）為主要景區</div>
             <div class="timeline-tip">提示：有電梯可達半山，長者友善；但洞內階梯較陡需注意</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="huyen-khong">
             <div class="timeline-dot"></div>
             <div class="timeline-time">11:00</div>
             <div class="timeline-title">非幽窟 Huyen Khong Cave</div>
@@ -708,7 +827,7 @@
             <div class="timeline-title">前往山茶半島</div>
             <div class="timeline-desc">車程約 15 分鐘</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="son-tra">
             <div class="timeline-dot"></div>
             <div class="timeline-time">14:30</div>
             <div class="timeline-title">靈應寺 Son Tra Temple</div>
@@ -735,13 +854,13 @@
           <div class="day-date">8月15日，週六 · 步數 ~8,000 · 行車 ~30 min · 節奏：輕鬆</div>
         </div>
         <div class="timeline">
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="museum">
             <div class="timeline-dot"></div>
             <div class="timeline-time">09:00</div>
             <div class="timeline-title">峴港博物館</div>
             <div class="timeline-desc">了解占婆文化、越南戰爭歷史</div>
           </div>
-          <div class="timeline-item">
+          <div class="timeline-item" data-spot-id="han-market">
             <div class="timeline-dot"></div>
             <div class="timeline-time">10:30</div>
             <div class="timeline-title">韓市場 Han Market</div>
@@ -1192,6 +1311,29 @@
         updateProgress();
       } catch {}
     }
+
+    // ── Clickable itinerary items → map markers ──
+    function focusSpot(spotId) {
+      const spot = spots.find(s => s.id === spotId);
+      if (!spot || !googleMap) return;
+      const marker = markers[spotId];
+      if (!marker) return;
+      // Switch to the correct day tab first
+      switchDay(String(spot.day));
+      // Pan to marker and open info window
+      googleMap.panTo(marker.getPosition());
+      googleMap.setZoom(15);
+      infoWindow.setContent(createPopupContent(spot));
+      infoWindow.open(googleMap, marker);
+    }
+
+    // Attach click handlers to all data-spot-id elements (use delegation for dynamic content)
+    document.addEventListener('click', (e) => {
+      const item = e.target.closest('[data-spot-id]');
+      if (item) {
+        focusSpot(item.dataset.spotId);
+      }
+    });
 
     // ── Scroll spy for day nav ──
     const observer = new IntersectionObserver((entries) => {
