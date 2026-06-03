@@ -947,8 +947,17 @@
     </div>
   </div>
 
-  <!-- Google Maps API — loads now that initMap is defined above -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&callback=initMap&libraries=places" defer></script>
+  <script>
+    // Load Google Maps and init when ready
+    (function() {
+      var s = document.createElement('script');
+      s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&libraries=places';
+      s.onload = function() {
+        if (typeof window.initMap === 'function') window.initMap();
+      };
+      document.head.appendChild(s);
+    })();
+  </script>
   
   <script>
     // ── Theme ──
