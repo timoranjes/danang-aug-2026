@@ -423,6 +423,7 @@
     }
   </style>
   <!-- Google Maps API — loaded after inline JS defines initMap -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&libraries=places" defer></script>
 </head>
 <body>
   <!-- Topbar -->
@@ -1202,9 +1203,8 @@
 
     dayPanels.forEach(panel => observer.observe(panel));
   </script>
-  <!-- Load Google Maps AFTER all initMap/switchDay/filterMap are defined -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&libraries=places&callback=initMap" defer></script>
 
 
+  <script>if(window.initMap)window.initMap();</script>
 </body>
 </html>
