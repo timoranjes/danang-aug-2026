@@ -423,7 +423,7 @@
     }
   </style>
   <!-- Google Maps API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&libraries=places" defer onload="window.initMap && window.initMap()"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSy...plk4&callback=initMap&libraries=places" async defer></script>
 </head>
 <body>
   <!-- Topbar -->
@@ -950,6 +950,12 @@
 
   <!-- Google Maps API - loaded last so initMap is already defined -->
   
+  <!-- Ensure initMap exists before Google Maps loads -->
+  <script>
+    // Placeholder - will be overwritten by the full initMap below
+    window.initMap = window.initMap || function() { console.log('initMap placeholder, waiting for definition'); };
+  </script>
+  
   <script>
     // ── Theme ──
     const themeToggle = document.getElementById('themeToggle');
@@ -1083,10 +1089,16 @@
         line.setVisible(visible);
       });
 
-      if (count > 0 && !showAll) {
-        googleMap.fitBounds(bounds, { padding: 40 });
-      } else if (showAll) {
-        googleMap.fitBounds(bounds, { padding: 40 });
+      if (count > 0) {
+        // Smooth recenter: fitBounds with padding, then adjust zoom
+        googleMap.fitBounds(bounds, { top: 80, bottom: 80, left: 60, right: 60 });
+        // If only one place, zoom in closer
+        if (count === 1) {
+          const listener = google.maps.event.addListener(googleMap, 'idle', () => {
+            if (googleMap.getZoom() > 14) googleMap.setZoom(14);
+            google.maps.event.removeListener(listener);
+          });
+        }
       }
     }
 
