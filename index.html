@@ -58,6 +58,33 @@
       --d4: #A888C8;
       --d5: #D8C078;
       --d6: #88A8B8;
+
+      /* Popup dark overrides */
+      --popup-bg: #1E1E1C;
+      --popup-text: #E8E8E2;
+      --popup-desc: #A0A098;
+      --popup-shadow: 0 4px 24px rgba(0,0,0,0.5);
+    }
+
+    /* Popup dark mode */
+    [data-theme="dark"] .gm-popup {
+      background: var(--popup-bg) !important;
+      box-shadow: var(--popup-shadow) !important;
+    }
+    [data-theme="dark"] .gm-popup-title {
+      color: var(--popup-text) !important;
+    }
+    [data-theme="dark"] .gm-popup-desc {
+      color: var(--popup-desc) !important;
+    }
+    [data-theme="dark"] .gm-popup-body {
+      background: var(--popup-bg);
+    }
+    [data-theme="dark"] .gm-popup-dir {
+      color: #60A5FA;
+    }
+    [data-theme="dark"] .gm-style-iw-t::after {
+      background: #1E1E1C !important;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -483,26 +510,84 @@
       border-radius: var(--radius-lg) !important;
       padding: 0 !important;
     }
+
+    /* ── Enhanced Popup Card ── */
     .gm-popup {
-      padding: 12px 16px; min-width: 200px;
+      padding: 0 !important;
+      min-width: 240px !important;
+      max-width: 260px !important;
+      border-radius: 12px !important;
+      overflow: hidden;
+      font-family: var(--font-body) !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+    }
+    .gm-popup-hero {
+      height: 110px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .gm-popup-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.35) 100%);
+    }
+    .gm-popup-hero--noimg {
+      height: 60px;
+      opacity: 0.85;
+    }
+    .gm-popup-body {
+      padding: 12px 14px 10px;
+    }
+    .gm-popup-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .gm-popup-day-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+      letter-spacing: 0.03em;
     }
     .gm-popup-title {
       font-family: var(--font-heading);
-      font-size: 16px; font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .gm-popup-day {
-      font-size: 11px; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.06em;
-      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.3;
     }
     .gm-popup-desc {
-      font-size: 13px; color: var(--text-secondary);
-      line-height: 1.5;
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin-bottom: 8px;
     }
-    .gm-popup-img {
-      width: 100%; height: 100px; object-fit: cover;
-      border-radius: var(--radius); margin-bottom: 8px;
+    .gm-popup-dir {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #2563EB;
+      text-decoration: none;
+      padding: 4px 0;
+      transition: opacity 0.15s;
+    }
+    .gm-popup-dir:hover {
+      opacity: 0.75;
+      text-decoration: underline;
+    }
+    /* Google Maps InfoWindow chrome override */
+    .gm-style-iw-d {
+      overflow: hidden !important;
+    }
+    .gm-style-iw-t::after {
+      background: #fff !important;
     }
 
     /* ── Responsive ── */
@@ -1166,15 +1251,25 @@
     }
 
     function createPopupContent(spot) {
-      const img = spot.img
-        ? `<img class="gm-popup-img" src="${spot.img}" alt="${spot.name}" onerror="this.style.display='none'">`
-        : '';
+      const imgHtml = spot.img
+        ? `<div class="gm-popup-hero" style="background-image:url('${spot.img}')"><div class="gm-popup-hero-overlay"></div></div>`
+        : `<div class="gm-popup-hero gm-popup-hero--noimg" style="background-color:${dayColors[spot.day]}"></div>`;
+      const dirUrl = `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+      const dayBadge = `<span class="gm-popup-day-badge" style="background:${dayColors[spot.day]}">Day ${spot.day}</span>`;
       return `
         <div class="gm-popup">
-          ${img}
-          <div class="gm-popup-day" style="color:${dayColors[spot.day]}">Day ${spot.day}</div>
-          <div class="gm-popup-title">${spot.name}</div>
-          <div class="gm-popup-desc">${spot.desc}</div>
+          ${imgHtml}
+          <div class="gm-popup-body">
+            <div class="gm-popup-header">
+              ${dayBadge}
+              <span class="gm-popup-title">${spot.name}</span>
+            </div>
+            <div class="gm-popup-desc">${spot.desc}</div>
+            <a class="gm-popup-dir" href="${dirUrl}" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+              Get Directions
+            </a>
+          </div>
         </div>
       `;
     }
