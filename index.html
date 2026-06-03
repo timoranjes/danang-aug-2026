@@ -1199,30 +1199,30 @@
     // ── Google Maps ──
     const spots = [
       // Day 1
-      { id: 'airport', name: '峴港國際機場', day: 1, lat: 16.0440, lng: 108.1994, desc: '降落峴港，過關取行李' },
+      { id: 'airport', name: '峴港國際機場', day: 1, lat: 16.0440, lng: 108.1994, img: 'https://images.unsplash.com/photo-1436491865332-7a61a109db05?w=400&q=75', desc: '降落峴港，過關取行李' },
       { id: 'bun-chca', name: 'Bun Cha Ca 109', day: 1, lat: 16.0678, lng: 108.2208, desc: '魚餅檬粉，峴港名店', img: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=400&q=75' },
-      { id: 'my-khe', name: '美溪海灘 My Khe Beach', day: 1, lat: 16.0487, lng: 108.2457, desc: '福布斯全球最美海灘之一' },
-      { id: 'be-man', name: 'Be Man Seafood', day: 1, lat: 16.0520, lng: 108.2380, desc: '海鮮晚餐' },
-      { id: 'dragon-bridge', name: '龍橋 Dragon Bridge', day: 1, lat: 16.0630, lng: 108.2280, desc: '漢江地標，週六晚噴火表演' },
+      { id: 'my-khe', name: '美溪海灘 My Khe Beach', day: 1, lat: 16.0487, lng: 108.2457, img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=75', desc: '福布斯全球最美海灘之一' },
+      { id: 'be-man', name: 'Be Man Seafood', day: 1, lat: 16.0520, lng: 108.2380, img: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&q=75', desc: '海鮮晚餐' },
+      { id: 'dragon-bridge', name: '龍橋 Dragon Bridge', day: 1, lat: 16.0630, lng: 108.2280, img: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=75', desc: '漢江地標，週六晚噴火表演' },
 
       // Day 2
-      { id: 'bana-hill', name: '巴拿山 Ba Na Hills', day: 2, lat: 16.0617, lng: 107.9883, desc: '世界最長單線纜車，海拔 1,487m' },
-      { id: 'golden-bridge', name: 'Golden Bridge 佛手橋', day: 2, lat: 16.0613, lng: 107.9883, desc: '全球知名景點，兩隻巨手托起金橋' },
-      { id: 'french-village', name: '法國村 French Village', day: 2, lat: 16.0625, lng: 107.9890, desc: '哥德式建築群，適合拍照' },
+      { id: 'bana-hill', name: '巴拿山 Ba Na Hills', day: 2, lat: 16.0617, lng: 107.9883, img: 'https://images.unsplash.com/photo-1591530228299-47a04adfa120?w=400&q=75', desc: '世界最長單線纜車，海拔 1,487m' },
+      { id: 'golden-bridge', name: 'Golden Bridge 佛手橋', day: 2, lat: 16.0613, lng: 107.9883, img: 'https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=400&q=75', desc: '全球知名景點，兩隻巨手托起金橋' },
+      { id: 'french-village', name: '法國村 French Village', day: 2, lat: 16.0625, lng: 107.9890, img: 'https://images.unsplash.com/photo-1555952494-efd681c7e3f9?w=400&q=75', desc: '哥德式建築群，適合拍照' },
 
       // Day 3
-      { id: 'hoi-an', name: '會安古鎮 Hoi An', day: 3, lat: 15.8801, lng: 108.3380, desc: 'UNESCO 世界遺產，400年歷史' },
-      { id: 'japanese-bridge', name: '日本廊橋', day: 3, lat: 15.8790, lng: 108.3360, desc: '會安地標，木結構廊橋' },
-      { id: 'banh-mi', name: 'Banh Mi Phuong', day: 3, lat: 15.8795, lng: 108.3340, desc: 'Anthony Bourdain 推薦的法棍' },
+      { id: 'hoi-an', name: '會安古鎮 Hoi An', day: 3, lat: 15.8801, lng: 108.3380, img: 'https://images.unsplash.com/photo-1557750255-c7606e4417e4?w=400&q=75', desc: 'UNESCO 世界遺產，400年歷史' },
+      { id: 'japanese-bridge', name: '日本廊橋', day: 3, lat: 15.8790, lng: 108.3360, img: 'https://images.unsplash.com/photo-1528127269322-539801943592?w=400&q=75', desc: '會安地標，木結構廊橋' },
+      { id: 'banh-mi', name: 'Banh Mi Phuong', day: 3, lat: 15.8795, lng: 108.3340, img: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400&q=75', desc: 'Anthony Bourdain 推薦的法棍' },
 
       // Day 4
-      { id: 'marble', name: '五行山 Marble Mountains', day: 4, lat: 16.0030, lng: 108.2630, desc: '五座石灰岩山峰，洞穴寺廟' },
-      { id: 'huyen-khong', name: '非幽窟 Huyen Khong Cave', day: 4, lat: 16.0035, lng: 108.2625, desc: '最大洞穴寺廟，陽光從洞頂射入' },
-      { id: 'son-tra', name: '靈應寺 Son Tra Temple', day: 4, lat: 16.1050, lng: 108.2700, desc: '高 67m 觀音像，俯瞰峴港灣' },
+      { id: 'marble', name: '五行山 Marble Mountains', day: 4, lat: 16.0030, lng: 108.2630, img: 'https://images.unsplash.com/photo-1563293881-224422ac745e?w=400&q=75', desc: '五座石灰岩山峰，洞穴寺廟' },
+      { id: 'huyen-khong', name: '非幽窟 Huyen Khong Cave', day: 4, lat: 16.0035, lng: 108.2625, img: 'https://images.unsplash.com/photo-1557750255-c7606e4417e4?w=400&q=75', desc: '最大洞穴寺廟，陽光從洞頂射入' },
+      { id: 'son-tra', name: '靈應寺 Son Tra Temple', day: 4, lat: 16.1050, lng: 108.2700, img: 'https://images.unsplash.com/photo-1562511649-869e98793328?w=400&q=75', desc: '高 67m 觀音像，俯瞰峴港灣' },
 
       // Day 5
-      { id: 'han-market', name: '韓市場 Han Market', day: 5, lat: 16.0670, lng: 108.2230, desc: '當地最大市場，特產紀念品' },
-      { id: 'museum', name: '峴港博物館', day: 5, lat: 16.0610, lng: 108.2180, desc: '占婆文化、越南戰爭歷史' },
+      { id: 'han-market', name: '韓市場 Han Market', day: 5, lat: 16.0670, lng: 108.2230, img: 'https://images.unsplash.com/photo-1533907650686-70576141c030?w=400&q=75', desc: '當地最大市場，特產紀念品' },
+      { id: 'museum', name: '峴港博物館', day: 5, lat: 16.0610, lng: 108.2180, img: 'https://images.unsplash.com/photo-1566127444979-b3d2b654e3d7?w=400&q=75', desc: '占婆文化、越南戰爭歷史' },
     ];
 
     const dayColors = {
