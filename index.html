@@ -423,6 +423,11 @@
     }
   </style>
   <!-- Google Maps API -->
+  <script>
+    // Define initMap early so Google Maps callback can find it.
+    // The real implementation below will overwrite this.
+    window.initMap = function() {};
+  </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSy...plk4&callback=initMap&libraries=places" defer></script>
 </head>
 <body>
