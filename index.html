@@ -1563,16 +1563,30 @@
       window.filterMap(activeDay);
     }
 
-    // Try Google Maps first, fall back to Leaflet
+    // Use Leaflet as primary map (works without API key)
+    // Google Maps will override if it loads successfully
     window.initMap = initGoogleMap;
 
-    // If Google Maps fails to load within 8 seconds, use Leaflet
-    const mapFallbackTimer = setTimeout(() => {
-      if (!mapLib) {
-        console.log('Google Maps not loaded, falling back to Leaflet');
-        initLeafletMap();
+    // Start Leaflet immediately — it always works
+    initLeafletMap();
+
+    // If Google Maps loads successfully within 10s, replace Leaflet
+    // (only works with a valid Google Maps API key)
+    let googleLoaded = false;
+    window.initMap = function() {
+      if (!googleLoaded) {
+        googleLoaded = true;
+        // Remove Leaflet map
+        if (window.leafletMap) {
+          window.leafletMap.remove();
+          window.leafletMap = null;
+        }
+        // Clear map div and init Google Maps
+        document.getElementById('map').innerHTML = '';
+        document.getElementById('mapStatus').classList.remove('show');
+        initGoogleMap();
       }
-    }, 8000);
+    };
 
     // ── Spot Modal ──
     function openSpotModal(spot) {
