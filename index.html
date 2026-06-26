@@ -633,6 +633,41 @@
     .modal-actions {
       display: flex; gap: 10px; flex-wrap: wrap;
     }
+    .modal-section-label {
+      font-family: var(--font-heading);
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-muted); margin-bottom: 8px; margin-top: 16px;
+    }
+    .modal-nav-grid, .modal-ride-grid {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .modal-nav-link, .modal-ride-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 16px; border-radius: 10px;
+      font-size: 13px; font-weight: 600;
+      text-decoration: none; font-family: var(--font-heading);
+      transition: var(--transition);
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      border: 1.5px solid transparent;
+    }
+    .modal-nav-link {
+      background: var(--accent-light); color: var(--accent);
+      border-color: var(--border);
+    }
+    .modal-nav-link:hover { background: var(--accent); color: #fff; }
+    .modal-nav-link:active { transform: scale(0.96); }
+    .modal-ride-link {
+      background: #EFF6FF; color: #2563EB;
+      border-color: #BFDBFE;
+    }
+    [data-theme="dark"] .modal-ride-link {
+      background: #1E3A5F; color: #60A5FA;
+      border-color: #1E40AF;
+    }
+    .modal-ride-link:hover { background: #2563EB; color: #fff; }
+    .modal-ride-link:active { transform: scale(0.96); }
     .modal-dir-btn {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 12px 24px;
@@ -645,6 +680,20 @@
     }
     .modal-dir-btn:hover { background: var(--accent-hover); }
     .modal-dir-btn:active { transform: scale(0.97); }
+
+    /* ── Leaflet popup styles ── */
+    .spot-popup .leaflet-popup-content-wrapper {
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      padding: 4px;
+    }
+    .spot-popup .leaflet-popup-content {
+      margin: 10px 14px;
+      line-height: 1.5;
+    }
+    .spot-popup .leaflet-popup-tip {
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
     .modal-photo-credit {
       font-size: 10px; color: var(--text-muted);
       margin-top: 12px; font-family: var(--font-heading);
@@ -1367,23 +1416,17 @@
       4: '#7C3AED', 5: '#2563EB', 6: '#0891B2',
     };
 
-    // ── Map: Google Maps with Leaflet fallback ──
-    let mapLib = null; // 'google' or 'leaflet'
-    let markers = {};
-    let polylines = {};
+    // ── Map: Leaflet only ──
 
-    // Dark map styles for Google Maps
-    const darkMapStyle = [
-      { elementType: "geometry", stylers: [{ color: "#1d2c4d" }] },
-      { elementType: "labels.text.fill", stylers: [{ color: "#8ec3b9" }] },
-      { elementType: "labels.text.stroke", stylers: [{ color: "#1a3646" }] },
-      { featureType: "water", elementType: "geometry.fill", stylers: [{ color: "#0e1626" }] },
-    ];
+    // Use Leaflet as primary map (works without API key)
+    // ── Leaflet Map (primary) ──
+    // Clear map div first (Google Maps may have polluted it)
+    document.getElementById('map').innerHTML = '';
 
     function initLeafletMap() {
       mapLib = 'leaflet';
       document.getElementById('mapStatus').classList.add('show');
-      document.getElementById('mapStatus').textContent = '📍 Map loaded (offline-friendly)';
+      document.getElementById('mapStatus').textContent = '📍 Tap markers for details';
 
       const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
       const tileUrl = isDark
@@ -1394,27 +1437,43 @@
         center: [16.0544, 108.2022],
         zoom: 12,
         zoomControl: true,
-        attributionControl: true,
+        attributionControl: false,
+        tap: true,            // Enable mobile tap
+        tapTolerance: 15,     // 15px tap tolerance for fat fingers
       });
 
       L.tileLayer(tileUrl, {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>',
         maxZoom: 19,
       }).addTo(map);
 
-      // Add markers
+      // Add markers with proper mobile touch handling
       const markerGroup = L.layerGroup().addTo(map);
       spots.forEach(spot => {
         const color = dayColors[spot.day];
         const icon = L.divIcon({
           className: 'custom-marker',
-          html: '<div style="width:24px;height:24px;border-radius:50%;background:' + color + ';border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>',
-          iconSize: [24, 24],
-          iconAnchor: [12, 12],
+          html: '<div style="width:28px;height:28px;border-radius:50%;background:' + color + ';border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:var(--font-heading)">' + spot.day + '</div>',
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
         });
-        const marker = L.marker([spot.lat, spot.lng], { icon }).addTo(markerGroup);
-        marker.bindPopup('<b>' + spot.name + '</b><br>' + spot.desc);
-        marker.on('click', () => openSpotModal(spot));
+        const marker = L.marker([spot.lat, spot.lng], { icon, riseOnHover: true }).addTo(markerGroup);
+
+        // Use both click and popup for reliable mobile interaction
+        marker.bindPopup(
+          '<div style="font-family:var(--font-body);min-width:140px">' +
+          '<strong style="font-family:var(--font-heading);font-size:14px">' + spot.name + '</strong><br>' +
+          '<span style="font-size:12px;color:var(--text-secondary)">' + spot.desc + '</span><br>' +
+          '<a href="#" onclick="event.preventDefault();openSpotModal(spots.find(s=>s.id===\\'' + spot.id + '\\'));return false;" style="display:inline-block;margin-top:6px;padding:6px 12px;background:' + color + ';color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;font-family:var(--font-heading);-webkit-tap-highlight-color:transparent;touch-action:manipulation">View Details →</a>' +
+          '</div>',
+          { maxWidth: 220, closeButton: false, className: 'spot-popup' }
+        );
+
+        // Also open modal on direct marker click (desktop)
+        marker.on('click', function(e) {
+          setTimeout(function() { openSpotModal(spot); }, 100);
+        });
+
         markers[spot.id] = marker;
       });
 
@@ -1445,13 +1504,22 @@
             const color = dayColors[spot.day];
             const icon = L.divIcon({
               className: 'custom-marker',
-              html: '<div style="width:24px;height:24px;border-radius:50%;background:' + color + ';border:2.5px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);"></div>',
-              iconSize: [24, 24],
-              iconAnchor: [12, 12],
+              html: '<div style="width:28px;height:28px;border-radius:50%;background:' + color + ';border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.35);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;font-family:var(--font-heading)">' + spot.day + '</div>',
+              iconSize: [28, 28],
+              iconAnchor: [14, 14],
             });
-            const m = L.marker([spot.lat, spot.lng], { icon }).addTo(markerGroup);
-            m.bindPopup('<b>' + spot.name + '</b><br>' + spot.desc);
-            m.on('click', () => openSpotModal(spot));
+            const m = L.marker([spot.lat, spot.lng], { icon, riseOnHover: true }).addTo(markerGroup);
+            m.bindPopup(
+              '<div style="font-family:var(--font-body);min-width:140px">' +
+              '<strong style="font-family:var(--font-heading);font-size:14px">' + spot.name + '</strong><br>' +
+              '<span style="font-size:12px;color:var(--text-secondary)">' + spot.desc + '</span><br>' +
+              '<a href="#" onclick="event.preventDefault();openSpotModal(spots.find(s=>s.id===\\'' + spot.id + '\\'));return false;" style="display:inline-block;margin-top:6px;padding:6px 12px;background:' + color + ';color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;font-family:var(--font-heading);-webkit-tap-highlight-color:transparent;touch-action:manipulation">View Details →</a>' +
+              '</div>',
+              { maxWidth: 220, closeButton: false, className: 'spot-popup' }
+            );
+            m.on('click', function(e) {
+              setTimeout(function() { openSpotModal(spot); }, 100);
+            });
             markers[spot.id] = m;
             bounds.push([spot.lat, spot.lng]);
           }
@@ -1462,7 +1530,7 @@
           else map.removeLayer(line);
         });
         if (bounds.length > 0) {
-          map.fitBounds(bounds, { padding: [40, 40] });
+          map.fitBounds(bounds, { padding: [40, 40], maxZoom: 14 });
         }
       };
 
@@ -1471,134 +1539,56 @@
       window.filterMap(activeDay);
     }
 
-    function initGoogleMap() {
-      mapLib = 'google';
-      document.getElementById('mapStatus').classList.remove('show');
-
-      const center = { lat: 16.0544, lng: 108.2022 };
-      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-
-      const googleMap = new google.maps.Map(document.getElementById('map'), {
-        center,
-        zoom: 11,
-        styles: isDark ? darkMapStyle : [],
-        disableDefaultUI: false,
-        zoomControl: true,
-        mapTypeControl: false,
-        streetViewControl: false,
-        fullscreenControl: false,
-      });
-
-      window.googleMap = googleMap;
-
-      // Update map theme
-      window.updateMapTheme = function(dark) {
-        googleMap.setOptions({ styles: dark ? darkMapStyle : [] });
-      };
-
-      // Create markers
-      spots.forEach(spot => {
-        const marker = new google.maps.Marker({
-          position: { lat: spot.lat, lng: spot.lng },
-          map: googleMap,
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 12,
-            fillColor: dayColors[spot.day],
-            fillOpacity: 1,
-            strokeColor: '#fff',
-            strokeWeight: 2.5,
-          },
-          title: spot.name,
-          optimized: true,
-        });
-        marker.addListener('click', () => openSpotModal(spot));
-        markers[spot.id] = marker;
-      });
-
-      // Click on map background closes modal
-      googleMap.addListener('click', () => closeSpotModal());
-
-      // Create polylines
-      for (let day = 1; day <= 6; day++) {
-        const daySpots = spots.filter(s => s.day === day);
-        if (daySpots.length >= 2) {
-          const path = daySpots.map(s => ({ lat: s.lat, lng: s.lng }));
-          polylines[day] = new google.maps.Polyline({
-            path, geodesic: true,
-            strokeColor: dayColors[day],
-            strokeOpacity: 0.6, strokeWeight: 3,
-            map: googleMap,
-          });
+    // Init Leaflet when L is available
+    if (typeof L !== 'undefined') {
+      initLeafletMap();
+    } else {
+      // Wait for Leaflet CDN to load
+      var leafletCheck = setInterval(function() {
+        if (typeof L !== 'undefined') {
+          clearInterval(leafletCheck);
+          initLeafletMap();
         }
-      }
-
-      // filterMap for Google Maps
-      window.filterMap = function(day) {
-        const showAll = day === 'all';
-        const bounds = new google.maps.LatLngBounds();
-        let count = 0;
-        Object.entries(markers).forEach(([id, marker]) => {
-          const spot = spots.find(s => s.id === id);
-          const visible = showAll || spot.day === parseInt(day);
-          marker.setVisible(visible);
-          if (visible) { bounds.extend(marker.getPosition()); count++; }
-        });
-        Object.entries(polylines).forEach(([d, line]) => {
-          line.setVisible(showAll || String(d) === String(day));
-        });
-        if (count > 0) {
-          googleMap.fitBounds(bounds, { top: 60, bottom: 60, left: 50, right: 50 });
-          if (count === 1) {
-            const listener = google.maps.event.addListener(googleMap, 'idle', () => {
-              if (googleMap.getZoom() > 15) googleMap.setZoom(15);
-              google.maps.event.removeListener(listener);
-            });
-          }
-        }
-      };
-
-      // Initial filter
-      const activeDay = document.querySelector('.day-tab.active')?.dataset.day || '1';
-      window.filterMap(activeDay);
+      }, 200);
+      // Give up after 10 seconds
+      setTimeout(function() { clearInterval(leafletCheck); }, 10000);
     }
 
-    // Use Leaflet as primary map (works without API key)
-    // Google Maps will override if it loads successfully
-    window.initMap = initGoogleMap;
-
-    // Start Leaflet immediately — it always works
-    initLeafletMap();
-
-    // If Google Maps loads successfully within 10s, replace Leaflet
-    // (only works with a valid Google Maps API key)
-    let googleLoaded = false;
-    window.initMap = function() {
-      if (!googleLoaded) {
-        googleLoaded = true;
-        // Remove Leaflet map
-        if (window.leafletMap) {
-          window.leafletMap.remove();
-          window.leafletMap = null;
-        }
-        // Clear map div and init Google Maps
-        document.getElementById('map').innerHTML = '';
-        document.getElementById('mapStatus').classList.remove('show');
-        initGoogleMap();
-      }
-    };
-
-    // ── Spot Modal ──
+    // ── Spot Modal (enhanced with nav & ride-hailing links) ──
     function openSpotModal(spot) {
       const modal = document.getElementById('spot-modal');
       const overlay = document.getElementById('spot-modal-overlay');
       const inner = modal.querySelector('.modal-inner');
 
       const heroHtml = spot.img
-        ? '<img class="modal-hero" src="' + spot.img + '" alt="' + spot.name + '" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\';"><div class="modal-hero-placeholder" style="display:none;background:' + dayColors[spot.day] + '"></div>'
+        ? '<img class="modal-hero" src="' + spot.img + '" alt="' + spot.name + '" onerror="this.style.display=\\'none\\';this.nextElementSibling.style.display=\\'block\\';">' +
+          '<div class="modal-hero-placeholder" style="display:none;background:' + dayColors[spot.day] + '"></div>'
         : '<div class="modal-hero-placeholder" style="background:' + dayColors[spot.day] + '"></div>';
 
-      const dirUrl = 'https://www.google.com/maps/dir/?api=1&destination=' + spot.lat + ',' + spot.lng;
+      // Navigation deep links (Vietnam-specific)
+      var encodedName = encodeURIComponent(spot.name);
+      var coords = spot.lat + ',' + spot.lng;
+
+      var navLinks = [
+        { label: 'Google Maps', icon: '📍', url: 'https://www.google.com/maps/dir/?api=1&destination=' + coords },
+        { label: 'Apple Maps', icon: '🗺️', url: 'https://maps.apple.com/?daddr=' + coords + '&q=' + encodedName },
+        { label: 'Waze', icon: '🚗', url: 'https://waze.com/ul?ll=' + coords + '&navigate=yes' },
+      ];
+
+      // Ride-hailing apps (Vietnam: Grab is king, also Xanh SM, Be)
+      var rideApps = [
+        { label: 'Grab', icon: '🛵', url: 'https://r.grab.com/g/?drop_lat=' + spot.lat + '&drop_lng=' + spot.lng },
+        { label: 'Xanh SM', icon: '🚙', url: 'https://app.xanhsm.com/booking?dropoff_lat=' + spot.lat + '&dropoff_lng=' + spot.lng },
+        { label: 'Be', icon: '🚕', url: 'https://be.com.vn/' },
+      ];
+
+      var navHtml = navLinks.map(function(a) {
+        return '<a class="modal-nav-link" href="' + a.url + '" target="_blank" rel="noopener">' + a.icon + ' ' + a.label + '</a>';
+      }).join('');
+
+      var rideHtml = rideApps.map(function(a) {
+        return '<a class="modal-ride-link" href="' + a.url + '" target="_blank" rel="noopener">' + a.icon + ' ' + a.label + '</a>';
+      }).join('');
 
       inner.innerHTML =
         '<button class="modal-close" onclick="closeSpotModal()">✕</button>' +
@@ -1607,12 +1597,10 @@
           '<span class="modal-badge" style="background:' + dayColors[spot.day] + '">Day ' + spot.day + '</span>' +
           '<div class="modal-title">' + spot.name + '</div>' +
           '<div class="modal-desc">' + spot.desc + '</div>' +
-          '<div class="modal-actions">' +
-            '<a class="modal-dir-btn" href="' + dirUrl + '" target="_blank" rel="noopener">' +
-              '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>' +
-              'Get Directions' +
-            '</a>' +
-          '</div>' +
+          '<div class="modal-section-label">Navigate</div>' +
+          '<div class="modal-nav-grid">' + navHtml + '</div>' +
+          '<div class="modal-section-label">Call a Ride</div>' +
+          '<div class="modal-ride-grid">' + rideHtml + '</div>' +
           (spot.img_credit ? '<div class="modal-photo-credit">Photo: ' + spot.img_credit + ' / Pexels</div>' : '') +
         '</div>';
 
@@ -1637,13 +1625,7 @@
       const spot = spots.find(s => s.id === spotId);
       if (!spot) return;
       switchDay(String(spot.day));
-      if (mapLib === 'google' && window.googleMap) {
-        const marker = markers[spotId];
-        if (marker) {
-          window.googleMap.panTo(marker.getPosition());
-          window.googleMap.setZoom(15);
-        }
-      } else if (mapLib === 'leaflet' && window.leafletMap) {
+      if (window.leafletMap) {
         window.leafletMap.setView([spot.lat, spot.lng], 15);
       }
       openSpotModal(spot);
@@ -1694,9 +1676,7 @@
     dayPanels.forEach(panel => observer.observe(panel));
   </script>
 
-  <!-- Google Maps API (primary) -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB5UnjilqaMCYfFMtLGcebGt-8XdWYplk4&libraries=places&callback=initMap" async defer></script>
-  <!-- Leaflet JS (fallback) -->
+  <!-- Leaflet JS — primary map -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
 </body>
