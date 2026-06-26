@@ -1,0 +1,22 @@
+{
+  "name": "峴港 · Da Nang — August 2026 Family Trip",
+  "short_name": "Da Nang Trip",
+  "description": "Family trip itinerary for Da Nang, Vietnam — August 11-16, 2026. Includes daily schedules, maps, and travel tips.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#FFF1F2",
+  "theme_color": "#E11D48",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%23E11D48'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-family='Arial,sans-serif' font-weight='bold'>DN</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "lifestyle"],
+  "lang": "zh-Hant",
+  "dir": "ltr"
+}
