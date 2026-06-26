@@ -139,7 +139,7 @@
     }
     .theme-toggle:hover { border-color: var(--accent); background: var(--accent-light); }
     .theme-toggle:active { transform: scale(0.94); }
-    .theme-toggle svg { width: 18px; height: 18px; stroke: var(--text-secondary); }
+    .theme-toggle svg { width: 18px; height: 18px; stroke: var(--text-secondary); display: block; flex-shrink: 0; }
 
     /* ── Hero ── */
     .hero {
@@ -1417,6 +1417,9 @@
     };
 
     // ── Map: Leaflet only ──
+    let mapLib = null;
+    let markers = {};
+    let polylines = {};
 
     // Use Leaflet as primary map (works without API key)
     // ── Leaflet Map (primary) ──
@@ -1459,12 +1462,12 @@
         });
         const marker = L.marker([spot.lat, spot.lng], { icon, riseOnHover: true }).addTo(markerGroup);
 
-        // Use both click and popup for reliable mobile interaction
+        // Use popup with a simple "View" link that triggers via click delegation
         marker.bindPopup(
           '<div style="font-family:var(--font-body);min-width:140px">' +
           '<strong style="font-family:var(--font-heading);font-size:14px">' + spot.name + '</strong><br>' +
           '<span style="font-size:12px;color:var(--text-secondary)">' + spot.desc + '</span><br>' +
-          '<a href="#" onclick="event.preventDefault();openSpotModal(spots.find(s=>s.id===\\'' + spot.id + '\\'));return false;" style="display:inline-block;margin-top:6px;padding:6px 12px;background:' + color + ';color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;font-family:var(--font-heading);-webkit-tap-highlight-color:transparent;touch-action:manipulation">View Details →</a>' +
+          '<button class="popup-view-btn" data-spot="' + spot.id + '" style="margin-top:6px;padding:6px 12px;background:' + color + ';color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;font-family:var(--font-heading);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation">View Details \u2192</button>' +
           '</div>',
           { maxWidth: 220, closeButton: false, className: 'spot-popup' }
         );
@@ -1513,7 +1516,7 @@
               '<div style="font-family:var(--font-body);min-width:140px">' +
               '<strong style="font-family:var(--font-heading);font-size:14px">' + spot.name + '</strong><br>' +
               '<span style="font-size:12px;color:var(--text-secondary)">' + spot.desc + '</span><br>' +
-              '<a href="#" onclick="event.preventDefault();openSpotModal(spots.find(s=>s.id===\\'' + spot.id + '\\'));return false;" style="display:inline-block;margin-top:6px;padding:6px 12px;background:' + color + ';color:#fff;border-radius:6px;text-decoration:none;font-size:11px;font-weight:600;font-family:var(--font-heading);-webkit-tap-highlight-color:transparent;touch-action:manipulation">View Details →</a>' +
+              '<button class="popup-view-btn" data-spot="' + spot.id + '" style="margin-top:6px;padding:6px 12px;background:' + color + ';color:#fff;border:none;border-radius:6px;font-size:11px;font-weight:600;font-family:var(--font-heading);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation">View Details \u2192</button>' +
               '</div>',
               { maxWidth: 220, closeButton: false, className: 'spot-popup' }
             );
@@ -1561,7 +1564,7 @@
       const inner = modal.querySelector('.modal-inner');
 
       const heroHtml = spot.img
-        ? '<img class="modal-hero" src="' + spot.img + '" alt="' + spot.name + '" onerror="this.style.display=\\'none\\';this.nextElementSibling.style.display=\\'block\\';">' +
+        ? '<img class="modal-hero" src="' + spot.img + '" alt="' + spot.name + '" loading="lazy">' +
           '<div class="modal-hero-placeholder" style="display:none;background:' + dayColors[spot.day] + '"></div>'
         : '<div class="modal-hero-placeholder" style="background:' + dayColors[spot.day] + '"></div>';
 
@@ -1633,7 +1636,15 @@
 
     document.addEventListener('click', (e) => {
       const item = e.target.closest('[data-spot-id]');
-      if (item) focusSpot(item.dataset.spotId);
+      if (item) { focusSpot(item.dataset.spotId); return; }
+      // Handle popup "View Details" buttons
+      const popupBtn = e.target.closest('.popup-view-btn');
+      if (popupBtn) {
+        const spotId = popupBtn.dataset.spot;
+        const spot = spots.find(s => s.id === spotId);
+        if (spot) openSpotModal(spot);
+        return;
+      }
     });
 
     // ── Packing Checklist ──
